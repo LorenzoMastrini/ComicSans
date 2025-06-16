@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const Comicsans());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Comicsans extends StatelessWidget {
+  const Comicsans({super.key});
 
   // This widget is the root of your application.
   @override
