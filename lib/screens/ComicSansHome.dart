@@ -1,4 +1,6 @@
+import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:flutter/material.dart';
+import 'package:comicsans/components/ComicSansBottomBar.dart';
 
 class ComicSansHome extends StatefulWidget {
   final String title;
@@ -27,27 +29,18 @@ class _ComicSansHomeState extends State<ComicSansHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title)
-      ),
+      appBar: const ComicSansAppBar(),
       body: IndexedStack(
         index: _selectedTabIndex,
         children: _pages
       ),
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar: ComicSansBottomBar(
           selectedIndex: _selectedTabIndex,
           onDestinationSelected: (int index) {
             setState(() { // refresh of the interface
               _selectedTabIndex = index;
             });
-          },
-          destinations: const [
-            NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-            NavigationDestination(icon: Icon(Icons.favorite), label: "Preferiti"),
-            NavigationDestination(icon: Icon(Icons.add_circle), label: "Vendi"),
-            NavigationDestination(icon: Icon(Icons.email), label: "Inbox"),
-            NavigationDestination(icon: Icon(Icons.account_circle), label: "Profilo"),
-          ]
+          }
       ),
     );
   }
