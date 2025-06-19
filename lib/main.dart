@@ -1,7 +1,7 @@
 import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/components/ComicSansBottomBar.dart';
 import 'package:flutter/material.dart';
-import 'screens/ComicSansHome.dart';
+import 'package:flutter/services.dart';
 
 
 
@@ -25,11 +25,20 @@ class _ComicSansAppState extends State<ComicSansApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "ComicSans App",
-      //theme: mainTheme,
-      home: ComicSansBottomBar(),
+    return SafeArea(
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.white,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        ),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "ComicSans App",
+          //theme: mainTheme,
+          home: ComicSansBottomBar(),
+        ),
+      ),
     );
   }
 }
