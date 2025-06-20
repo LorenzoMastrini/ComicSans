@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ComicSansInput extends StatefulWidget {
+class ComicSansTextInput extends StatefulWidget {
   final String title;
   final String hintText;
   final String labelText;
 
   // Constructor
-  const ComicSansInput({
+  const ComicSansTextInput({
     super.key,
     required this.title,
     required this.hintText,
@@ -14,12 +14,12 @@ class ComicSansInput extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => _ComicSansInputState();
+  State<StatefulWidget> createState() => _ComicSansTextInputState();
 }
 
 
 
-class _ComicSansInputState extends State<ComicSansInput> {
+class _ComicSansTextInputState extends State<ComicSansTextInput> {
   @override
   Widget build(BuildContext context) {
     return Column(

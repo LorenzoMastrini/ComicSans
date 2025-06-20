@@ -1,23 +1,24 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
-import 'package:comicsans/components/ComicSansInput.dart';
+import 'package:comicsans/components/ComicSansInputForm.dart';
+import 'package:comicsans/components/ComicSansRadioButtons.dart';
 import 'package:flutter/material.dart';
 
-class ComicSansSell extends StatefulWidget {
-  const ComicSansSell({super.key});
+class ComicSansSell2 extends StatefulWidget {
+  const ComicSansSell2({super.key});
 
   @override
-  State<ComicSansSell> createState() => _ComicSansSellState();
+  State<ComicSansSell2> createState() => _ComicSansSell2State();
 }
 
 
 
-class _ComicSansSellState extends State<ComicSansSell> {
+class _ComicSansSell2State extends State<ComicSansSell2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const ComicSansAppBar(
-          title: "1/3: Informazioni base",
-          showBackButton: false,
+          title: "2/3: Carica le foto",
+          showBackButton: true,
           showCloseButton: true,
           actionType: appBarActionType.close
       ),
@@ -25,16 +26,16 @@ class _ComicSansSellState extends State<ComicSansSell> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18),
           child: ListView(
-            children: const <Widget>[
+            children: <Widget>[
               // Title
-              ComicSansInput(
+              ComicSansTextInput(
                 title: 'Titolo',
                 hintText: 'Titolo',
                 labelText: 'Inserisci il titolo del fumetto'
               ),
 
               // Description
-              ComicSansInput(
+              ComicSansTextInput(
                 title: 'Descrizione',
                 hintText: 'Descrizione',
                 labelText: 'Inserisci la descrizione del fumetto'
@@ -45,7 +46,7 @@ class _ComicSansSellState extends State<ComicSansSell> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: ComicSansInput(
+                    child: ComicSansTextInput(
                       title: 'Prezzo',
                       hintText: 'Prezzo',
                       labelText: 'Inserisci un prezzo appropriato'
@@ -60,6 +61,23 @@ class _ComicSansSellState extends State<ComicSansSell> {
                   ),
                 ]
               ),
+
+              // Conditions
+              ComicSansRadioButtons(
+                title: 'Condizioni',
+                options: [
+                  {'title': 'Da edicola', 'value': 'Da edicola'},
+                  {'title': 'Ottime', 'value': 'Ottime'},
+                  {'title': 'Buone', 'value': 'Buone'},
+                  {'title': 'Molto usato', 'value': 'Molto usato'}
+                ]
+              ),
+
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Continua'))
             ]
           ),
         )

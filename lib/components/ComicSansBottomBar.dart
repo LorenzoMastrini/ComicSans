@@ -2,7 +2,7 @@ import 'package:comicsans/screens/ComicSansFavorite.dart';
 import 'package:comicsans/screens/ComicSansHome.dart';
 import 'package:comicsans/screens/ComicSansInbox.dart';
 import 'package:comicsans/screens/ComicSansProfile.dart';
-import 'package:comicsans/screens/ComicSansSell.dart';
+import 'package:comicsans/screens/ComicSansSell1.dart';
 import 'package:flutter/material.dart';
 
 
@@ -17,7 +17,7 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
   final List<Widget> _pages = <Widget>[
     ComicSansHome(), // Homepage
     ComicSansFavorite(), // Favorite
-    ComicSansSell(), // Sell a comic
+    ComicSansSell1(), // Sell a comic
     ComicSansInbox(), // Inbox
     ComicSansProfile() // Profile
   ];
@@ -29,7 +29,7 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
           isScrollControlled: true, // Takes the whole height of the screen
           useSafeArea: true,
           builder: (BuildContext context) {
-            return ComicSansSell();
+            return ComicSansSell1();
           });
     } else {
       setState(() {

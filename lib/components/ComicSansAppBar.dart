@@ -69,6 +69,16 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
         )
       : null, // title not given
+      automaticallyImplyLeading: false,
+      leading: showBackButton ? IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+        },
+      )
+      : null,
       actions: actionsList.isNotEmpty ? actionsList : null
     );
   }
