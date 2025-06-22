@@ -1,13 +1,13 @@
 class CreditCard{
-  String holder;
-  int number;
-  String expiration;
-  int cvv;
+  String? holder;
+  int? number;
+  String? expiration;
+  int? cvv;
 
-  CreditCard(
+  CreditCard({
     this.holder,
     this.number,
     this.expiration,
     this.cvv
-  );
+  });
 }

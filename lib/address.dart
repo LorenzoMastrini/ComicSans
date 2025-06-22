@@ -5,11 +5,11 @@ class Address{
   String address;
   int cap;
 
-  Address(
-    this.name,
-    this.lastName,
-    this.country,
-    this.address,
-    this.cap,
-  );
+  Address({
+    this.name = "",
+    this.lastName = "",
+    this.country = "",
+    this.address = "",
+    this.cap = 1,
+  });
 }
