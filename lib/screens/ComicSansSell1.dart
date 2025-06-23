@@ -25,38 +25,57 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
       ),
       body: Form(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
+          padding: const EdgeInsets.fromLTRB(18, 0, 18, 5),
           child: Stack(
             fit: StackFit.expand,
             children: [
               ListView(
-                padding: const EdgeInsets.only(
-                  top: 18.0,
-                  bottom: 30
-                ),
-                children: const [
-                  ComicSansTextInput(
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      style: DefaultTextStyle.of(context).style,
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: '*',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Informazione obbligatoria'
+                        ),
+                      ]
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Titolo
+                  const ComicSansTextInput(
                     title: 'Titolo',
                     hintText: 'Titolo',
-                    labelText: 'Inserisci il titolo del fumetto'
+                    labelText: 'Inserisci il titolo del fumetto',
+                    inputRequired: true
                   ),
 
                   // Description
-                  ComicSansTextInput(
+                  const ComicSansTextInput(
                     title: 'Descrizione',
                     hintText: 'Descrizione',
-                    labelText: 'Inserisci la descrizione del fumetto'
+                    labelText: 'Inserisci la descrizione del fumetto',
+                    inputRequired: true
                   ),
 
                   // Price
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Expanded(
                         child: ComicSansTextInput(
                           title: 'Prezzo',
                           hintText: 'Prezzo',
-                          labelText: 'Inserisci un prezzo appropriato'
+                          labelText: 'Inserisci un prezzo appropriato',
+                          inputRequired: true
                         ),
                       ),
                       Text(
@@ -70,14 +89,15 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                   ),
 
                   // Conditions
-                  ComicSansRadioButtons(
+                  const ComicSansRadioButtons(
                     title: 'Condizioni',
                     options: [
                       {'title': 'Da edicola', 'value': 'Da edicola'},
                       {'title': 'Ottime', 'value': 'Ottime'},
                       {'title': 'Buone', 'value': 'Buone'},
                       {'title': 'Molto usato', 'value': 'Molto usato'}
-                    ]
+                    ],
+                    inputRequired: true
                   ),
                 ]
               ),
