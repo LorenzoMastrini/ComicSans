@@ -19,7 +19,22 @@ class ComicSansCheckbox extends StatefulWidget {
 
 
 class _ComicSansCheckboxState extends State<ComicSansCheckbox> {
-  bool? _selectedValue;
+  // local state list, initialized from widget.options
+  late List<Map<String, dynamic>> _currentOptions;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize _currentOptions as editable copy of widget.options
+    _currentOptions = widget.options.map((optionFromWidget) {
+      final Map<String, dynamic> newOption = Map<String, dynamic>.from(optionFromWidget);
+      // Ensure 'value' to be bool
+      if (newOption['value'] == null || newOption['value'] is! bool) {
+        newOption['value'] = false; // Default value
+      }
+      return newOption;
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,23 +59,25 @@ class _ComicSansCheckboxState extends State<ComicSansCheckbox> {
             childAspectRatio: 4.5,
           ),
           itemBuilder: (context, index) {
-            final option = widget.options[index];
             return Align(
               alignment: Alignment.centerLeft,
               child: CheckboxListTile(
                 visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),
                 contentPadding: const EdgeInsets.all(0),
-                title: Text(
-                  option['title'].toString(),
-                  style: const TextStyle(
-                    fontSize: 14
+                title: Transform.translate(
+                  offset: const Offset(-10, 0),
+                  child: Text(
+                    _currentOptions[index]['title'].toString(),
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
-                value: option['value'],
-                onChanged: (bool? value) {
-                  setState(() {
-                    _selectedValue = value;
-                  });
+                value: _currentOptions[index]['value'] as bool?,
+                onChanged: (bool? newValue) {
+                  if (newValue != null) {
+                    setState(() {
+                      _currentOptions[index]['value'] = newValue;
+                    });
+                  }
                 },
                 controlAffinity: ListTileControlAffinity.leading, // Checkbox to the left
               ),

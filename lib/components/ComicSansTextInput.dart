@@ -5,6 +5,7 @@ class ComicSansTextInput extends StatefulWidget {
   final String hintText;
   final String labelText;
   final bool inputRequired;
+  final TextInputType keyboardType;
 
   // Constructor
   const ComicSansTextInput({
@@ -12,7 +13,8 @@ class ComicSansTextInput extends StatefulWidget {
     required this.title,
     required this.hintText,
     required this.labelText,
-    this.inputRequired = false
+    this.inputRequired = false,
+    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -67,8 +69,8 @@ class _ComicSansTextInputState extends State<ComicSansTextInput> {
             hintText: widget.labelText,
             border: const OutlineInputBorder(),
           ),
+          keyboardType: widget.keyboardType,
         ),
-        const SizedBox(height: 20)
       ]
     );
   }

@@ -3,6 +3,8 @@ import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ImageUploadSlot.dart';
 import 'package:comicsans/screens/ComicSansSell3.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ComicSansSell2 extends StatefulWidget {
   const ComicSansSell2({super.key});
@@ -14,27 +16,60 @@ class ComicSansSell2 extends StatefulWidget {
 
 
 class _ComicSansSell2State extends State<ComicSansSell2> {
+  final List<File> _uploadedImages = []; // List of uploaded images in the grid (excluding cover image)
 
   // Grid of (maximum) 9 photos
   Widget photoGrid() {
+    int currentImageCount = _uploadedImages.length;
+    bool canAddImages = currentImageCount < 9; // If true show the "Add image" slot
+    int totalImageCount = currentImageCount + (canAddImages ? 1 : 0);
+
     return GridView.builder(
-      itemCount: 9,
+      itemCount: totalImageCount,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3, // 3 photos per row
       ),
       itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            // TODO: Load photo from gallery or take a photo with camera
-          },
-          child: ImageUploadSlot(
+        // Slot for an loaded image
+        if(index < currentImageCount) {
+          final imageFile = _uploadedImages[index];
+          return ImageUploadSlot(
+            key: ValueKey(imageFile.path),
+            initialImage: imageFile,
             onImageSelected: (File? selectedImage) {
-
+              setState(() {
+                if (selectedImage != null) {
+                  _uploadedImages[index] = selectedImage;
+                } else {
+                  _uploadedImages.removeAt(index);
+                }
+              });
             },
-          ),
-        );
+          );
+        // Slot to add a new image
+        } else if(canAddImages) {
+          return ImageUploadSlot(
+            key: const ValueKey("add_new_image_slot"),
+            onImageSelected: (File? selectedImage) {
+              if (selectedImage != null) {
+                if (_uploadedImages.length < 9) {
+                  setState(() {
+                    _uploadedImages.add(selectedImage);
+                  });
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Puoi caricare fino a 10 foto totali.'),
+                    ),
+                  );
+                }
+              }
+            },
+          );
+        }
+        return const SizedBox.shrink(); // To suppress the nullable return warning (should never happen)
       }
     );
   }
@@ -43,7 +78,7 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
   Widget build(BuildContext context) {
     const double btnBottomPadding = 15; // Bottom padding for the button
     const double btnHeight = 60;
-    const double bottomSpaceForButton = btnHeight + btnBottomPadding * 2; // Space for the ListView to avoid content under the button
+    const double bottomSpaceForButton = btnHeight + btnBottomPadding * 5; // Space for the ListView to avoid content under the button
 
     return Scaffold(
       appBar: const ComicSansAppBar(
@@ -60,7 +95,7 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
               children: [
                 ListView(
                   children: [
-                    const Text('Carica fino a 10 foto'),
+                    const Text('Carica fino a 10 foto (copertina inclusa)'),
                     const SizedBox(height: 20),
                     const Row(
                       children: [
@@ -84,9 +119,7 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(50, 10, 50, 0),
                       child: ImageUploadSlot(
-                        plusDimension: 40,
                         onImageSelected: (File? selectedImage) {
-
                         }
                       ),
                     ),
@@ -124,7 +157,7 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ComicSansSell3()
+                            builder: (context) => const ComicSansSell3()
                         )
                       );
                     },

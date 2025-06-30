@@ -1,61 +1,49 @@
-import 'package:comicsans/screens/ComicSansFavorite.dart';
-import 'package:comicsans/screens/ComicSansHome.dart';
-import 'package:comicsans/screens/ComicSansInbox.dart';
-import 'package:comicsans/screens/ComicSansProfile.dart';
-import 'package:comicsans/screens/ComicSansSell1.dart';
 import 'package:flutter/material.dart';
 
 
 
-class ComicSansBottomBar extends StatefulWidget {
-  @override
-  State<ComicSansBottomBar> createState() => _ComicSansBottomBarState();
-}
+class ComicSansBottomBar extends StatelessWidget {
+  final int selectedIndex;
+  final ValueChanged<int> onDestinationSelected; // Callback to notify the tap
 
-class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
-  int _selectedIndex = 0;
-  final List<Widget> _pages = <Widget>[
-    ComicSansHome(), // Homepage
-    ComicSansFavorite(), // Favorite
-    ComicSansSell1(), // Sell a comic
-    ComicSansInbox(), // Inbox
-    ComicSansProfile() // Profile
-  ];
-
-  void _onItemTapped(int index) {
-    if (index == 2) { // Screen "ComicSansSell"
-      showModalBottomSheet<void>(
-          context: context,
-          isScrollControlled: true, // Takes the whole height of the screen
-          useSafeArea: true,
-          builder: (BuildContext context) {
-            return ComicSansSell1();
-          });
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-  }
+  const ComicSansBottomBar({
+    super.key,
+    required this.selectedIndex, // Default to Home
+    required this.onDestinationSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-          index: _selectedIndex,
-          children: _pages
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onItemTapped,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-          NavigationDestination(icon: Icon(Icons.favorite), label: "Preferiti"),
-          NavigationDestination(icon: Icon(Icons.add_circle), label: "Vendi"),
-          NavigationDestination(icon: Icon(Icons.email), label: "Inbox"),
-          NavigationDestination(icon: Icon(Icons.account_circle), label: "Profilo"),
-        ],
-      ),
+    return NavigationBar(
+      selectedIndex: selectedIndex,
+      onDestinationSelected: onDestinationSelected,
+      destinations: const <Widget>[
+        NavigationDestination(
+          selectedIcon: Icon(Icons.home),
+          icon: Icon(Icons.home_outlined),
+          label: 'Home',
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.favorite),
+          icon: Icon(Icons.favorite_outline),
+          label: 'Favorite',
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.add_circle),
+          icon: Icon(Icons.add_circle_outline),
+          label: 'Sell',
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.inbox),
+          icon: Icon(Icons.inbox_outlined),
+          label: 'Inbox',
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.person),
+          icon: Icon(Icons.person_outline),
+          label: 'Profile',
+        ),
+      ],
     );
   }
 }

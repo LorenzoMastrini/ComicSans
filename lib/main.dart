@@ -1,5 +1,6 @@
 import 'package:comicsans/ComicSansTheme.dart';
-import 'package:comicsans/components/ComicSansBottomBar.dart';
+import 'package:comicsans/MainScreen.dart';
+import 'package:comicsans/RouteGenerator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -7,13 +8,13 @@ import 'package:flutter/services.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(ComicSansApp());
+  runApp(const ComicSansApp());
 }
 
 
 
 class ComicSansApp extends StatefulWidget {
-  ComicSansApp({super.key});
+  const ComicSansApp({super.key});
 
   @override
   State<ComicSansApp> createState() => _ComicSansAppState();
@@ -22,21 +23,21 @@ class ComicSansApp extends StatefulWidget {
 class _ComicSansAppState extends State<ComicSansApp> {
   //final ThemeData mainTheme = ComicSansTheme.light();
 
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return const SafeArea( // Avoids the UI elements of the OS
       child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(
+        value: SystemUiOverlayStyle(
           statusBarColor: Colors.white,
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.light,
         ),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: "ComicSans App",
+          title: "ComicSans",
           //theme: mainTheme,
-          home: ComicSansBottomBar(),
+          home: MainScreen(),
+          onGenerateRoute: RouteGenerator.generateRoute,
         ),
       ),
     );

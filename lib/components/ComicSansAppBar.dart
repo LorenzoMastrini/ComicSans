@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-enum appBarActionType {
-  close,
-  overflowMenu,
+enum AppBarActionType {
+  close, // "x" button to close the current process and return to main screen
+  overflowMenu, // three-dot menu (not implemented)
   none, // No actions
 }
 
@@ -10,16 +10,16 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final bool showBackButton; // Visibility of the back arrow
   final bool showCloseButton; // Visibility of the close button
-  final appBarActionType actionType; // Tipo di azione principale
+  final AppBarActionType actionType; // Tipo di azione principale
   final VoidCallback? onOverflowMenuPressed; // Callback per il menu a tre puntini
   final VoidCallback? onCloseButtonPressed;
 
   const ComicSansAppBar({
     super.key,
     this.title = 'Comic Sans',
-    this.showBackButton = true,
+    this.showBackButton = false,
     this.showCloseButton = false,
-    this.actionType = appBarActionType.none,
+    this.actionType = AppBarActionType.none,
     this.onOverflowMenuPressed,
     this.onCloseButtonPressed
   });
@@ -29,18 +29,16 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
     List<Widget> actionsList = [];
 
     // Main action based on the actionType
-    if (actionType == appBarActionType.close) {
+    if (actionType == AppBarActionType.close) {
       actionsList.add(
         IconButton(
           icon: const Icon(Icons.close),
           onPressed: onCloseButtonPressed ?? () { // Use the given callback or the default
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
-            }
+              Navigator.pushNamed(context, '/'); // Return to the main screen
           },
         ),
       );
-    } else if (actionType == appBarActionType.overflowMenu) {
+    } else if (actionType == AppBarActionType.overflowMenu) {
       actionsList.add(
         IconButton(
           icon: const Icon(Icons.more_vert),

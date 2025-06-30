@@ -1,5 +1,5 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
-import 'package:comicsans/components/ComicSansInputForm.dart';
+import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'package:comicsans/components/ComicSansRadioButtons.dart';
 import 'package:comicsans/screens/ComicSansSell2.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +16,10 @@ class ComicSansSell1 extends StatefulWidget {
 class _ComicSansSell1State extends State<ComicSansSell1> {
   @override
   Widget build(BuildContext context) {
+    const double btnBottomPadding = 15; // Bottom padding for the button
+    const double btnHeight = 60;
+    const double bottomSpaceForButton = btnHeight + btnBottomPadding * 5;
+
     return Scaffold(
       appBar: const ComicSansAppBar(
           title: "1/3: Informazioni base",
@@ -57,6 +61,7 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                     labelText: 'Inserisci il titolo del fumetto',
                     inputRequired: true
                   ),
+                  const SizedBox(height: 20),
 
                   // Description
                   const ComicSansTextInput(
@@ -65,6 +70,7 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                     labelText: 'Inserisci la descrizione del fumetto',
                     inputRequired: true
                   ),
+                  const SizedBox(height: 20),
 
                   // Price
                   const Row(
@@ -78,15 +84,19 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                           inputRequired: true
                         ),
                       ),
-                      Text(
-                        '€',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.normal,
+                      Padding(
+                        padding: EdgeInsets.only(top: 25, left: 10),
+                        child: Text(
+                          '€',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ),
                     ]
                   ),
+                  const SizedBox(height: 20),
 
                   // Conditions
                   const ComicSansRadioButtons(
@@ -99,6 +109,8 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                     ],
                     inputRequired: true
                   ),
+
+                  const SizedBox(height: bottomSpaceForButton),
                 ]
               ),
               Positioned(
