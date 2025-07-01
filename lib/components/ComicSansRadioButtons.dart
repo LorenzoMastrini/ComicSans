@@ -1,77 +1,77 @@
 import 'package:flutter/material.dart';
 
-class ComicSansRadioButtons extends StatefulWidget {
+
+
+class ComicSansRadioButtons extends StatelessWidget {
   final String title;
-  final List<Map<String, dynamic>> options;
-  //final Function(String?)? onSelectionChanged;
+  final List<String> options;
   final bool inputRequired;
+  final TextEditingController? controller; // To control from outside
+  final ValueChanged<String?>? onChanged;
+  final String? selectedValue;
 
   // Constructor
   const ComicSansRadioButtons({
     super.key,
     required this.title,
     required this.options,
-    this.inputRequired = false
+    this.inputRequired = false,
+    this.controller,
+    this.onChanged,
+    this.selectedValue,
   });
 
-  @override
-  State<StatefulWidget> createState() => _ComicSansRadioButtonsState();
-}
-
-
-
-class _ComicSansRadioButtonsState extends State<ComicSansRadioButtons> {
-  String? _selectedValue;
 
   Widget addAsterisk() {
-    if(widget.inputRequired) {
-      return const Text(
+    return inputRequired
+      ? const Text(
         '*',
         style: TextStyle(
           color: Colors.red,
           fontWeight: FontWeight.bold,
         ),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
+      )
+    : const SizedBox.shrink();
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        RichText(
-          text: TextSpan(
-              style: DefaultTextStyle.of(context).style,
-              children: [
-                TextSpan(
-                  text: widget.title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          RichText(
+            text: TextSpan(
+                style: DefaultTextStyle.of(context).style,
+                children: [
+                  TextSpan(
+                    text: title,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                WidgetSpan(
-                    child: addAsterisk()
-                ),
-              ]
+                  WidgetSpan(
+                      child: addAsterisk()
+                  ),
+                ]
+            ),
           ),
-        ),
-        ...widget.options.map((option) {
-          return RadioListTile<String>(
-            title: Text(option['title']),
-            value: option['value'],
-            groupValue: _selectedValue,
-            onChanged: (value) {
-              setState(() {
-                _selectedValue = value;
-              });
-            }
-          );
-        })
-      ]
+          ...options.map((option) {
+            return RadioListTile<String>(
+              title: Text(option),
+              value: option,
+              groupValue: selectedValue,
+              onChanged: (newValue) {
+                if (onChanged != null) {
+                  onChanged!(newValue);
+                  if (controller != null && newValue != controller!.text) {
+                    controller!.text = newValue ?? '';
+                  }
+                }
+              },
+            );
+          }),
+        ]
     );
   }
 }

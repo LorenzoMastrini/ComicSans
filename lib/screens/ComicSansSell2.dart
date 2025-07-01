@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ImageUploadSlot.dart';
+import 'package:comicsans/providers/SellInfoProvider.dart';
 import 'package:comicsans/screens/ComicSansSell3.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:provider/provider.dart';
+
+
 
 class ComicSansSell2 extends StatefulWidget {
   const ComicSansSell2({super.key});
@@ -16,13 +18,12 @@ class ComicSansSell2 extends StatefulWidget {
 
 
 class _ComicSansSell2State extends State<ComicSansSell2> {
-  final List<File> _uploadedImages = []; // List of uploaded images in the grid (excluding cover image)
 
   // Grid of (maximum) 9 photos
-  Widget photoGrid() {
-    int currentImageCount = _uploadedImages.length;
-    bool canAddImages = currentImageCount < 9; // If true show the "Add image" slot
-    int totalImageCount = currentImageCount + (canAddImages ? 1 : 0);
+  Widget photoGrid(SellInfoProvider provider) {
+    final uploadedImages = provider.uploadedImages;
+    bool canAddImages = uploadedImages.length < 9;
+    int totalImageCount = uploadedImages.length + (canAddImages ? 1 : 0);
 
     return GridView.builder(
       itemCount: totalImageCount,
@@ -31,51 +32,44 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3, // 3 photos per row
       ),
-      itemBuilder: (context, index) {
+      itemBuilder: (_, index) {
+        final uploadedImages = provider.uploadedImages;
+
         // Slot for an loaded image
-        if(index < currentImageCount) {
-          final imageFile = _uploadedImages[index];
+        if(index < uploadedImages.length) {
+          final image = uploadedImages[index];
           return ImageUploadSlot(
-            key: ValueKey(imageFile.path),
-            initialImage: imageFile,
+            key: ValueKey(image!.path),
+            initialImage: image,
             onImageSelected: (File? selectedImage) {
-              setState(() {
-                if (selectedImage != null) {
-                  _uploadedImages[index] = selectedImage;
-                } else {
-                  _uploadedImages.removeAt(index);
-                }
-              });
+              if (selectedImage != null) {
+                provider.replacePhotoAt(index, selectedImage);
+              } else {
+                provider.removePhotoAt(index);
+              }
             },
           );
-        // Slot to add a new image
-        } else if(canAddImages) {
+        } else {
           return ImageUploadSlot(
             key: const ValueKey("add_new_image_slot"),
             onImageSelected: (File? selectedImage) {
-              if (selectedImage != null) {
-                if (_uploadedImages.length < 9) {
-                  setState(() {
-                    _uploadedImages.add(selectedImage);
-                  });
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Puoi caricare fino a 10 foto totali.'),
-                    ),
-                  );
-                }
+              if (selectedImage != null && uploadedImages.length < 9) {
+                provider.addPhoto(selectedImage);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Puoi caricare fino a 10 foto totali.')),
+                );
               }
             },
           );
         }
-        return const SizedBox.shrink(); // To suppress the nullable return warning (should never happen)
       }
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final sellInfoProvider = Provider.of<SellInfoProvider>(context);
     const double btnBottomPadding = 15; // Bottom padding for the button
     const double btnHeight = 60;
     const double bottomSpaceForButton = btnHeight + btnBottomPadding * 5; // Space for the ListView to avoid content under the button
@@ -85,7 +79,7 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
           title: "2/3: Carica le foto",
           showBackButton: true,
           showCloseButton: true,
-          actionType: appBarActionType.close
+          actionType: AppBarActionType.close
       ),
         body: Form(
           child: Padding(
@@ -119,11 +113,14 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(50, 10, 50, 0),
                       child: ImageUploadSlot(
+                        initialImage: sellInfoProvider.cover,
                         onImageSelected: (File? selectedImage) {
+                          sellInfoProvider.updateCover(selectedImage);
                         }
                       ),
                     ),
                     const SizedBox(height: 30),
+
                     const Text(
                       'Foto aggiuntive',
                       style: TextStyle(
@@ -131,13 +128,11 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                           fontWeight: FontWeight.bold
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsetsGeometry.directional(top: 10), // Padding from the label
-                        child: photoGrid()
-                    ),
 
-                    // Prevent the content to be covered by the ElevatedButton
-                    const SizedBox(height: bottomSpaceForButton),
+                    const SizedBox(height: 30),
+                    photoGrid(sellInfoProvider),
+
+                    const SizedBox(height: bottomSpaceForButton), // Prevent the content to be covered by the ElevatedButton
                   ]
                 ),
 
@@ -156,9 +151,7 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const ComicSansSell3()
-                        )
+                        MaterialPageRoute(builder: (_) => const ComicSansSell3())
                       );
                     },
                     child: const Text('Continua')

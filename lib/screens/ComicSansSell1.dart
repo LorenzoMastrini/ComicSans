@@ -1,8 +1,10 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'package:comicsans/components/ComicSansRadioButtons.dart';
+import 'package:comicsans/providers/SellInfoProvider.dart';
 import 'package:comicsans/screens/ComicSansSell2.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ComicSansSell1 extends StatefulWidget {
   const ComicSansSell1({super.key});
@@ -14,6 +16,7 @@ class ComicSansSell1 extends StatefulWidget {
 
 
 class _ComicSansSell1State extends State<ComicSansSell1> {
+
   @override
   Widget build(BuildContext context) {
     const double btnBottomPadding = 15; // Bottom padding for the button
@@ -25,7 +28,7 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
           title: "1/3: Informazioni base",
           showBackButton: false,
           showCloseButton: true,
-          actionType: appBarActionType.close
+          actionType: AppBarActionType.close
       ),
       body: Form(
         child: Padding(
@@ -55,16 +58,16 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                   const SizedBox(height: 20),
 
                   // Titolo
-                  const ComicSansTextInput(
+                  ComicSansTextInput(
                     title: 'Titolo',
                     hintText: 'Titolo',
                     labelText: 'Inserisci il titolo del fumetto',
-                    inputRequired: true
+                    inputRequired: true,
                   ),
                   const SizedBox(height: 20),
 
                   // Description
-                  const ComicSansTextInput(
+                  ComicSansTextInput(
                     title: 'Descrizione',
                     hintText: 'Descrizione',
                     labelText: 'Inserisci la descrizione del fumetto',
@@ -73,7 +76,7 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                   const SizedBox(height: 20),
 
                   // Price
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Expanded(
@@ -81,7 +84,8 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                           title: 'Prezzo',
                           hintText: 'Prezzo',
                           labelText: 'Inserisci un prezzo appropriato',
-                          inputRequired: true
+                          inputRequired: true,
+                          keyboardType: TextInputType.number,
                         ),
                       ),
                       Padding(
@@ -102,10 +106,10 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                   const ComicSansRadioButtons(
                     title: 'Condizioni',
                     options: [
-                      {'title': 'Da edicola', 'value': 'Da edicola'},
-                      {'title': 'Ottime', 'value': 'Ottime'},
-                      {'title': 'Buone', 'value': 'Buone'},
-                      {'title': 'Molto usato', 'value': 'Molto usato'}
+                      'Da edicola',
+                      'Ottime',
+                      'Buone',
+                      'Molto usato',
                     ],
                     inputRequired: true
                   ),

@@ -38,6 +38,16 @@ class _ImageUploadSlotState extends State<ImageUploadSlot> {
     _uploadedImage = widget.initialImage;
   }
 
+  @override
+  void didUpdateWidget(covariant ImageUploadSlot oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialImage?.path != oldWidget.initialImage?.path) {
+      setState(() {
+        _uploadedImage = widget.initialImage;
+      });
+    }
+  }
+
   // Select an image from the device gallery or from camera
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
