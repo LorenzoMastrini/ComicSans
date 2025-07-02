@@ -17,31 +17,39 @@ class _ImagesDisplayState extends State<ImagesDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        ComicSansAppBar(showBackButton: true),
-        CarouselSlider(
-          options: CarouselOptions(
-              height: 550,
-              viewportFraction: 1.0,
-              enlargeCenterPage: false,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  current = index;
-                });
-              }),
-          items: widget.comicImages
-              ?.map((item) => Container(
-            child: Center(
-                child: Image.asset(
-                  item,
-                  fit: BoxFit.cover,
-                  height: MediaQuery.of(context).size.height,
-                )),
-          ))
-              .toList(),
-        ),
-      ],
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          ComicSansAppBar(showBackButton: true),
+          Expanded(
+            child: CarouselSlider(
+              options: CarouselOptions(
+                  height: 550,
+                  viewportFraction: 1.0,
+                  enlargeCenterPage: false,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      current = index;
+                    });
+                  }),
+              items: widget.comicImages
+                  ?.map((item) => Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Center(
+                    child: Image.asset(
+                      item,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                      alignment: Alignment.center,
+                    )),
+              ))
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

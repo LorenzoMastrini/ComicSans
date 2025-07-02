@@ -5,7 +5,7 @@ enum binding {Spillato, Cartonato, Brossurato, Altro}
 
 class Comic {
   int id;
-  User? seller;
+  User seller;
   String title;
   String description;
   int price;
@@ -28,7 +28,7 @@ class Comic {
 
   Comic({
     this.id = 0,
-    this.seller,
+    required this.seller,
     this.title = "",
     this.description = "",
     this.price = 1,

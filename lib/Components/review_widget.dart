@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../comic.dart';
+import '../user.dart';
 
 class ReviewWidget extends StatefulWidget {
-  Comic comic;
-  ReviewWidget({super.key, required this.comic});
+  User user;
+  ReviewWidget({super.key, required this.user});
 
   @override
   State<ReviewWidget> createState() => ReviewWidgetState();
@@ -28,7 +29,7 @@ class ReviewWidgetState extends State<ReviewWidget> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ...printStar(widget.comic.seller!.rating)
+        ...printStar(widget.user.rating)
       ]
     );
   }

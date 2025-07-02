@@ -13,6 +13,9 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
   final appBarActionType actionType; // Tipo di azione principale
   final VoidCallback? onOverflowMenuPressed; // Callback per il menu a tre puntini
   final VoidCallback? onCloseButtonPressed;
+  final Color? backgroundColor;
+  final Color? iconColor;
+  final bool modified;
 
   const ComicSansAppBar({
     super.key,
@@ -21,13 +24,15 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showCloseButton = false,
     this.actionType = appBarActionType.none,
     this.onOverflowMenuPressed,
-    this.onCloseButtonPressed
+    this.onCloseButtonPressed,
+    this.backgroundColor,
+    this.iconColor,
+    this.modified = false
   });
 
   @override
   Widget build(BuildContext context) {
     List<Widget> actionsList = [];
-
     // Main action based on the actionType
     if (actionType == appBarActionType.close) {
       actionsList.add(
@@ -45,18 +50,16 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.more_vert),
           onPressed: onOverflowMenuPressed ?? () {
-            // Implementa qui la logica di default per l'overflow menu
-            // o lascia che sia gestita dalla pagina che usa l'AppBar
             print("Overflow menu pressed (default action)");
-            // Esempio: Scaffold.of(context).openEndDrawer(); // Se hai un endDrawer
-            // O mostra un PopupMenuButton
           },
         ),
       );
     }
 
     return AppBar(
-        toolbarHeight: 40,
+        backgroundColor: backgroundColor ?? Colors.transparent,
+        toolbarHeight: 50,
+        scrolledUnderElevation: 0,
         title: title != null ?
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -65,8 +68,17 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Text(title!)
             )
           ],
+        ) : null, // title not given
+        automaticallyImplyLeading: false,
+        leading: showBackButton ? IconButton(
+          icon: Icon(Icons.arrow_back, color: iconColor ?? Colors.black),
+          onPressed: () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context, modified);
+            }
+          },
         )
-            : null, // title not given
+            : null,
         actions: actionsList.isNotEmpty ? actionsList : null
     );
   }

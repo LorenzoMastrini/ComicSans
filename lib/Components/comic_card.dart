@@ -1,19 +1,40 @@
 import 'package:comicsans/comic.dart';
 import 'package:flutter/material.dart';
+import 'package:comicsans/user.dart';
 
 
 class ComicCard extends StatefulWidget{
   final Comic comic;
-
-  const ComicCard ({required this.comic});
+  final User user;
+  const ComicCard ({required this.comic, required this.user});
 
   @override
   State<ComicCard> createState() => _ComicCardState();
 }
 
 class _ComicCardState extends State<ComicCard> {
+  late bool isFavourite;
+
+  @override
+  void initState(){
+    super.initState();
+    //isFavourite = widget.user.checkFavourites(widget.user, widget.comic);
+  }
+
+  void toggleFavourite(){
+    setState(() {
+      if(isFavourite){
+        widget.user.removeFavourite(widget.comic);
+      }
+      else{
+        widget.user.addFavourite(widget.comic);
+      }
+      isFavourite = !isFavourite;
+    });
+  }
   @override
   Widget build(BuildContext context){
+    isFavourite = widget.user.checkFavourites(widget.user, widget.comic);
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
       child: Stack(
@@ -73,9 +94,33 @@ class _ComicCardState extends State<ComicCard> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.bookmark_border, color: Colors.white),
-                      onPressed: () {
-                        
+                      icon: isFavourite ? Icon(Icons.bookmark, color: Colors.white) : Icon(Icons.bookmark_border, color: Colors.white),
+                      onPressed: () async {
+                        if (isFavourite) {
+                          bool? confirm = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              content: Text("Sei sicuro di voler rimuovere questo fumetto dai preferiti?"),
+                              actions: [
+                                TextButton(
+                                  child: Text("Annulla"),
+                                  onPressed: () => Navigator.of(context).pop(false),
+                                ),
+                                TextButton(
+                                  child: Text("Conferma"),
+                                  onPressed: () => Navigator.of(context).pop(true),
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (confirm == true) {
+                            toggleFavourite();
+                          }
+                        }
+                        else {
+                          toggleFavourite(); // aggiunta diretta senza conferma
+                        }
                       },
                     )
                   ]

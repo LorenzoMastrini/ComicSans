@@ -3,9 +3,11 @@
 import 'package:comicsans/screens/ComicSansHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:comicsans/sample_data.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SampleData.init();
   runApp(ComicSansApp());
 }
 
@@ -31,7 +33,7 @@ class _ComicSansAppState extends State<ComicSansApp> {
           debugShowCheckedModeBanner: false,
           title: "ComicSans App",
           //theme: mainTheme,
-          home: ComicSansHome(title: ""),
+          home: ComicSansHome(title: "", user: SampleData.allUsers[0], purchaseConfirmed: false),
         ),
       ),
     );
