@@ -1,10 +1,12 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansBottomBar.dart';
+import 'package:comicsans/sample_data.dart';
 import 'package:comicsans/screens/ComicSansFavorite.dart';
 import 'package:comicsans/screens/ComicSansHome.dart';
 import 'package:comicsans/screens/ComicSansInbox.dart';
 import 'package:comicsans/screens/ComicSansProfile.dart';
 import 'package:comicsans/screens/ComicSansSell1.dart'; // Page for the modal
+import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -12,7 +14,6 @@ class MainScreen extends StatefulWidget {
 
   @override
   State<MainScreen> createState() => _MainScreenState();
-
 }
 
 
@@ -20,12 +21,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _navigationBarIndex = 0; //(0: Home, 1: Favorite, 2: Sell, 3: Inbox, 4: Profile)
 
-  static const List<Widget> _pageContents = <Widget>[
-  ComicSansHome(),
-  ComicSansFavorite(),
-  // No page fo Sell1 because it opens a modal
-  ComicSansInbox(),
-  ComicSansProfile(),
+  static List<Widget> _pageContents = <Widget>[
+    ComicSansHome(user: SampleData.allUsers[0], purchaseConfirmed: false),
+    ComicSansFavorite(user: SampleData.allUsers[0]),
+    // No page fo Sell1 because it opens a modal
+    ComicSansInbox(),
+    ComicSansProfile(user: SampleData.allUsers[0]),
   ];
 
   void _onBottomNavItemTapped(int navBarIndex) {
@@ -81,9 +82,6 @@ class _MainScreenState extends State<MainScreen> {
       }
 
       return Scaffold(
-        appBar: ComicSansAppBar(
-          title: _getTitleForActualPage(actualPageIndex),
-        ),
         body: IndexedStack(
           index: actualPageIndex, // Use the mapped index
           children: _pageContents,

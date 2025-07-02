@@ -245,12 +245,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                       widget.comic.seller.comicsSale.remove(widget.comic);
                       SampleData.allComics.remove(widget.comic);
 
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context){
-                            return ComicSansHome(title: "", user: widget.user, purchaseConfirmed: true);
-                          }
-                        )
-                      );
+                      Navigator.pushNamed(context, '/');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,

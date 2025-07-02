@@ -2,6 +2,7 @@ import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/MainScreen.dart';
 import 'package:comicsans/RouteGenerator.dart';
 import 'package:comicsans/providers/SellInfoProvider.dart';
+import 'package:comicsans/sample_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +14,6 @@ void main() {
   SampleData.init();
   runApp(const ComicSansApp());
 }
-
-
 
 class ComicSansApp extends StatefulWidget {
   const ComicSansApp({super.key});
@@ -32,9 +31,9 @@ class _ComicSansAppState extends State<ComicSansApp> {
       providers: [
         ChangeNotifierProvider(create: (context) => SellInfoProvider())
       ],
-      child: const SafeArea( // Avoids the UI elements of the OS
+      child: SafeArea( // Avoids the UI elements of the OS
         child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle(
+          value: const SystemUiOverlayStyle(
             statusBarColor: Colors.white,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
