@@ -1,18 +1,23 @@
-//import 'package:comicsans/ComicSansTheme.dart';
-//import 'package:comicsans/components/ComicSansBottomBar.dart';
-import 'package:comicsans/screens/ComicSansHome.dart';
+import 'package:comicsans/ComicSansTheme.dart';
+import 'package:comicsans/MainScreen.dart';
+import 'package:comicsans/RouteGenerator.dart';
+import 'package:comicsans/providers/SellInfoProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:comicsans/sample_data.dart';
+import 'package:provider/provider.dart';
+
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SampleData.init();
-  runApp(ComicSansApp());
+  runApp(const ComicSansApp());
 }
 
+
+
 class ComicSansApp extends StatefulWidget {
-  ComicSansApp({super.key});
+  const ComicSansApp({super.key});
 
   @override
   State<ComicSansApp> createState() => _ComicSansAppState();
@@ -20,20 +25,27 @@ class ComicSansApp extends StatefulWidget {
 
 class _ComicSansAppState extends State<ComicSansApp> {
   //final ThemeData mainTheme = ComicSansTheme.light();
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(
-          statusBarColor: Colors.white,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.light,
-        ),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: "ComicSans App",
-          //theme: mainTheme,
-          home: ComicSansHome(title: "", user: SampleData.allUsers[0], purchaseConfirmed: false),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SellInfoProvider())
+      ],
+      child: const SafeArea( // Avoids the UI elements of the OS
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle(
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: "ComicSans",
+            //theme: mainTheme,
+            home: MainScreen(),
+            onGenerateRoute: RouteGenerator.generateRoute,
+          ),
         ),
       ),
     );

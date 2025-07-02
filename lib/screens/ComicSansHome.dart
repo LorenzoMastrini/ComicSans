@@ -1,3 +1,7 @@
+import 'package:comicsans/components/ComicSansBottomBar.dart';
+import 'package:comicsans/screens/ComicSansFavorite.dart';
+import 'package:comicsans/screens/ComicSansInbox.dart';
+import 'package:comicsans/screens/ComicSansProfile.dart';
 import 'package:comicsans/Components/app_bar.dart';
 import 'package:comicsans/Components/product_grid.dart';
 import 'package:comicsans/Components/search_bar_favourite.dart';

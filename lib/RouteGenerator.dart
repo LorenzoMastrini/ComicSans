@@ -1,0 +1,32 @@
+import 'package:comicsans/MainScreen.dart';
+import 'package:flutter/material.dart';
+
+
+
+class RouteGenerator {
+  static Route<dynamic> generateRoute(RouteSettings routeSettings) {
+    final args = routeSettings.arguments; // Arguments passed in the call to Navigator.pushNamed
+
+    switch(routeSettings.name) {
+      case '/':
+        return MaterialPageRoute(builder: (_) => const MainScreen()); // Main screen with the bottom bar
+      default:
+        return _errorRoute();
+    }
+  }
+
+  // Route not found
+  static Route<dynamic> _errorRoute() {
+    return MaterialPageRoute(builder: (_) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Error Route'),
+        ),
+        body: const Center(
+          child: Text('ERROR ROUTE'),
+        ),
+      );
+    }
+    );
+  }
+}
