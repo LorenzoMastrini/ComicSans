@@ -1,4 +1,6 @@
 import 'package:comicsans/MainScreen.dart';
+import 'package:comicsans/screens/Login.dart';
+import 'package:comicsans/screens/Registration.dart';
 import 'package:flutter/material.dart';
 
 
@@ -8,6 +10,12 @@ class RouteGenerator {
     final args = routeSettings.arguments; // Arguments passed in the call to Navigator.pushNamed
 
     switch(routeSettings.name) {
+      case '/login':
+        return MaterialPageRoute(builder: (_) => const Login());
+      case '/forgot_password':
+        return MaterialPageRoute(builder: (_) => const MainScreen());
+      case '/registration':
+        return MaterialPageRoute(builder: (_) => const Registration());
       case '/':
         return MaterialPageRoute(builder: (_) => const MainScreen()); // Main screen with the bottom bar
       default:

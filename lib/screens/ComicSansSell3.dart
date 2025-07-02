@@ -7,6 +7,7 @@ import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'package:comicsans/components/ComicSansRadioButtons.dart';
 import 'package:comicsans/components/ComicSansToggle.dart';
 import 'package:comicsans/providers/SellInfoProvider.dart';
+import 'package:comicsans/screens/ComicSansButton.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -321,17 +322,11 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                   bottom: 20,
                   left: 0,
                   right: 0,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(60),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                    ),
+                  child: ComicSansButton (
+                    text: 'Pubblica',
                     onPressed: () {
                       Navigator.pushNamed(context, '/'); // return to the main screen
                     },
-                    child: const Text('Pubblica')
                   ),
                 )
               ]

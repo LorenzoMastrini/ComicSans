@@ -11,6 +11,7 @@ class ComicSansTextInput extends StatefulWidget {
   final ValueChanged<String>? onChanged; // To notify changes
   final ValueChanged<String>? onFieldSubmitted; // When user confirms the field
   final FormFieldValidator<String>? validator; // To validate forms
+  final bool passwordField;
 
   // Constructor
   const ComicSansTextInput({
@@ -25,6 +26,7 @@ class ComicSansTextInput extends StatefulWidget {
     this.onFieldSubmitted,
     this.validator,
     this.onChanged,
+    this.passwordField = false,
   });
 
   @override
@@ -34,15 +36,13 @@ class ComicSansTextInput extends StatefulWidget {
 
 
 class _ComicSansTextInputState extends State<ComicSansTextInput> {
-  late final bool _usesExternalController;
   late TextEditingController _controller;
   final FocusNode _focusNode = FocusNode();
-  //String? _errorText; // Validation error
+  late bool _obscureText = widget.passwordField ? true : false;
 
   @override
   void initState() {
     super.initState();
-    _usesExternalController = widget.controller != null;
     _controller = widget.controller ?? TextEditingController(text: widget.initialValue ?? ''); // Use the given controller or create one
     _controller.addListener(_handleChange);
 
@@ -78,21 +78,28 @@ class _ComicSansTextInputState extends State<ComicSansTextInput> {
     }
   }
 
+  void _toggleVisibility() {
+    setState(() => _obscureText = !_obscureText);
+  }
+
   Widget _buildLabel() {
-    return RichText(
-      text: TextSpan(
-        style: DefaultTextStyle.of(context).style,
-        children: [
-          TextSpan(
-            text: widget.title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          if (widget.inputRequired)
-            const TextSpan(
-              text: ' *',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+    return Padding(
+      padding: EdgeInsetsGeometry.directional(bottom: 2),
+      child: RichText(
+        text: TextSpan(
+          style: DefaultTextStyle.of(context).style,
+          children: [
+            TextSpan(
+              text: widget.title,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-        ],
+            if (widget.inputRequired)
+              const TextSpan(
+                text: ' *',
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -104,10 +111,10 @@ class _ComicSansTextInputState extends State<ComicSansTextInput> {
       children: <Widget>[
         // Label
         _buildLabel(),
-        const SizedBox(height: 8),
 
         // Input field
         TextFormField(
+          obscureText: _obscureText,
           controller: _controller,
           focusNode: _focusNode,
           keyboardType: widget.keyboardType,
@@ -115,9 +122,20 @@ class _ComicSansTextInputState extends State<ComicSansTextInput> {
             hintText: widget.hintText,
             labelText: widget.labelText,
             border: const OutlineInputBorder(),
+            suffixIcon: widget.passwordField
+              ? IconButton( // Show hide password only if it's a password field
+                icon: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                ),
+                onPressed: _toggleVisibility,
+              )
+              : null, // Otherwise don't show the icon
           ),
           validator: (value) {
-            if(widget.inputRequired && (value == null || value.trim().isEmpty)) {
+            if (widget.validator != null) {
+              return widget.validator!(value); // If the validator is provided, use it
+              // Otherwise use the input required validator (default)
+            } else if(widget.inputRequired && (value == null || value.trim().isEmpty)) {
               return 'Campo obbligatorio';
             }
             return widget.validator?.call(value);

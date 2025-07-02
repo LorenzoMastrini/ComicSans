@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:comicsans/comic.dart';
 import 'package:flutter/cupertino.dart';
 
 
@@ -27,9 +26,9 @@ class SellInfoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Conditions? _conditions;
-  Conditions? get conditions => _conditions;
-  set conditions(Conditions? value) {
+  String? _conditions;
+  String? get conditions => _conditions;
+  set conditions(String? value) {
     _conditions = value;
     notifyListeners();
   }
