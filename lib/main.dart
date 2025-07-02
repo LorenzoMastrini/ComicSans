@@ -2,6 +2,7 @@ import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/MainScreen.dart';
 import 'package:comicsans/RouteGenerator.dart';
 import 'package:comicsans/providers/SellInfoProvider.dart';
+import 'package:comicsans/screens/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ class _ComicSansAppState extends State<ComicSansApp> {
             debugShowCheckedModeBanner: false,
             title: "ComicSans",
             //theme: mainTheme,
-            home: MainScreen(),
+            initialRoute: '/login',
             onGenerateRoute: RouteGenerator.generateRoute,
           ),
         ),

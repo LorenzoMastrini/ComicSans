@@ -36,11 +36,20 @@ class ComicSansRadioButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          RichText(
-            text: TextSpan(
+    return FormField<String>(
+      initialValue: selectedValue,
+      validator: (value) {
+        if (inputRequired && (value == null || value.isEmpty)) {
+          return 'Campo obbligatorio';
+        }
+        return null;
+      },
+      builder: (state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            RichText(
+              text: TextSpan(
                 style: DefaultTextStyle.of(context).style,
                 children: [
                   TextSpan(
@@ -50,28 +59,36 @@ class ComicSansRadioButtons extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  WidgetSpan(
-                      child: addAsterisk()
-                  ),
+                  WidgetSpan(child: addAsterisk()),
                 ]
+              ),
             ),
-          ),
-          ...options.map((option) {
-            return RadioListTile<String>(
-              title: Text(option),
-              value: option,
-              groupValue: selectedValue,
-              onChanged: (newValue) {
-                if (onChanged != null) {
-                  onChanged!(newValue);
+            ...options.map((option) {
+              return RadioListTile<String> (
+                title: Text(option),
+                value: option,
+                groupValue: state.value,
+                onChanged: (newValue) {
+                  state.didChange(newValue);
+                  if (onChanged != null) onChanged!(newValue);
                   if (controller != null && newValue != controller!.text) {
                     controller!.text = newValue ?? '';
                   }
-                }
-              },
-            );
-          }),
-        ]
+                },
+              );
+            }),
+            if (state.hasError)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Text(
+                  state.errorText ?? '',
+                  style: Theme.of(context).inputDecorationTheme.errorStyle ??
+                      TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              ),
+          ]
+        );
+      }
     );
   }
 }

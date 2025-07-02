@@ -1,4 +1,11 @@
 class GlobalConstants {
+  static const List<String> availableConditions = [
+    'Da edicola',
+    'Ottime',
+    'Buone',
+    'Molto usato',
+  ];
+
   static const List<String> availableGenreTitles = [
     'Avventura',
     'Azione',

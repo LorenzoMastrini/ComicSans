@@ -7,6 +7,8 @@ import 'package:comicsans/screens/ComicSansProfile.dart';
 import 'package:comicsans/screens/ComicSansSell1.dart'; // Page for the modal
 import 'package:flutter/material.dart';
 
+
+
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
