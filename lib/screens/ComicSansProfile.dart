@@ -1,16 +1,16 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansBottomBar.dart';
-import 'package:comicsans/screens/profile_screen.dart';
-import 'package:comicsans/screens/user_purchases_screen.dart';
-import 'package:comicsans/screens/user_sellings_screen.dart';
-import 'package:comicsans/screens/user_vendor_screen.dart';
+import 'package:comicsans/screens/Profile.dart';
+import 'package:comicsans/screens/UserPurchasesScreen.dart';
+import 'package:comicsans/screens/UserSellingsScreen.dart';
+import 'package:comicsans/screens/UserVendorScreen.dart';
 import 'package:flutter/material.dart';
 
-import '../Components/review_widget.dart';
+import '../Components/ReviewWidget.dart';
 import '../user.dart';
-import 'account_settings_screen.dart';
-import 'assistance_screen.dart';
-import 'followed_users.dart';
+import 'AccountSettingsScreen.dart';
+import 'AssitanceScreen.dart';
+import 'FollowedUsersScreen.dart';
 
 class ComicSansProfile extends StatefulWidget {
   User user;

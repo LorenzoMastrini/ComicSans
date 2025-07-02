@@ -1,7 +1,7 @@
 import 'package:comicsans/address.dart';
-import 'package:comicsans/credit_card.dart';
+import 'package:comicsans/CreditCard.dart';
 import 'package:comicsans/comic.dart';
-import 'package:comicsans/Components//review_component.dart';
+import 'package:comicsans/Components//ReviewComponent.dart';
 import 'package:comicsans/review.dart';
 
 enum Gender {Maschio, Femmina, Altro}

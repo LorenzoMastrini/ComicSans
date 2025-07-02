@@ -1,5 +1,5 @@
 import 'package:comicsans/components/ComicSansTextInput.dart';
-import 'package:comicsans/screens/ComicSansButton.dart';
+import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:flutter/material.dart';
 
 class Registration extends StatelessWidget {

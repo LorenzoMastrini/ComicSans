@@ -3,14 +3,14 @@ import 'package:comicsans/screens/ComicSansFavorite.dart';
 import 'package:comicsans/screens/ComicSansInbox.dart';
 import 'package:comicsans/screens/ComicSansProfile.dart';
 import 'package:comicsans/Components/app_bar.dart';
-import 'package:comicsans/Components/product_grid.dart';
-import 'package:comicsans/Components/search_bar_favourite.dart';
-import 'package:comicsans/screens/profile_screen.dart';
+import 'package:comicsans/Components/ProductGrid.dart';
+import 'package:comicsans/Components/ComicSansSearchBarFavourite.dart';
+import 'package:comicsans/screens/Profile.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/Components/categories_grid.dart';
-import 'package:comicsans/Components/search_bar.dart' hide SearchBar;
-import '../Components/favourite_grid.dart';
-import '../sample_data.dart';
+import 'package:comicsans/Components/CategoriesGrid.dart';
+import 'package:comicsans/Components/ComicSansSearchBar.dart' hide SearchBar;
+import '../Components/FavouriteGrid.dart';
+import '../SampleData.dart';
 import '../user.dart';
 
 

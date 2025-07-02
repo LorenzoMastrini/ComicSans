@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:comicsans/sample_data.dart';
+import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/user.dart';
 
 import '../comic.dart';
-import '../screens/results_screen.dart';
+import '../screens/SearchResults.dart';
 
 class MySearchBarFavourite extends StatefulWidget{
   User user;

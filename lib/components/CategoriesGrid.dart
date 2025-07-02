@@ -1,4 +1,4 @@
-import 'package:comicsans/Components/category_slot.dart';
+import 'package:comicsans/Components/CategorySlot.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/category.dart';
 

@@ -1,15 +1,15 @@
-import 'package:comicsans/Components/product_grid.dart';
-import 'package:comicsans/screens/product_details.dart';
+import 'package:comicsans/Components/ProductGrid.dart';
+import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:comicsans/screens/product_details_modify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/sample_data.dart';
+import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/comic.dart';
 import '../Components/app_bar.dart';
-import '../Components/comic_card.dart';
+import '../Components/ComicCard.dart';
 import '../Components/comic_card_delete.dart';
-import '../Components/review_component.dart';
-import '../Components/review_widget.dart';
+import '../Components/ReviewComponent.dart';
+import '../Components/ReviewWidget.dart';
 import '../user.dart';
 
 class UserVendorScreen extends StatefulWidget{

@@ -1,16 +1,16 @@
 import 'package:comicsans/comic.dart';
-import 'package:comicsans/screens/image_display.dart';
-import 'package:comicsans/screens/purchase_screen.dart';
-import 'package:comicsans/screens/user_vendor_screen.dart';
-import 'package:comicsans/screens/vendor_screen.dart';
+import 'package:comicsans/screens/ImagesDisplay.dart';
+import 'package:comicsans/screens/PurchaseScreen.dart';
+import 'package:comicsans/screens/UserVendorScreen.dart';
+import 'package:comicsans/screens/VendorScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/Components/app_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import '../Components/details_panel.dart';
-import '../Components/review_widget.dart';
-import '../sample_data.dart';
+import '../Components/PanelWidget.dart';
+import '../Components/ReviewWidget.dart';
+import '../SampleData.dart';
 import '../user.dart';
 
 class ProductDetailsModifyScreen extends StatefulWidget {

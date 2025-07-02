@@ -2,7 +2,7 @@ import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/MainScreen.dart';
 import 'package:comicsans/RouteGenerator.dart';
 import 'package:comicsans/providers/SellInfoProvider.dart';
-import 'package:comicsans/sample_data.dart';
+import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/screens/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

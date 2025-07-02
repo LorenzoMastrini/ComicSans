@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:comicsans/GlobalContants.dart';
+import 'package:comicsans/GlobalConstants.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansCheckbox.dart';
 import 'package:comicsans/components/ComicSansDropdown.dart';
@@ -7,7 +7,7 @@ import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'package:comicsans/components/ComicSansRadioButtons.dart';
 import 'package:comicsans/components/ComicSansToggle.dart';
 import 'package:comicsans/providers/SellInfoProvider.dart';
-import 'package:comicsans/screens/ComicSansButton.dart';
+import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,12 +1,12 @@
-import 'package:comicsans/screens/account_settings_screen.dart';
-import 'package:comicsans/screens/followed_users.dart';
-import 'package:comicsans/screens/user_purchases_screen.dart';
-import 'package:comicsans/screens/user_sellings_screen.dart';
-import 'package:comicsans/screens/user_vendor_screen.dart';
+import 'package:comicsans/screens/AccountSettingsScreen.dart';
+import 'package:comicsans/screens/FollowedUsersScreen.dart';
+import 'package:comicsans/screens/UserPurchasesScreen.dart';
+import 'package:comicsans/screens/UserSellingsScreen.dart';
+import 'package:comicsans/screens/UserVendorScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/user.dart';
-import '../Components/review_widget.dart';
-import 'assistance_screen.dart';
+import '../Components/ReviewWidget.dart';
+import 'AssitanceScreen.dart';
 
 class Profile extends StatefulWidget {
   User user;

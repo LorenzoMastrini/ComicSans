@@ -1,9 +1,9 @@
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/review.dart';
 import 'package:comicsans/user.dart';
-import 'package:comicsans/credit_card.dart';
+import 'package:comicsans/CreditCard.dart';
 import 'package:comicsans/address.dart';
-import 'Components/review_component.dart';
+import 'Components/ReviewComponent.dart';
 
 class SampleData{
   static late User user1, user2;

@@ -1,4 +1,4 @@
-import 'package:comicsans/GlobalContants.dart';
+import 'package:comicsans/GlobalConstants.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'package:comicsans/components/ComicSansRadioButtons.dart';
@@ -13,8 +13,6 @@ class ComicSansSell1 extends StatefulWidget {
   @override
   State<ComicSansSell1> createState() => _ComicSansSell1State();
 }
-
-
 
 class _ComicSansSell1State extends State<ComicSansSell1> {
   final _formKey = GlobalKey<FormState>(); // For form validation

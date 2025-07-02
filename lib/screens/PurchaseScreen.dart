@@ -3,7 +3,7 @@ import 'package:comicsans/screens/ComicSansHome.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/user.dart';
-import 'package:comicsans/sample_data.dart';
+import 'package:comicsans/SampleData.dart';
 
 class PurchaseScreen extends StatefulWidget{
   User user;

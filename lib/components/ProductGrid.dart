@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:comicsans/sample_data.dart';
-import 'package:comicsans/Components/comic_card.dart';
-import 'package:comicsans/screens/product_details.dart';
+import 'package:comicsans/SampleData.dart';
+import 'package:comicsans/Components/ComicCard.dart';
+import 'package:comicsans/screens/ProductDetail.dart';
 import '../user.dart';
 
 class ProductGrid extends StatefulWidget{

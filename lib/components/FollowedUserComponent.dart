@@ -1,5 +1,5 @@
-import 'package:comicsans/Components/review_component.dart';
-import 'package:comicsans/Components/review_widget.dart';
+import 'package:comicsans/Components/ReviewComponent.dart';
+import 'package:comicsans/Components/ReviewWidget.dart';
 import 'package:flutter/material.dart';
 import '../user.dart';
 

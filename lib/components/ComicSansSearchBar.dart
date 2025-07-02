@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:comicsans/sample_data.dart';
+import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/user.dart';
-import 'package:comicsans/screens/results_screen.dart';
+import 'package:comicsans/screens/SearchResults.dart';
 
 import '../comic.dart';
 

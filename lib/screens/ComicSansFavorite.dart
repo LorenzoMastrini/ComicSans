@@ -1,8 +1,8 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansBottomBar.dart';
 import 'package:flutter/material.dart';
-import '../Components/favourite_grid.dart';
-import '../Components/search_bar_favourite.dart';
+import '../Components/FavouriteGrid.dart';
+import '../Components/ComicSansSearchBarFavourite.dart';
 import '../user.dart';
 
 class ComicSansFavorite extends StatefulWidget {

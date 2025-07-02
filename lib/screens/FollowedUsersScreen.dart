@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Components/followed_user_component.dart';
+import '../Components/FollowedUserComponent.dart';
 import '../user.dart';
 
 class FollowedUsersScreen extends StatefulWidget{

@@ -1,10 +1,10 @@
-import 'package:comicsans/Components/search_bar.dart';
-import 'package:comicsans/screens/product_details.dart';
+import 'package:comicsans/Components/ComicSansSearchBar.dart';
+import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/sample_data.dart';
+import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/user.dart';
 
-import '../Components/comic_card.dart';
+import '../Components/ComicCard.dart';
 import '../comic.dart';
 
 class SearchResults extends StatefulWidget{

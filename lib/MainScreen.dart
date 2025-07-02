@@ -1,6 +1,6 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansBottomBar.dart';
-import 'package:comicsans/sample_data.dart';
+import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/screens/ComicSansFavorite.dart';
 import 'package:comicsans/screens/ComicSansHome.dart';
 import 'package:comicsans/screens/ComicSansInbox.dart';
