@@ -1,13 +1,13 @@
 import 'package:comicsans/Components/ProductGrid.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
-import 'package:comicsans/screens/product_details_modify.dart';
+import 'package:comicsans/screens/ProductDetailsModify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/comic.dart';
 import '../Components/app_bar.dart';
 import '../Components/ComicCard.dart';
-import '../Components/comic_card_delete.dart';
+import '../Components/ComicCardDelete.dart';
 import '../Components/ReviewComponent.dart';
 import '../Components/ReviewWidget.dart';
 import '../user.dart';

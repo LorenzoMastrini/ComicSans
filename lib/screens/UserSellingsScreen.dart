@@ -1,5 +1,5 @@
 import 'package:comicsans/Components/app_bar.dart';
-import 'package:comicsans/Components/comic_card_wout_button.dart';
+import 'package:comicsans/Components/ComicCardWoutButton.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
 import '../Components/ComicCard.dart';
