@@ -1,12 +1,9 @@
-import 'package:comicsans/ComicSansTheme.dart';
-import 'package:comicsans/MainScreen.dart';
 import 'package:comicsans/RouteGenerator.dart';
 import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/providers/messages_provider.dart';
 import 'package:comicsans/providers/sell_informations_provider.dart';
 import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/providers/user_provider.dart';
-import 'package:comicsans/screens/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -57,4 +54,3 @@ class _ComicSansAppState extends State<ComicSansApp> {
     );
   }
 }
-

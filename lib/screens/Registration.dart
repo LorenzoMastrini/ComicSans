@@ -1,9 +1,11 @@
 import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
+import 'package:comicsans/global_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/SampleData.dart';
+import 'package:comicsans/user.dart';
 
-import '../user.dart';
+
 
 class Registration extends StatefulWidget {
   const Registration({super.key});
@@ -15,45 +17,45 @@ class Registration extends StatefulWidget {
 class _RegistrationState extends State<Registration> {
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    final _nameController = TextEditingController();
-    final _lastNameController = TextEditingController();
-    final _emailController = TextEditingController();
-    final _passwordController = TextEditingController();
-    final _confirmPasswordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    final nameController = TextEditingController();
+    final lastNameController = TextEditingController();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
     // For form validation
-    String? _currentPassword;
+    String? currentPassword;
 
     @override
     void dispose() {
-      _nameController.dispose();
-      _lastNameController.dispose();
-      _emailController.dispose();
-      _passwordController.dispose();
-      _confirmPasswordController.dispose();
+      nameController.dispose();
+      lastNameController.dispose();
+      emailController.dispose();
+      passwordController.dispose();
+      confirmPasswordController.dispose();
       super.dispose();
     }
 
     void registerUser() {
-      if (_formKey.currentState!.validate()) {
-        final name = _nameController.text.trim();
-        final lastName = _lastNameController.text.trim();
-        final email = _emailController.text.trim();
-        final password = _passwordController.text;
+      if (formKey.currentState!.validate()) {
+        final name = nameController.text.trim();
+        final lastName = lastNameController.text.trim();
+        final email = emailController.text.trim();
+        final password = passwordController.text;
         if(SampleData.allUsers.any((user) => user.email == email)){
           showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                  content: Text("Questa email è già stata utilizzata!"),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text("OK")
-                    )
-                  ]
-              )
+            context: context,
+            builder: (context) => AlertDialog(
+              content: Text("Questa email è già stata utilizzata!"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("OK")
+                )
+              ]
+            )
           );
           return;
         }
@@ -66,9 +68,9 @@ class _RegistrationState extends State<Registration> {
           email: email,
           password: password,
           imagePath: "",
-          gend: Gender.Altro,
+          gender: Gender.altro,
           birthday: "",
-          addr: null,
+          address: null,
           card: null,
           rating: 0,
           favouriteComics: [],
@@ -94,7 +96,7 @@ class _RegistrationState extends State<Registration> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Form (
-            key: _formKey,
+            key: formKey,
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -102,14 +104,14 @@ class _RegistrationState extends State<Registration> {
                   ComicSansTextInput(
                     title: 'Nome',
                     inputRequired: true,
-                    controller: _nameController,
+                    controller: nameController,
                   ),
                   const SizedBox(height: 10),
 
                   ComicSansTextInput(
                     title: 'Cognome',
                     inputRequired: true,
-                    controller: _lastNameController,
+                    controller: lastNameController,
                   ),
                   const SizedBox(height: 10),
 
@@ -117,7 +119,7 @@ class _RegistrationState extends State<Registration> {
                     title: 'Indirizzo email',
                     keyboardType: TextInputType.emailAddress,
                     inputRequired: true,
-                    controller: _emailController,
+                    controller: emailController,
                   ),
                   const SizedBox(height: 10),
 
@@ -126,9 +128,9 @@ class _RegistrationState extends State<Registration> {
                     passwordField: true,
                     inputRequired: true,
                     onChanged: (value) {
-                      _currentPassword = value;
+                      currentPassword = value;
                     },
-                    controller: _passwordController,
+                    controller: passwordController,
                   ),
                   const SizedBox(height: 10),
 
@@ -140,7 +142,7 @@ class _RegistrationState extends State<Registration> {
                       if(value == null || value.trim().isEmpty) {
                         return 'Campo obbligatorio';
                       }
-                      if (value != _currentPassword) {
+                      if (value != currentPassword) {
                         return 'Le password non corrispondono';
                       }
                       return null;

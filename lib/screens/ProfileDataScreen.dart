@@ -1,18 +1,22 @@
+import 'package:comicsans/global_constants.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import '../Components/ComicSansButton.dart';
-import '../GlobalConstants.dart';
-import '../components/ComicSansAppBar.dart';
-import '../components/ComicSansRadioButtons.dart';
-import '../components/ComicSansTextInput.dart';
-import '../user.dart';
+import 'package:comicsans/components/ComicSansButton.dart';
+import 'package:comicsans/components/ComicSansAppBar.dart';
+import 'package:comicsans/components/ComicSansTextInput.dart';
+import 'package:comicsans/user.dart';
+import 'package:provider/provider.dart';
+
+
 
 class ProfileDataScreen extends StatefulWidget{
-  User user;
-  ProfileDataScreen({super.key, required this.user});
+  const ProfileDataScreen({super.key});
 
   @override
   State<ProfileDataScreen> createState() => _ProfileDataScreenState();
 }
+
+
 
 class _ProfileDataScreenState extends State<ProfileDataScreen> {
   late TextEditingController _nameController;
@@ -28,12 +32,15 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.user.name);
-    _lastNameController = TextEditingController(text: widget.user.lastName);
-    _genderController = TextEditingController(text: widget.user.gend?.label ?? '');
-    _birthdayController = TextEditingController(text: widget.user.birthday);
-
-    selectedGender = widget.user.gend;
+    // Safe access to provider without triggering rebuilds
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      _nameController = TextEditingController(text: userProvider.loggedInUser!.name);
+      _lastNameController = TextEditingController(text: userProvider.loggedInUser!.lastName);
+      _genderController = TextEditingController(text: userProvider.loggedInUser!.gender?.label ?? '');
+      _birthdayController = TextEditingController(text: userProvider.loggedInUser!.birthday);
+      selectedGender = userProvider.loggedInUser!.gender;
+    });
   }
 
   @override
@@ -47,13 +54,14 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    void updateProfileData(){
-      widget.user.name = _nameController.text;
-      widget.user.lastName = _lastNameController.text;
-      widget.user.gend = selectedGender;
-      widget.user.birthday = _birthdayController.text;
+    final formKey = GlobalKey<FormState>();
+    final userProviderRead = context.read<UserProvider>();
 
+    void updateProfileData(){
+      userProviderRead.loggedInUser!.name = _nameController.text;
+      userProviderRead.loggedInUser!.lastName = _lastNameController.text;
+      userProviderRead.loggedInUser!.gender = selectedGender;
+      userProviderRead.loggedInUser!.birthday = _birthdayController.text;
       Navigator.pop(context, true);
     }
 
@@ -65,17 +73,17 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
       ),
       body:
       Form (
-        key: _formKey,
+        key: formKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                  child: GestureDetector(
-                    onTap: (){},
-                    child: Icon(Icons.account_circle, color: Colors.black, size: 100)
-                  )
+                child: GestureDetector(
+                  onTap: (){},
+                  child: Icon(Icons.account_circle, color: Colors.black, size: 100)
+                )
               ),
               ComicSansTextInput(
                 title: 'Nome',
@@ -91,42 +99,42 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
 
               Text("Sesso", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               ListTile(
-                  title: Text("Maschio", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                  leading: Radio<Gender>(
-                      value: Gender.Maschio,
-                      groupValue: selectedGender,
-                      onChanged: (Gender? value) {
-                        setState(() {
-                          selectedGender = value;
-                          _genderController.text = value?.label ?? '';
-                        });
-                      }
-                  )
+                title: Text("Maschio", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                leading: Radio<Gender>(
+                  value: Gender.maschio,
+                  groupValue: selectedGender,
+                  onChanged: (Gender? value) {
+                    setState(() {
+                      selectedGender = value;
+                      _genderController.text = value?.label ?? '';
+                    });
+                  }
+                )
               ),
               ListTile(
                 title: Text("Femmina", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
                 leading: Radio<Gender>(
-                    value: Gender.Femmina,
-                    groupValue: selectedGender,
-                    onChanged: (Gender? value) {
-                      setState(() {
-                        selectedGender = value;
-                        _genderController.text = value?.label ?? '';
-                      });
-                    }
+                  value: Gender.femmina,
+                  groupValue: selectedGender,
+                  onChanged: (Gender? value) {
+                    setState(() {
+                      selectedGender = value;
+                      _genderController.text = value?.label ?? '';
+                    });
+                  }
                 ),
               ),
               ListTile(
                 title: Text("Altro", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
                 leading: Radio<Gender>(
-                    value: Gender.Altro,
-                    groupValue: selectedGender,
-                    onChanged: (Gender? value) {
-                      setState(() {
-                        selectedGender = value;
-                        _genderController.text = value?.label ?? '';
-                      });
-                    }
+                  value: Gender.altro,
+                  groupValue: selectedGender,
+                  onChanged: (Gender? value) {
+                    setState(() {
+                      selectedGender = value;
+                      _genderController.text = value?.label ?? '';
+                    });
+                  }
                 ),
               ),
               const SizedBox(height: 10),

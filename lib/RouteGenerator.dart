@@ -3,8 +3,9 @@ import 'package:comicsans/MainScreen.dart';
 import 'package:comicsans/screens/ChatScreen.dart';
 import 'package:comicsans/screens/Login.dart';
 import 'package:comicsans/screens/Registration.dart';
-import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
+
+
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -14,10 +15,7 @@ class RouteGenerator {
       case '/login':
         return MaterialPageRoute(builder: (_) => const Login());
       case '/forgot_password':
-        if(args is User) {
-          return MaterialPageRoute(builder: (_) => MainScreen(user: args));
-        }
-        return _errorRoute();
+        return MaterialPageRoute(builder: (_) => MainScreen());
       case '/registration':
         return MaterialPageRoute(builder: (_) => const Registration());
       case '/chat':
@@ -27,10 +25,7 @@ class RouteGenerator {
           return _errorRoute();
         }
       case '/':
-        if(args is User) {
-          return MaterialPageRoute(builder: (_) => MainScreen(user: args));
-        } // Main screen with the bottom bar
-        return _errorRoute();
+        return MaterialPageRoute(builder: (_) => MainScreen());
       default:
         return _errorRoute();
     }

@@ -1,26 +1,19 @@
 import 'package:comicsans/comic.dart';
-import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/Components/ComicCard.dart';
+import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
-import 'package:comicsans/user.dart';
 import 'package:provider/provider.dart';
 
 
 
-class ProductGrid extends StatefulWidget{
-  User user;
-  ProductGrid({super.key, required this.user});
+class ProductGrid extends StatelessWidget {
+  const ProductGrid({super.key});
 
-  @override
-  State<ProductGrid> createState() => _ProductGridState();
-}
-
-class _ProductGridState extends State<ProductGrid> {
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<ComicsProvider>();
-    final List<Comic> comicsList = provider.getPurchasableComics(widget.user);
+    final userProviderWatch = context.watch<UserProvider>();
+    final List<Comic> comicsList = userProviderWatch.getPurchasableComics();
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
@@ -33,17 +26,12 @@ class _ProductGridState extends State<ProductGrid> {
         ),
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () async {
-              final result = await Navigator.push(context, MaterialPageRoute(
-                builder: (context){
-                  return ProductDetail(comic: comicsList[index], user: widget.user);
-                }
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => ProductDetail(comic: comicsList[index])
               ));
-              if (result == true){
-                setState(() {});
-              }
             },
-            child: ComicCard(comic: comicsList[index], user: widget.user)
+            child: ComicCard(comic: comicsList[index])
           );
         },
         itemCount: comicsList.length,

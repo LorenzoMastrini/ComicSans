@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
@@ -36,7 +35,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
   late TextEditingController _countryController;
   late TextEditingController _editionYearController;
   late TextEditingController _isbnController;
-  late TextEditingController _bookbindingsController;
+  late TextEditingController _bookbindingController;
 
   @override
   void initState() {
@@ -58,7 +57,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
     _countryController = TextEditingController(text: provider.country ?? '');
     _editionYearController = TextEditingController(text: provider.editionYear?.toString() ?? '');
     _isbnController = TextEditingController(text: provider.isbn?.toString() ?? '');
-    _bookbindingsController = TextEditingController(text: provider.bookbinding?.toString() ?? '');
+    _bookbindingController = TextEditingController(text: provider.bookbinding?.toString() ?? '');
 
     _syncAuthors(provider);
   }
@@ -75,7 +74,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
     _collanaController.dispose();
     _countryController.dispose();
     _editionYearController.dispose();
-    _bookbindingsController.dispose();
+    _bookbindingController.dispose();
     _isbnController.dispose();
     super.dispose();
   }
@@ -129,10 +128,10 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
 
     return Scaffold(
       appBar: const ComicSansAppBar(
-          title: '3/3: Dettagli',
-          showBackButton: true,
-          showCloseButton: true,
-          actionType: AppBarActionType.close
+        title: '3/3: Dettagli',
+        showBackButton: true,
+        showCloseButton: true,
+        actionType: AppBarActionType.close
       ),
         body: Form(
           child: Padding(
@@ -271,11 +270,11 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     ComicSansRadioButtons(
                       title: 'Rilegatura',
                       options: Binding.values.map((binding) => bindingToString(binding)).toList(),
-                      controller: _bookbindingsController,
+                      controller: _bookbindingController,
                       onChanged: (newValue) {
                         providerRead.bookbinding = stringToBinding(newValue);
-                        if (_bookbindingsController.text != (newValue ?? '')) {
-                           _bookbindingsController.text = newValue ?? '';
+                        if (_bookbindingController.text != (newValue ?? '')) {
+                          _bookbindingController.text = newValue ?? '';
                         }
                       },
                       selectedValue: bindingToString(providerWatch.bookbinding) // Selected value from provider

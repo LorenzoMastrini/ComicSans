@@ -1,17 +1,21 @@
+import 'package:comicsans/providers/user_provider.dart';
+import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
-import '../Components/ComicSansButton.dart';
-import '../CreditCard.dart';
-import '../components/ComicSansAppBar.dart';
-import '../components/ComicSansTextInput.dart';
-import '../user.dart';
+import 'package:comicsans/components/ComicSansButton.dart';
+import 'package:comicsans/components/ComicSansAppBar.dart';
+import 'package:comicsans/components/ComicSansTextInput.dart';
+import 'package:provider/provider.dart';
+
+
 
 class ChangeCreditCardScreen extends StatefulWidget{
-  User user;
-  ChangeCreditCardScreen({super.key, required this.user});
+  const ChangeCreditCardScreen({super.key});
 
   @override
   State<ChangeCreditCardScreen> createState() => _ChangeCreditCardScreenState();
 }
+
+
 
 class _ChangeCreditCardScreenState extends State<ChangeCreditCardScreen> {
   late TextEditingController _holderController;
@@ -22,10 +26,14 @@ class _ChangeCreditCardScreenState extends State<ChangeCreditCardScreen> {
   @override
   void initState() {
     super.initState();
-    _holderController = TextEditingController(text: widget.user.card?.holder);
-    _numberController = TextEditingController(text: widget.user.card?.number.toString());
-    _expirationController = TextEditingController(text: widget.user.card?.expiration);
-    _cvvController = TextEditingController(text: widget.user.card?.cvv.toString());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      CreditCard? card = userProvider.loggedInUser!.card;
+      _holderController = TextEditingController(text: card?.holder);
+      _numberController = TextEditingController(text: card?.number.toString());
+      _expirationController = TextEditingController(text: card?.expiration);
+      _cvvController = TextEditingController(text: card?.cvv.toString());
+    });
   }
 
   @override
@@ -39,10 +47,11 @@ class _ChangeCreditCardScreenState extends State<ChangeCreditCardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
+    final userProviderRead = context.read<UserProvider>();
 
     void updateCreditCardData() {
-      if(_formKey.currentState!.validate()){
+      if(formKey.currentState!.validate()){
         final newCard = CreditCard(
           holder: _holderController.text,
           number: int.parse(_numberController.text),
@@ -50,7 +59,7 @@ class _ChangeCreditCardScreenState extends State<ChangeCreditCardScreen> {
           cvv: int.parse(_cvvController.text),
         );
 
-        widget.user.card = newCard;
+        userProviderRead.loggedInUser!.card = newCard;
         Navigator.pop(context, true);
       }
     }
@@ -64,7 +73,7 @@ class _ChangeCreditCardScreenState extends State<ChangeCreditCardScreen> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Form (
-            key: _formKey,
+            key: formKey,
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -80,8 +89,9 @@ class _ChangeCreditCardScreenState extends State<ChangeCreditCardScreen> {
                     controller: _numberController,
                     keyboardType: TextInputType.number,
                     validator: (value){
-                      if(value?.length != 16)
+                      if(value?.length != 16) {
                         return 'Numero della carta non valido';
+                      }
 
                       return null;
                     }
@@ -106,8 +116,9 @@ class _ChangeCreditCardScreenState extends State<ChangeCreditCardScreen> {
                           controller: _cvvController,
                             keyboardType: TextInputType.number,
                             validator: (value){
-                              if(value?.length != 3)
+                              if(value?.length != 3) {
                                 return 'CVV non valido';
+                              }
 
                               return null;
                             }

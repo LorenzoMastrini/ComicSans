@@ -27,24 +27,4 @@ class ComicsProvider extends ChangeNotifier {
   List<Comic> getPurchasableComics(User user) {
     return _allComics.where((comic) => comic.seller.id != user.id).toList();
   }
-
-
-
-  // favorite comics for the current user
-  final List<Comic> _favorite = [];
-  List<Comic> get favorite => List.unmodifiable(_favorite);
-
-  void addFavorite(Comic newFavorite) {
-    _favorite.add(newFavorite);
-    notifyListeners();
-  }
-
-  void removeFavorite(Comic favoriteToRemove) {
-    _favorite.remove(favoriteToRemove);
-    notifyListeners();
-  }
-
-  bool checkFavorite(Comic comic){
-    return _favorite.contains(comic) ? true : false;
-  }
 }

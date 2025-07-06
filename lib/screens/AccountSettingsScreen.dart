@@ -1,20 +1,14 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/user.dart';
-import 'ChangeCreditCardScreen.dart';
 import 'ChangeShippingAddressScreen.dart';
 import 'CreditCardAccountSettingsScreen.dart';
 import 'ProfileDataScreen.dart';
 
-class AccountSettingsScreen extends StatefulWidget{
-  User user;
-  AccountSettingsScreen({super.key, required this.user});
 
-  @override
-  State<AccountSettingsScreen> createState() => _AccountSettingsScreenState();
-}
 
-class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
+class AccountSettingsScreen extends StatelessWidget{
+  const AccountSettingsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +28,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
             child: TextButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context){
-                      return ProfileDataScreen(user: widget.user);
-                    }
+                  builder: (context) => ProfileDataScreen()
                 ));
               },
               style: TextButton.styleFrom(
@@ -44,11 +36,11 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
               ),
               child: Row(
-                  children: <Widget>[
-                    Text("Dati profilo", style: TextStyle(color: Colors.black, fontSize: 16)),
-                    Spacer(),
-                    Icon(Icons.arrow_forward_ios, color: Colors.black),
-                  ]
+                children: <Widget>[
+                  Text("Dati profilo", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  Spacer(),
+                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                ]
               ),
             ),
           ),
@@ -61,9 +53,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
             child: TextButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context){
-                      return CreditCardAccountSettingsScreen(user: widget.user);
-                    }
+                  builder: (context) => CreditCardAccountSettingsScreen()
                 ));
               },
               style: TextButton.styleFrom(
@@ -71,11 +61,11 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
               ),
               child: Row(
-                  children: <Widget>[
-                    Text("Pagamenti", style: TextStyle(color: Colors.black, fontSize: 16)),
-                    Spacer(),
-                    Icon(Icons.arrow_forward_ios, color: Colors.black),
-                  ]
+                children: <Widget>[
+                  Text("Pagamenti", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  Spacer(),
+                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                ]
               ),
             ),
           ),
@@ -88,9 +78,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
             child: TextButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context){
-                    return ChangeShippingAddressScreen(user: widget.user);
-                  }
+                  builder: (context) => ChangeShippingAddressScreen()
                 ));
               },
               style: TextButton.styleFrom(
@@ -98,11 +86,11 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
               ),
               child: Row(
-                  children: <Widget>[
-                    Text("Spedizione", style: TextStyle(color: Colors.black, fontSize: 16)),
-                    Spacer(),
-                    Icon(Icons.arrow_forward_ios, color: Colors.black),
-                  ]
+                children: <Widget>[
+                  Text("Spedizione", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  Spacer(),
+                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                ]
               ),
             ),
           ),
@@ -116,19 +104,17 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 ),
               ),
               child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-                },
+                onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false),
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
                 ),
                 child: Row(
-                    children: <Widget>[
-                      Text("Disconnetti", style: TextStyle(color: Colors.black, fontSize: 16)),
-                      Spacer(),
-                      Icon(Icons.arrow_forward_ios, color: Colors.black),
-                    ]
+                  children: <Widget>[
+                    Text("Disconnetti", style: TextStyle(color: Colors.black, fontSize: 16)),
+                    Spacer(),
+                    Icon(Icons.arrow_forward_ios, color: Colors.black),
+                  ]
                 ),
               ),
             ),
@@ -146,11 +132,11 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
               ),
               child: Row(
-                  children: <Widget>[
-                    Text("Elimina account", style: TextStyle(color: Colors.black, fontSize: 16)),
-                    Spacer(),
-                    Icon(Icons.arrow_forward_ios, color: Colors.black),
-                  ]
+                children: <Widget>[
+                  Text("Elimina account", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  Spacer(),
+                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                ]
               ),
             ),
           ),

@@ -145,3 +145,7 @@ const List<String> availableLanguages = [
   'Tedesco',
   'Altro',
 ];
+
+enum Shipping { home, retirePoint }
+enum PaymentMethod { creditCard, payPal }
+enum Gender { maschio, femmina, altro }

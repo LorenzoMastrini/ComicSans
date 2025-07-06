@@ -1,27 +1,26 @@
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import '../Components/FollowedUserComponent.dart';
-import '../user.dart';
+import 'package:comicsans/components/FollowedUserComponent.dart';
+import 'package:provider/provider.dart';
 
-class FollowedUsersScreen extends StatefulWidget{
-  User user;
-  FollowedUsersScreen({super.key, required this.user});
 
-  @override
-  State<FollowedUsersScreen> createState() => _FollowedUsersScreenState();
-}
 
-class _FollowedUsersScreenState extends State<FollowedUsersScreen> {
+class FollowedUsersScreen extends StatelessWidget{
+  const FollowedUsersScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
+    UserProvider userProviderWatch = context.watch<UserProvider>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Utenti seguiti"),
       ),
       body: ListView.builder(
         itemBuilder: (context, index){
-            return FollowedUserComponent(user: widget.user, followedUser: widget.user.followedUsers[index], isFollowed: true);
+            return FollowedUserComponent(followedUser: userProviderWatch.getFollowedUsers()[index], isFollowed: true);
         },
-        itemCount: widget.user.followedUsers!.length,
+        itemCount: userProviderWatch.getNumberOfFollowedUsers(),
         shrinkWrap: true,
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
@@ -5,14 +6,14 @@ import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/components/ReviewComponent.dart';
 import 'package:comicsans/components/ReviewWidget.dart';
 import 'package:comicsans/user.dart';
+import 'package:provider/provider.dart';
 
 
 
 class VendorScreen extends StatefulWidget{
-  User seller;
-  User user;
+  final User seller;
 
-  VendorScreen({super.key, required this.seller, required this.user});
+  const VendorScreen({super.key, required this.seller});
 
   @override
   State<VendorScreen> createState() => _VendorScreenState();
@@ -23,23 +24,22 @@ class VendorScreen extends StatefulWidget{
 class _VendorScreenState extends State<VendorScreen> {
   late bool isFollowed;
 
-  @override
-  void initState(){
-    super.initState();
-    isFollowed = widget.user.followedUsers.contains(widget.seller);
-  }
-
   void _toggleFollow() {
+    final userProviderRead = context.watch<UserProvider>();
+
     setState(() {
       isFollowed
-        ? widget.user.removeFollowing(widget.seller)
-        : widget.user.addFollowing(widget.seller);
+        ? userProviderRead.removeFollowing(widget.seller)
+        : userProviderRead.addFollowing(widget.seller);
       isFollowed = !isFollowed;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final userProviderWatch = context.watch<UserProvider>();
+    isFollowed = userProviderWatch.getFollowedUsers().contains(widget.seller);
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -59,11 +59,11 @@ class _VendorScreenState extends State<VendorScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(widget.seller.username,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w500)),
-                      ReviewWidget(user: widget.seller),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500)),
+                      ReviewWidget(),
                       SizedBox(height: 8),
                       SizedBox(
                         width: 120,
@@ -123,10 +123,10 @@ class _VendorScreenState extends State<VendorScreen> {
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(
                               builder: (_) =>
-                                  ProductDetail(comic: comic, user: widget.user)
+                                  ProductDetail(comic: comic)
                             ));
                           },
-                          child: ComicCard(comic: comic, user: widget.user)
+                          child: ComicCard(comic: comic)
                         );
                       },
                     ),
@@ -134,8 +134,7 @@ class _VendorScreenState extends State<VendorScreen> {
                   ListView.builder(
                     itemCount: widget.seller.reviews.length,
                     shrinkWrap: true,
-                    itemBuilder: (context, index) =>
-                      ReviewComponent(review: widget.seller.reviews[index])
+                    itemBuilder: (context, index) => ReviewComponent(review: widget.seller.reviews[index])
                   ),
                   Padding(
                     padding: const EdgeInsets.all(15),
@@ -167,7 +166,7 @@ class _VendorScreenState extends State<VendorScreen> {
                             fontWeight: FontWeight.w500
                           ),
                         ),
-                        Text(widget.seller.addr!.country,
+                        Text(widget.seller.address!.country,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 18,

@@ -1,57 +1,42 @@
-import 'package:comicsans/Components/ComicSansSearchBar.dart';
+import 'package:comicsans/components/ComicSansSearchBar.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/SampleData.dart';
-import 'package:comicsans/user.dart';
+import 'package:comicsans/components/ComicCard.dart';
+import 'package:comicsans/comic.dart';
 
-import '../Components/ComicCard.dart';
-import '../comic.dart';
-import '../components/ComicSansBottomBar.dart';
 
-class SearchResults extends StatefulWidget{
-  List<Comic> comicsResults;
-  User user;
-  String query;
-  SearchResults({super.key, required this.comicsResults, required this.user, required this.query});
 
-  @override
-  State<SearchResults> createState() => _SearchResultsState();
-}
+class SearchResults extends StatelessWidget {
+  final List<Comic> comicsResults;
+  final String query;
+  const SearchResults({super.key, required this.comicsResults, required this.query});
 
-class _SearchResultsState extends State<SearchResults> {
-  bool changed = false;
   @override
   Widget build(BuildContext context) {
-    if (widget.comicsResults.isEmpty) {
-      return WillPopScope(
-        onWillPop: () async {
-          Navigator.pop(context, changed);
-          return false;
-        },
-        child: Scaffold(
-          body: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
-                            child: MySearchBar(user: widget.user)
-                        ),
-                        SizedBox(width: 10),
-                        Container(
-                            height: 50,
-                            width: 50,
-                            child: Icon(Icons.filter_list, color: Colors.black, size: 30)
-                        )
-                      ]
+    if (comicsResults.isEmpty) {
+      return Scaffold(
+        body: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: ComicSansSearchBar()
                   ),
-                ),
-                Center(child: Text("Nessun fumetto trovato.")),
-              ]
-          )
-        ),
+                  SizedBox(width: 10),
+                  SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Icon(Icons.filter_list, color: Colors.black, size: 30)
+                  )
+                ]
+              ),
+            ),
+            Center(child: Text("Nessun fumetto trovato.")),
+          ]
+        )
       );
     }
     return Scaffold(
@@ -61,55 +46,55 @@ class _SearchResultsState extends State<SearchResults> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                        child: MySearchBar(user: widget.user)
-                    ),
-                    SizedBox(width: 10),
-                    IconButton(
-                      icon: const Icon(Icons.filter_list, size: 30),
-                      tooltip: 'Filtri',
-                      onPressed: () {
-                      },
-                    ),
-                  ]
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: ComicSansSearchBar()
+                  ),
+                  SizedBox(width: 10),
+                  IconButton(
+                    icon: const Icon(Icons.filter_list, size: 30),
+                    tooltip: 'Filtri',
+                    onPressed: () {
+                    },
+                  ),
+                ]
               ),
             ),
             SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
-                  children: <Widget>[
-                    Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: <Widget>[
-                          FilterChip(
-                              label: Text("Ordina per"),
-                              selected: false,
-                              onSelected: (bool value) {
-                                // TODO: logica ordinamento
-                              },
-                              avatar: Icon(Icons.swap_vert, size: 18),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              )
-                          ),
-                          FilterChip(
-                              label: Text("Ricerca per ISBN"),
-                              selected: false,
-                              onSelected: (bool value) {
-                                // TODO: logica ordinamento
-                              },
-                              avatar: Icon(Icons.search, size: 18),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              )
-                          )
-                        ]
-                    )
-                  ]
+                children: <Widget>[
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: <Widget>[
+                      FilterChip(
+                        label: Text("Ordina per"),
+                        selected: false,
+                        onSelected: (bool value) {
+                          // TODO: logica ordinamento
+                        },
+                        avatar: Icon(Icons.swap_vert, size: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        )
+                      ),
+                      FilterChip(
+                        label: Text("Ricerca per ISBN"),
+                        selected: false,
+                        onSelected: (bool value) {
+                          // TODO: logica ordinamento
+                        },
+                        avatar: Icon(Icons.search, size: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        )
+                      )
+                    ]
+                  )
+                ]
               ),
             ),
             Padding(
@@ -123,23 +108,17 @@ class _SearchResultsState extends State<SearchResults> {
                 ),
                 itemBuilder: (context, index){
                   return GestureDetector(
-                      onTap: () async {
-                        changed = await Navigator.push(context, MaterialPageRoute(
-                            builder: (context){
-                              return ProductDetail(comic: widget.comicsResults[index], user: widget.user);
-                            }
-                        )
-                        );
-                        if (changed == true){
-                            setState(() {
-                            }
-                          );
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context){
+                          return ProductDetail(comic: comicsResults[index]);
                         }
-                      },
-                      child: ComicCard(comic: widget.comicsResults[index], user: widget.user)
+                      ));
+                    },
+                    child: ComicCard(comic: comicsResults[index])
                   );
                 },
-                itemCount: widget.comicsResults.length,
+                itemCount: comicsResults.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,

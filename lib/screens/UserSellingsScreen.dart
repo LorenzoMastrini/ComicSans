@@ -1,20 +1,26 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicCardWoutButton.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/user.dart';
+import 'package:provider/provider.dart';
+
+
 
 class UserSellingsScreen extends StatefulWidget{
-  User user;
-  UserSellingsScreen({super.key, required this.user});
+  const UserSellingsScreen({super.key});
 
   @override
   State<UserSellingsScreen> createState() => _UserSellingsScreenState();
 }
 
+
+
 class _UserSellingsScreenState extends State<UserSellingsScreen> {
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProviderWatch = context.watch<UserProvider>();
+
     return Scaffold(
       appBar: ComicSansAppBar(showBackButton: true, title: "Vendite"),
       body: Padding(
@@ -28,22 +34,15 @@ class _UserSellingsScreenState extends State<UserSellingsScreen> {
           ),
           itemBuilder: (context, index){
             return GestureDetector(
-                onTap: () async {
-                  final result = await Navigator.push(context, MaterialPageRoute(
-                      builder: (context){
-                        return ProductDetail(comic: widget.user.getSellings()[index], user: widget.user);
-                      })
-                  );
-                  if (result == true){
-                    setState(() {
-                    }
-                    );
-                  }
-                },
-                child: ComicCardWoutButton(comic: widget.user.getSellings()[index], user: widget.user)
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => ProductDetail(comic: userProviderWatch.getSellings()[index])
+                ));
+              },
+              child: ComicCardWoutButton(comic: userProviderWatch.getSellings()[index])
             );
           },
-          itemCount: widget.user.getSellings().length,
+          itemCount: userProviderWatch.getNumberOfSellings(),
           shrinkWrap: false,
           padding: EdgeInsets.zero,
         ),

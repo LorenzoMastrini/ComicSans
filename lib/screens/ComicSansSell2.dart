@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ImageUploadSlot.dart';
 import 'package:comicsans/providers/sell_informations_provider.dart';

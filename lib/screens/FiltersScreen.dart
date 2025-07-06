@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:comicsans/GlobalConstants.dart';
+import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansCheckbox.dart';
 import 'package:comicsans/components/ComicSansDropdown.dart';
 import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'package:comicsans/components/ComicSansRadioButtons.dart';
 import 'package:comicsans/components/ComicSansToggle.dart';
-import 'package:comicsans/providers/SellInfoProvider.dart';
+import 'package:comicsans/providers/sell_informations_provider.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +52,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
     _collanaController = TextEditingController(text: provider.series ?? '');
     _countryController = TextEditingController(text: provider.country ?? '');
     _editionYearController = TextEditingController(text: provider.editionYear?.toString() ?? '');
-    _isbnController = TextEditingController(text: provider.isbn ?? '');
-    _bookbindingsController = TextEditingController(text: provider.bookbinding ?? '');
+    _isbnController = TextEditingController(text: provider.isbn.toString() ?? '');
+    _bookbindingsController = TextEditingController(text: provider.bookbinding.toString() ?? '');
     _priceStartController = TextEditingController();
     _priceEndController = TextEditingController();
 
@@ -124,6 +124,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
     final sellInfo = context.watch<SellInfoProvider>();
     final provider = Provider.of<SellInfoProvider>(context, listen: false);
 
+    return Scaffold();
+/*
     return Scaffold(
         appBar: const ComicSansAppBar(
             showBackButton: true,
@@ -213,7 +215,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                           // Genres
                           ComicSansCheckbox(
                               title: 'Condizioni',
-                              options: GlobalConstants.availableConditions.map((title) => {
+                              options: Conditions.map((title) => {
                                 'title': title, // Provider initial state
                               }).toList(),
                               onChanged: (title, value) =>
@@ -399,6 +401,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             )
         )
     );
+    */
   }
 
   void _syncAuthors(SellInfoProvider provider) {

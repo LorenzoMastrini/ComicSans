@@ -2,18 +2,12 @@ import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/FavouriteGrid.dart';
 import 'package:comicsans/components/ComicSansSearchBarFavourite.dart';
-import 'package:comicsans/user.dart';
 
-class ComicSansFavorite extends StatefulWidget {
-  static const int _pageIndex = 1;
-  User user;
-  ComicSansFavorite({super.key, required this.user});
 
-  @override
-  State<ComicSansFavorite> createState() => _ComicSansFavoriteState();
-}
 
-class _ComicSansFavoriteState extends State<ComicSansFavorite> {
+class ComicSansFavorite extends StatelessWidget {
+  const ComicSansFavorite({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,64 +17,64 @@ class _ComicSansFavoriteState extends State<ComicSansFavorite> {
         title: "Preferiti"
       ),
       body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: MySearchBarFavourite()
+                  ),
+                  SizedBox(width: 10),
+                  SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Icon(Icons.filter_list, color: Colors.black, size: 30)
+                  )
+                ]
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: <Widget>[
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
                     children: <Widget>[
-                      Expanded(
-                          child: MySearchBarFavourite(user: widget.user)
+                      FilterChip(
+                        label: Text("Ordina per"),
+                        selected: false,
+                        onSelected: (bool value) {
+                          // TODO: logica ordinamento
+                        },
+                        avatar: Icon(Icons.swap_vert, size: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        )
                       ),
-                      SizedBox(width: 10),
-                      Container(
-                          height: 50,
-                          width: 50,
-                          child: Icon(Icons.filter_list, color: Colors.black, size: 30)
+                      FilterChip(
+                        label: Text("Ricerca per ISBN"),
+                        selected: false,
+                        onSelected: (bool value) {
+                          // TODO: logica ordinamento
+                        },
+                        avatar: Icon(Icons.search, size: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        )
                       )
                     ]
-                ),
+                  )
+                ]
               ),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                    children: <Widget>[
-                      Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: <Widget>[
-                            FilterChip(
-                                label: Text("Ordina per"),
-                                selected: false,
-                                onSelected: (bool value) {
-                                  // TODO: logica ordinamento
-                                },
-                                avatar: Icon(Icons.swap_vert, size: 18),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                )
-                            ),
-                            FilterChip(
-                                label: Text("Ricerca per ISBN"),
-                                selected: false,
-                                onSelected: (bool value) {
-                                  // TODO: logica ordinamento
-                                },
-                                avatar: Icon(Icons.search, size: 18),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                )
-                            )
-                          ]
-                      )
-                    ]
-                ),
-              ),
-              FavouriteGrid(user: widget.user),
-            ],
-          )
+            ),
+            FavouriteGrid(),
+          ],
+        )
       ),
     );
   }

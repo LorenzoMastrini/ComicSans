@@ -1,21 +1,16 @@
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/FiltersScreen.dart';
 import 'package:comicsans/providers/comics_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/SampleData.dart';
-import 'package:comicsans/user.dart';
 import 'package:comicsans/screens/SearchResults.dart';
 import 'package:comicsans/comic.dart';
 import 'package:provider/provider.dart';
 
-class MySearchBar extends StatefulWidget{
-  User user;
-  MySearchBar({super.key, required this.user});
 
-  @override
-  State<MySearchBar> createState() => _MySearchBarState();
-}
 
-class _MySearchBarState extends State<MySearchBar> {
+class ComicSansSearchBar extends StatelessWidget{
+  const ComicSansSearchBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -28,14 +23,14 @@ class _MySearchBarState extends State<MySearchBar> {
         leading: const Icon(Icons.search),
         hintText: 'Ricerca...',
         shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(7),
-            ),
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(7),
+          ),
         ),
         onTap:(){
           showSearch(
-              context: context,
-              delegate: MySearchDelegate(user: widget.user)
+            context: context,
+            delegate: MySearchDelegate()
           );
         },
       ),
@@ -43,11 +38,9 @@ class _MySearchBarState extends State<MySearchBar> {
   }
 }
 
+
+
 class MySearchDelegate extends SearchDelegate {
-  User user;
-
-  MySearchDelegate({required this.user});
-
   @override
   String get searchFieldLabel => 'Ricerca...';
 
@@ -59,8 +52,7 @@ class MySearchDelegate extends SearchDelegate {
         tooltip: 'Filtri',
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(
-            builder: (context) => FiltersScreen(
-            ),
+            builder: (context) => FiltersScreen(),
           ));
         },
       ),
@@ -70,19 +62,21 @@ class MySearchDelegate extends SearchDelegate {
   @override
   Widget? buildLeading(BuildContext context) {
     return Row(
-        children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              close(context, null);
-            },
-          ),
-        ]
+      children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            close(context, null);
+          },
+        ),
+      ]
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
+    UserProvider userProvider = context.watch<UserProvider>();
+
     List<Comic> matchQuery = [];
     for (var c in context.watch<ComicsProvider>().allComics) {
       if (c.title.toLowerCase().contains(query.toLowerCase())) {
@@ -93,81 +87,51 @@ class MySearchDelegate extends SearchDelegate {
       close(context, query);
       Navigator.push(context, MaterialPageRoute(
         builder: (context) => SearchResults(
-          comicsResults: matchQuery.where((comic) => comic.seller.id != user.id).toList(),
-          user: user,
+          comicsResults: userProvider.getPurchasableComics(),
           query: query,
         ),
       ));
     });
     return Container();
   }
-/*return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index){
-        Comic comics = matchQuery[index];
-        return TextButton(
-            onPressed: () {
-              close(context, null);
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context){
-                    return SearchResults(comicsResults: matchQuery, user: user);
-                  }
-               )
-              );
-            },
-            style: TextButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero, // Rectangular
-              ),
-            ),
-            child: ListTile(
-              title: Text(comics.title),
-            ),
-        );
-      }
-    );
-  }*/
 
   @override
   Widget buildSuggestions(BuildContext context) {
     List<Comic> matchQuery = [];
-    for(var c in context.watch<ComicsProvider>().allComics){
+    for(var c in context.watch<UserProvider>().getPurchasableComics()){
       if(c.title.toLowerCase().contains(query.toLowerCase())){
         matchQuery.add(c);
       }
     }
-    List<Comic> filteredComics = matchQuery.where((comic) => comic.seller.id != user.id).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:<Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: FilterChip(
-              label: Text("Ricerca per ISBN"),
-              selected: false,
-              onSelected: (bool value) {
-                // TODO: logica ordinamento
-              },
-              avatar: Icon(Icons.search, size: 18),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              )
+            label: Text("Ricerca per ISBN"),
+            selected: false,
+            onSelected: (bool value) {
+              // TODO: logica ordinamento
+            },
+            avatar: Icon(Icons.search, size: 18),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            )
           ),
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: filteredComics.length,
+            itemCount: matchQuery.length,
             itemBuilder: (context, index){
-              Comic comics = filteredComics[index];
+              Comic comics = matchQuery[index];
               return TextButton(
                 onPressed: () {
                   close(context, query);
                   Navigator.push(context, MaterialPageRoute(
-                      builder: (context){
-                        return SearchResults(comicsResults: [comics], user: user, query: query);
-                      }
-                  )
-                  );
+                    builder: (context) => SearchResults(comicsResults: [comics], query: query)
+                  ));
                 },
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(

@@ -1,6 +1,5 @@
 import 'package:comicsans/Chat.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
-import 'package:comicsans/components/ComicSansBottomBar.dart';
 import 'package:comicsans/providers/messages_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,9 +54,9 @@ class ComicSansInbox extends StatelessWidget {
                   const SizedBox(height: 5),
                   Text(chat.product.title,
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal
                     ),
                   ),
                 ]
@@ -95,9 +94,7 @@ class ComicSansInbox extends StatelessWidget {
         ),
       ),
 
-      onTap: () {
-        Navigator.pushNamed(context, '/chat', arguments: chat);
-      },
+      onTap: () => Navigator.pushNamed(context, '/chat', arguments: chat),
     );
   }
 

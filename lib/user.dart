@@ -1,21 +1,17 @@
-import 'package:comicsans/address.dart';
-import 'package:comicsans/CreditCard.dart';
 import 'package:comicsans/comic.dart';
-import 'package:comicsans/components/ReviewComponent.dart';
+import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/review.dart';
 
 
 
-enum Gender {Maschio, Femmina, Altro}
-
 extension GenderExtension on Gender {
   String get label {
     switch (this) {
-      case Gender.Maschio:
+      case Gender.maschio:
         return 'Maschio';
-      case Gender.Femmina:
+      case Gender.femmina:
         return 'Femmina';
-      case Gender.Altro:
+      case Gender.altro:
         return 'Altro';
     }
   }
@@ -29,9 +25,9 @@ class User{
   String? email;
   String? password;
   String? imagePath;
-  Gender? gend;
+  Gender? gender;
   String? birthday;
-  Address? addr;
+  Address? address;
   CreditCard? card;
   List<Comic> comicsSale;
   List<Comic> favouriteComics;
@@ -50,9 +46,9 @@ class User{
     this.email,
     this.password,
     this.imagePath,
-    this.gend,
+    this.gender,
     this.birthday,
-    this.addr,
+    this.address,
     this.card,
     required this.comicsSale,
     required this.favouriteComics,
@@ -64,25 +60,45 @@ class User{
     required this.connectedAccount
   });
 
-  void addFollowing(User user){
-    followedUsers.add(user);
-  }
-  void removeFollowing(User user){
-    followedUsers.remove(user);
-  }
-  void removeComicsSale(Comic comic) {
-    comicsSale.remove(comic);
-  }
   List<Comic> getComicsSale(){
     return comicsSale;
   }
-  List<Comic> getSellings(){
-    return sellings;
-  }
-  List<Comic> getPurchases(){
-    return purchases;
-  }
+
   static List<Gender> getAllGenders(){
     return Gender.values;
   }
+}
+
+
+
+class Address{
+  String name;
+  String lastName;
+  String country;
+  String address;
+  int cap;
+
+  Address({
+    this.name = "",
+    this.lastName = "",
+    this.country = "",
+    this.address = "",
+    this.cap = 0,
+  });
+}
+
+
+
+class CreditCard{
+  String holder;
+  int number;
+  String expiration;
+  int cvv;
+
+  CreditCard({
+    this.holder = "",
+    this.number = 0,
+    this.expiration = "",
+    this.cvv = 0
+  });
 }

@@ -1,17 +1,21 @@
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
-import 'package:comicsans/address.dart';
-import '../Components/ComicSansButton.dart';
-import '../components/ComicSansTextInput.dart';
-import '../user.dart';
+import 'package:comicsans/components/ComicSansButton.dart';
+import 'package:comicsans/components/ComicSansTextInput.dart';
+import 'package:comicsans/user.dart';
+import 'package:provider/provider.dart';
+
+
 
 class ChangeShippingAddressScreen extends StatefulWidget{
-  User user;
-  ChangeShippingAddressScreen({super.key, required this.user});
+  const ChangeShippingAddressScreen({super.key});
 
   @override
   State<ChangeShippingAddressScreen> createState() => _ChangeShippingAddressScreenState();
 }
+
+
 
 class _ChangeShippingAddressScreenState extends State<ChangeShippingAddressScreen> {
   late TextEditingController _nameController;
@@ -23,11 +27,16 @@ class _ChangeShippingAddressScreenState extends State<ChangeShippingAddressScree
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.user.addr?.name);
-    _lastNameController = TextEditingController(text: widget.user.addr?.lastName);
-    _countryController = TextEditingController(text: widget.user.addr?.country);
-    _addressController = TextEditingController(text: widget.user.addr?.address);
-    _capController = TextEditingController(text: widget.user.addr?.cap.toString());
+    // Safe access to provider without triggering rebuilds
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      Address? addr = userProvider.loggedInUser!.address;
+      _nameController = TextEditingController(text: addr?.name);
+      _lastNameController = TextEditingController(text: addr?.lastName);
+      _countryController = TextEditingController(text: addr?.country);
+      _addressController = TextEditingController(text: addr?.address);
+      _capController = TextEditingController(text: addr?.cap.toString());
+    });
   }
 
   @override
@@ -42,10 +51,11 @@ class _ChangeShippingAddressScreenState extends State<ChangeShippingAddressScree
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
+    final userProviderRead = context.read<UserProvider>();
 
     void updateAddressData() {
-      final newAddres = Address(
+      final newAddress = Address(
           name: _nameController.text,
           lastName:  _lastNameController.text,
           country:  _countryController.text,
@@ -53,7 +63,7 @@ class _ChangeShippingAddressScreenState extends State<ChangeShippingAddressScree
           cap: int.parse(_capController.text),
       );
 
-      widget.user.addr = newAddres;
+      userProviderRead.loggedInUser!.address = newAddress;
       Navigator.pop(context, true);
     }
 
@@ -66,7 +76,7 @@ class _ChangeShippingAddressScreenState extends State<ChangeShippingAddressScree
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Form (
-            key: _formKey,
+            key: formKey,
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(

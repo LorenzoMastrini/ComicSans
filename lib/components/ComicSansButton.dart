@@ -1,6 +1,6 @@
-import 'package:comicsans/comic.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+
 
 class ComicSansButton extends StatelessWidget {
   final String text;
@@ -27,5 +27,4 @@ class ComicSansButton extends StatelessWidget {
       child: Text(text),
     );
   }
-
 }

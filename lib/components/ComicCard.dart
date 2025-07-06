@@ -1,15 +1,13 @@
 import 'package:comicsans/comic.dart';
-import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/user.dart';
 import 'package:provider/provider.dart';
 
 
 
 class ComicCard extends StatefulWidget{
   final Comic comic;
-  final User user;
-  const ComicCard ({super.key, required this.comic, required this.user});
+  const ComicCard ({super.key, required this.comic});
 
   @override
   State<ComicCard> createState() => _ComicCardState();
@@ -20,20 +18,15 @@ class ComicCard extends StatefulWidget{
 class _ComicCardState extends State<ComicCard> {
   late bool isFavourite;
 
-  @override
-  void initState(){
-    super.initState();
-  }
-
   void toggleFavourite(){
-    final provider = context.read<ComicsProvider>();
+    final UserProvider userProviderRead = context.read<UserProvider>();
 
     setState(() {
       if(isFavourite) {
-        provider.removeFavorite(widget.comic);
+        userProviderRead.removeFavorite(widget.comic);
       }
-      else{
-        provider.addFavorite(widget.comic);
+      else {
+        userProviderRead.addFavorite(widget.comic);
       }
       isFavourite = !isFavourite;
     });
@@ -41,8 +34,8 @@ class _ComicCardState extends State<ComicCard> {
 
   @override
   Widget build(BuildContext context){
-    final provider = context.watch<ComicsProvider>();
-    isFavourite = provider.checkFavorite(widget.comic);
+    final UserProvider userProviderWatch = context.watch<UserProvider>();
+    isFavourite = userProviderWatch.checkFavorite(widget.comic);
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
@@ -54,7 +47,7 @@ class _ComicCardState extends State<ComicCard> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(7),
               child: Image.asset(
-                widget.comic.cover ?? "assets/no_image.png",
+                widget.comic.coverPath ?? "assets/no_image.png",
                 fit: BoxFit.fill,
               ),
             ),
@@ -117,7 +110,6 @@ class _ComicCardState extends State<ComicCard> {
                             ],
                           ),
                         );
-
                         if (confirm == true) {
                           toggleFavourite();
                         }

@@ -91,7 +91,6 @@ class ComicSansBottomBar extends StatelessWidget {
         topRight: Radius.circular(10),
       ),
       child: NavigationBar(
-
         selectedIndex: selectedIndex,
         onDestinationSelected: onDestinationSelected,
         destinations: <Widget>[

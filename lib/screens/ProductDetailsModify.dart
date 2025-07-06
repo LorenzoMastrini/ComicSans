@@ -1,6 +1,7 @@
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ImagesDisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
@@ -8,20 +9,19 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:comicsans/components/PanelWidget.dart';
-import 'package:comicsans/user.dart';
 import 'package:comicsans/components/ComicSansButton.dart';
-import 'package:comicsans/components/ReviewWidget.dart';
 
 
 
 class ProductDetailsModifyScreen extends StatefulWidget {
   final Comic comic;
-  final User user;
   final VoidCallback onDelete;
-  const ProductDetailsModifyScreen({super.key, required this.comic, required this.user, required this.onDelete});
+  const ProductDetailsModifyScreen({super.key, required this.comic, required this.onDelete});
   @override
   State<ProductDetailsModifyScreen> createState() => _ProductDetailsModifyScreenState();
 }
+
+
 
 class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen> {
   late bool isFavourite;
@@ -59,162 +59,154 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
     }
   }
 
-  String formatCondition(Conditions cond) {
-    switch (cond) {
-      case Conditions.daEdicola:
-        return "Da edicola";
-      case Conditions.ottime:
-        return "Ottime";
-      case Conditions.buone:
-        return "Buone";
-      case Conditions.moltoUsato:
-        return "Molto usata";
-    }
-  }
-
   Widget buildMainContent(BuildContext context) {
-    final ComicsProvider provider = context.watch<ComicsProvider>();
+    final UserProvider userProviderRead = context.read<UserProvider>();
+    final ComicsProvider comicsProviderRead = context.read<ComicsProvider>();
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 0),
       child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Row(
-                  children: <Widget>[
-                    Flexible(
-                      child: Column(children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 3, 0, 0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(widget.comic.title,
-                                style: TextStyle(color: Colors.black, fontSize: 28, fontWeight: FontWeight.w500),
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 10, 0, 3),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("${widget.comic.price}€",
-                                style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.w500)),
-                          ),
-                        ),
-                      ]),
-                    ),
-                    IconButton(
-                      iconSize: 40,
-                      icon: Icon(Icons.delete, color: Colors.black),
-                      onPressed: () async {
-                        bool? confirm = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: Text("Sei sicuro di voler rimuovere questo annuncio?"),
-                            actions: [
-                              TextButton(
-                                child: Text("Annulla"),
-                                onPressed: () => Navigator.of(context).pop(false),
-                              ),
-                              TextButton(
-                                child: Text("Conferma"),
-                                onPressed: (){
-                                  widget.user.removeComicsSale(widget.comic);
-                                  provider.removeComic(widget.comic);
-                                  Navigator.of(context).pop(true);
-                                  widget.onDelete();
-                                  /*Navigator.pushReplacement(context, MaterialPageRoute(
-                                    builder: (context){
-                                      return UserVendorScreen(user: widget.user);
-                                    })
-                                  );*/
-                                  Navigator.pop(context, true);
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    )
-                  ]),
-              Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Condizioni",
-                          style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(widget.comic.conditions != null ? formatCondition(widget.comic.conditions!) : "N/D",
-                          style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Descrizione",
-                          style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(widget.comic.description,
-                          style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(3, 15, 15, 20),
-                    child: Align(
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Flexible(
+                  child: Column(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 3, 0, 0),
+                      child: Align(
                         alignment: Alignment.centerLeft,
-                        child:
-                        TextButton.icon(
-                            label: Text(
-                              'Dettagli',
-                              style: const TextStyle(
-                                decoration: TextDecoration.underline,
-                                fontSize: 18,
-                                color: Colors.black,
-                              ),
-                            ),
-                            onPressed: (){
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                                ),
-                                builder: (context) => DraggableScrollableSheet(
-                                  initialChildSize: 1.0,
-                                  minChildSize: 1.0,
-                                  maxChildSize: 1.0,
-                                  expand: true,
-                                  builder: (context, scrollController) => PanelWidget(
-                                    controller: scrollController,
-                                    comic: widget.comic,
-                                  ),
-                                ),
-                              );
-                            }
-                        )
-
+                        child: Text(
+                          widget.comic.title,
+                          style: TextStyle(color: Colors.black, fontSize: 28, fontWeight: FontWeight.w500),
+                          overflow: TextOverflow.ellipsis
+                        ),
+                      ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 10, 0, 3),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "${widget.comic.price}€",
+                          style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.w500)
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
+                IconButton(
+                  iconSize: 40,
+                  icon: Icon(Icons.delete, color: Colors.black),
+                  onPressed: () {
+                    showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: Text("Sei sicuro di voler rimuovere questo annuncio?"),
+                        actions: [
+                          TextButton(
+                            child: Text("Annulla"),
+                            onPressed: () => Navigator.of(context).pop(false),
+                          ),
+                          TextButton(
+                            child: Text("Conferma"),
+                            onPressed: () {
+                              userProviderRead.removeComicFromLibrary(widget.comic);
+                              comicsProviderRead.removeComic(widget.comic);
+                              Navigator.of(context).pop(true);
+                              widget.onDelete();
+                              /*Navigator.pushReplacement(context, MaterialPageRoute(
+                                builder: (context){
+                                  return UserVendorScreen(user: widget.user);
+                                })
+                              );*/
+                              Navigator.pop(context, true);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                )
+              ]),
+            Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Condizioni",
+                        style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
                   ),
-                ],
-              ),
-              SizedBox(height: 60)
-            ],
-          )
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(conditionsToString(widget.comic.conditions),
+                        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Descrizione",
+                        style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(widget.comic.description,
+                        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(3, 15, 15, 20),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child:
+                      TextButton.icon(
+                          label: Text(
+                            'Dettagli',
+                            style: const TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                          onPressed: (){
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                              ),
+                              builder: (context) => DraggableScrollableSheet(
+                                initialChildSize: 1.0,
+                                minChildSize: 1.0,
+                                maxChildSize: 1.0,
+                                expand: true,
+                                builder: (context, scrollController) => PanelWidget(
+                                  controller: scrollController,
+                                  comic: widget.comic,
+                                ),
+                              ),
+                            );
+                          }
+                      )
+
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 60)
+          ],
+        )
       ),
     );
   }
@@ -223,150 +215,140 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
   Widget build(BuildContext context) {
     double opacity = (_scrollController.hasClients ? _scrollController.offset / 200 : 0.0).clamp(0.0, 1.0);
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(context, changed);
-        return false;
-      },
-      child: Scaffold(
-        body: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              expandedHeight: 550,
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              automaticallyImplyLeading: false,
-              flexibleSpace: LayoutBuilder(
-                builder: (context, constraints) {
-                  double appBarHeight = constraints.biggest.height;
-                  double opacity = 0.0;
+    return Scaffold(
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 550,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            automaticallyImplyLeading: false,
+            flexibleSpace: LayoutBuilder(
+              builder: (context, constraints) {
+                double appBarHeight = constraints.biggest.height;
+                double opacity = 0.0;
 
-                  if (appBarHeight <= kToolbarHeight + 50) {
-                    opacity = 1.0;
-                  }
+                if (appBarHeight <= kToolbarHeight + 50) {
+                  opacity = 1.0;
+                }
 
-                  return Stack(
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) {
-                                return ImagesDisplay(comicImages: widget.comic.uploadedImages);
-                              }
-                            )
-                            );
-                          },
-                          child: CarouselSlider(
-                            carouselController: controller,
-                            options: CarouselOptions(
-                              height: 550,
-                              viewportFraction: 1.0,
-                              enlargeCenterPage: false,
-                              onPageChanged: (index, reason) {
-                                setState(() {
-                                  current = index;
-                                });
-                              }),
-                            items: widget.comic.uploadedImages.map((item) => SizedBox(
-                              width: double.infinity,
-                              height: double.infinity,
-                              child: Image.asset(
-                                item,
-                                fit: BoxFit.contain,
-                                width: double.infinity,
-                                height: double.infinity,
-                                alignment: Alignment.center
+                return Stack(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return ImagesDisplay(comicImages: widget.comic.otherImagesPath);
+                          }
+                        )
+                        );
+                      },
+                      child: CarouselSlider(
+                        carouselController: controller,
+                        options: CarouselOptions(
+                          height: 550,
+                          viewportFraction: 1.0,
+                          enlargeCenterPage: false,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              current = index;
+                            });
+                          }),
+                        items: widget.comic.otherImagesPath.map((item) => SizedBox(
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: Image.asset(
+                            item,
+                            fit: BoxFit.contain,
+                            width: double.infinity,
+                            height: double.infinity,
+                            alignment: Alignment.center
+                          ),
+                        )).toList(),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: widget.comic.otherImagesPath.asMap().entries.map((entry) {
+                          return GestureDetector(
+                            onTap: () => controller.animateToPage(entry.key),
+                            child: Container(
+                              width: 10.0,
+                              height: 10.0,
+                              margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)
+                                    .withOpacity(current == entry.key ? 0.9 : 0.4),
                               ),
-                            )).toList(),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: widget.comic.uploadedImages.asMap().entries.map((entry) {
-                              return GestureDetector(
-                                onTap: () => controller.animateToPage(entry.key),
-                                child: Container(
-                                  width: 10.0,
-                                  height: 10.0,
-                                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)
-                                        .withOpacity(current == entry.key ? 0.9 : 0.4),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                        IgnorePointer(
-                          ignoring: true,
-                          child: Container(
-                            color: Colors.white.withOpacity(opacity),
-                          ),
-                        ),
-                        Positioned(
-                          top: MediaQuery.of(context).padding.top,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            child: ComicSansAppBar(
-                              showBackButton: true,
-                              backgroundColor: Colors.white.withOpacity(opacity),
-                              iconColor: iconColor,
                             ),
-                          ),
-                        ),
-                      ]
-                  );
-                },
-              ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    IgnorePointer(
+                      ignoring: true,
+                      child: Container(
+                        color: Colors.white.withOpacity(opacity),
+                      ),
+                    ),
+                    Positioned(
+                      top: MediaQuery.of(context).padding.top,
+                      left: 0,
+                      right: 0,
+                      child: ComicSansAppBar(
+                        showBackButton: true,
+                        backgroundColor: Colors.white.withOpacity(opacity),
+                        iconColor: iconColor,
+                      ),
+                    ),
+                  ]
+                );
+              },
             ),
+          ),
 
-            // AppBar fissa sopra tutto
-            Positioned(
-              top: MediaQuery.of(context).padding.top,
-              left: 0,
-              right: 0,
-              child: ComicSansAppBar(
-                showBackButton: true,
-                backgroundColor: Color.lerp(Colors.transparent, Colors.black, opacity),
-                iconColor: Colors.white,
-                modified: changed,
-              ),
+          // AppBar fissa sopra tutto
+          Positioned(
+            top: MediaQuery.of(context).padding.top,
+            left: 0,
+            right: 0,
+            child: ComicSansAppBar(
+              showBackButton: true,
+              backgroundColor: Color.lerp(Colors.transparent, Colors.black, opacity)!,
+              iconColor: Colors.white,
             ),
+          ),
 
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 80),
-                child: buildMainContent(context),
-              ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 80),
+              child: buildMainContent(context),
             ),
-          ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton:
-          SizedBox(
-            width: 350,
-            child: ComicSansButton (
-              text: 'Modifica',
-              onPressed: () {
-                /*Navigator.push(context, MaterialPageRoute(
-                    builder: (context){
-                      return PurchaseScreen(comic: widget.comic, user: widget.user);
-                    }
-                  )
-                );*/
-              },// Go to the main screen
-            ),
-          )
+          ),
+        ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: SizedBox (
+        width: 350,
+        child: ComicSansButton (
+          text: 'Modifica',
+          onPressed: () {
+            /*Navigator.push(context, MaterialPageRoute(
+                builder: (context){
+                  return PurchaseScreen(comic: widget.comic, user: widget.user);
+                }
+              )
+            );*/
+          },// Go to the main screen
+        ),
+      )
     );
   }
 }

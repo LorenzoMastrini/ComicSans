@@ -10,8 +10,8 @@ class Comic {
   String description;
   double price;
   Conditions conditions;
-  String? cover;
-  List<String> uploadedImages;
+  String? coverPath;
+  List<String> otherImagesPath;
   List<String> authors;
   List<Genre> genre;
   int? publicationYear;
@@ -34,8 +34,8 @@ class Comic {
     required this.description,
     required this.price,
     required this.conditions,
-    this.uploadedImages = const [],
-    this.cover,
+    this.otherImagesPath = const [],
+    this.coverPath,
     this.authors = const [],
     this.genre = const [],
     this.publicationYear,

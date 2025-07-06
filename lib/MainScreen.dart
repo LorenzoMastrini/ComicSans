@@ -1,5 +1,4 @@
 import 'package:comicsans/components/ComicSansBottomBar.dart';
-import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/screens/ComicSansFavorite.dart';
 import 'package:comicsans/screens/ComicSansHome.dart';
 import 'package:comicsans/screens/ComicSansInbox.dart';
@@ -10,23 +9,22 @@ import 'package:flutter/material.dart';
 
 
 class MainScreen extends StatefulWidget {
-  User user;
-  MainScreen({super.key, required this.user});
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
+
+
 class _MainScreenState extends State<MainScreen> {
   int _navigationBarIndex = 0; //(0: Home, 1: Favorite, 2: Sell, 3: Inbox, 4: Profile)
-  late List<Widget> _pageContents;
-
-  static final List<Widget> _pageContents = <Widget>[
-    ComicSansHome(user: SampleData.allUsers[0], purchaseConfirmed: false),
-    ComicSansFavorite(user: SampleData.allUsers[0]),
+  final List<Widget> _pageContents = <Widget>[
+    ComicSansHome(purchaseConfirmed: false),
+    ComicSansFavorite(),
     // No page fo Sell1 because it opens a modal
     ComicSansInbox(),
-    ComicSansProfile(user: SampleData.allUsers[0]),
+    ComicSansProfile(),
   ];
 
   void _onBottomNavItemTapped(int navBarIndex) {

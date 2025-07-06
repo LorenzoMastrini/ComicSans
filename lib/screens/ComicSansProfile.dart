@@ -4,24 +4,19 @@ import 'package:comicsans/screens/UserSellingsScreen.dart';
 import 'package:comicsans/screens/UserVendorScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/ReviewWidget.dart';
-import 'package:comicsans/user.dart';
 import 'package:comicsans/screens/AccountSettingsScreen.dart';
-import 'package:comicsans/screens/AssitanceScreen.dart';
+import 'package:comicsans/screens/AssistanceScreen.dart';
 import 'package:comicsans/screens/FollowedUsersScreen.dart';
 import 'package:provider/provider.dart';
 
-class ComicSansProfile extends StatefulWidget {
-  User user;
-  ComicSansProfile({super.key, required this.user});
 
-  @override
-  State<ComicSansProfile> createState() => _ComicSansProfileState();
-}
 
-class _ComicSansProfileState extends State<ComicSansProfile> {
+class ComicSansProfile extends StatelessWidget {
+  const ComicSansProfile({super.key});
+
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = context.watch<UserProvider>();
+    UserProvider userProviderWatch = context.watch<UserProvider>();
 
     return ListView(
       children: <Widget> [
@@ -34,10 +29,8 @@ class _ComicSansProfileState extends State<ComicSansProfile> {
           child: TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(
-                builder: (context){
-                  return UserVendorScreen(user: widget.user);
-                })
-              );
+                builder: (context) => UserVendorScreen()
+              ));
             },
             style: TextButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -50,16 +43,16 @@ class _ComicSansProfileState extends State<ComicSansProfile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:<Widget>[
-                      Text(widget.user.username, style: TextStyle(color: Colors.black, fontSize: 24)),
-                      ReviewWidget(user: widget.user),
+                      Text(userProviderWatch.loggedInUser!.username, style: TextStyle(color: Colors.black, fontSize: 24)),
+                      ReviewWidget(),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: RichText(
                           text: TextSpan(
                             children: [
-                              TextSpan(text: userProvider.getLibraryLength().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
+                              TextSpan(text: userProviderWatch.getLibraryLength().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
                               TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
-                              TextSpan(text: widget.user.reviews.length.toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
+                              TextSpan(text: userProviderWatch.getNumberOfReviews().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
                               TextSpan(text: " recensioni", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
                             ]
                           )
@@ -83,20 +76,19 @@ class _ComicSansProfileState extends State<ComicSansProfile> {
           child: TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(
-                  builder: (context){
-                    return UserPurchasesScreen(user: widget.user);
-                  })
-              );},
+                builder: (context) => UserPurchasesScreen()
+              ));
+            },
             style: TextButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 16),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
             child: Row(
-                children: <Widget>[
-                  Text("Acquisti effettuati", style: TextStyle(color: Colors.black, fontSize: 16)),
-                  Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
-                ]
+              children: <Widget>[
+                Text("Acquisti effettuati", style: TextStyle(color: Colors.black, fontSize: 16)),
+                Spacer(),
+                Icon(Icons.arrow_forward_ios, color: Colors.black),
+              ]
             ),
           ),
         ),
@@ -110,7 +102,7 @@ class _ComicSansProfileState extends State<ComicSansProfile> {
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(
                   builder: (context){
-                    return UserSellingsScreen(user: widget.user);
+                    return UserSellingsScreen();
                   })
               );},
             style: TextButton.styleFrom(
@@ -135,10 +127,9 @@ class _ComicSansProfileState extends State<ComicSansProfile> {
           child: TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(
-                  builder: (context){
-                    return FollowedUsersScreen(user: widget.user);
-                  })
-              );},
+                  builder: (context) => FollowedUsersScreen()
+              ));
+            },
             style: TextButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 16),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -164,21 +155,19 @@ class _ComicSansProfileState extends State<ComicSansProfile> {
             child: TextButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context){
-                      return AccountSettingsScreen(user: widget.user);
-                    })
-                );
+                  builder: (context) => AccountSettingsScreen()
+                ));
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
               ),
               child: Row(
-                  children: <Widget>[
-                    Text("Impostazioni account", style: TextStyle(color: Colors.black, fontSize: 16)),
-                    Spacer(),
-                    Icon(Icons.arrow_forward_ios, color: Colors.black),
-                  ]
+                children: <Widget>[
+                  Text("Impostazioni account", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  Spacer(),
+                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                ]
               ),
             ),
           ),

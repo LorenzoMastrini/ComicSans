@@ -2,15 +2,13 @@ import 'package:comicsans/components/ProductGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/CategoriesGrid.dart';
 import 'package:comicsans/components/ComicSansSearchBar.dart';
-import 'package:comicsans/user.dart';
 
 
 
 class ComicSansHome extends StatefulWidget {
-  String title;
-  bool purchaseConfirmed = false;
-  User user;
-  ComicSansHome({super.key, this.title = "", required this.user, this.purchaseConfirmed = false});
+  final String title;
+  final bool purchaseConfirmed;
+  const ComicSansHome({super.key, this.title = "", this.purchaseConfirmed = false});
 
   @override
   State<ComicSansHome> createState() {
@@ -45,37 +43,37 @@ class _ComicSansHomeState extends State<ComicSansHome> {
 
   @override
   Widget build(BuildContext context) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              MySearchBar(user: widget.user),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(5, 5, 0, 2),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                      "Esplora",
-                      style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)
-                  ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            ComicSansSearchBar(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(5, 5, 0, 2),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Esplora",
+                  style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)
                 ),
               ),
-              CategoriesGrid(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(5, 5, 0, 2),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                      "Consigliati per te",
-                      style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)
-                  ),
+            ),
+            CategoriesGrid(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(5, 5, 0, 2),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                    "Consigliati per te",
+                    style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)
                 ),
               ),
-              ProductGrid(user: widget.user),
-            ],
-          ),
+            ),
+            ProductGrid(),
+          ],
         ),
-      );
+      ),
+    );
   }
 }

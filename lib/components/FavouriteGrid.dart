@@ -1,5 +1,4 @@
-import 'package:comicsans/providers/comics_provider.dart';
-import 'package:comicsans/user.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
@@ -7,18 +6,12 @@ import 'package:provider/provider.dart';
 
 
 
-class FavouriteGrid extends StatefulWidget{
-  User user;
-  FavouriteGrid({super.key, required this.user});
+class FavouriteGrid extends StatelessWidget{
+  const FavouriteGrid({super.key});
 
-  @override
-  State<FavouriteGrid> createState() => _FavouriteGridState();
-}
-
-class _FavouriteGridState extends State<FavouriteGrid> {
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<ComicsProvider>();
+    final UserProvider userProviderWatch = context.watch<UserProvider>();
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
@@ -34,13 +27,13 @@ class _FavouriteGridState extends State<FavouriteGrid> {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context){
-                  return ProductDetail(comic: provider.favorite[index], user: widget.user);
+                  return ProductDetail(comic: userProviderWatch.getFavoriteComics()[index]);
                 }
               ));
             },
-            child: ComicCard(comic: provider.favorite[index], user: widget.user));
+            child: ComicCard(comic: userProviderWatch.getFavoriteComics()[index]));
         },
-        itemCount: provider.favorite.length,
+        itemCount: userProviderWatch.getNumberFavoriteComics(),
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,

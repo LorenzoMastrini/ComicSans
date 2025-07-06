@@ -1,23 +1,21 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicCardWoutButton.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/user.dart';
+import 'package:provider/provider.dart';
 
-class UserPurchasesScreen extends StatefulWidget{
-  User user;
-  UserPurchasesScreen({super.key, required this.user});
 
-  @override
-  State<UserPurchasesScreen> createState() => _UserPurchasesScreenState();
-}
 
-class _UserPurchasesScreenState extends State<UserPurchasesScreen> {
+class UserPurchasesScreen extends StatelessWidget {
+  const UserPurchasesScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
-     appBar: ComicSansAppBar(showBackButton: true, title: "Acquisti"),
-     body: Padding(
+    final UserProvider userProviderWatch = context.watch<UserProvider>();
+    return Scaffold(
+      appBar: ComicSansAppBar(showBackButton: true, title: "Acquisti"),
+      body: Padding(
         padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -28,26 +26,19 @@ class _UserPurchasesScreenState extends State<UserPurchasesScreen> {
           ),
           itemBuilder: (context, index){
             return GestureDetector(
-              onTap: () async {
-                final result = await Navigator.push(context, MaterialPageRoute(
-                  builder: (context) =>
-                    ProductDetail(comic: widget.user.getPurchases()[index], user: widget.user)
-                  )
-                );
-                if (result == true){
-                    setState(() {
-                    }
-                  );
-                }
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => ProductDetail(comic: userProviderWatch.getPurchases()[index])
+                ));
               },
-              child: ComicCardWoutButton(comic: widget.user.getPurchases()[index], user: widget.user)
+              child: ComicCardWoutButton(comic: userProviderWatch.getPurchases()[index])
             );
           },
-          itemCount: widget.user.getPurchases().length,
+          itemCount: userProviderWatch.getNumberOfPurchases(),
           shrinkWrap: false,
           padding: EdgeInsets.zero,
         ),
       ),
-   );
+    );
   }
 }

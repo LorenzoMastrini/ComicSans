@@ -1,40 +1,43 @@
 import 'package:comicsans/Components/ComicSansButton.dart';
+import 'package:comicsans/SampleData.dart';
+import 'package:comicsans/global_constants.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ChangeCreditCardScreen.dart';
 import 'package:comicsans/screens/ChangeShippingAddressScreen.dart';
-import 'package:comicsans/screens/ComicSansHome.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/providers/comics_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/comic.dart';
-import 'package:comicsans/user.dart';
 import 'package:provider/provider.dart';
 
-class PurchaseScreen extends StatefulWidget{
-  User user;
-  Comic comic;
 
-  PurchaseScreen({super.key, required this.user, required this.comic});
+
+class PurchaseScreen extends StatefulWidget{
+  final Comic comic;
+
+  const PurchaseScreen({super.key, required this.comic});
+
   @override
   State<PurchaseScreen> createState() => _PurchaseScreenState();
 }
 
-enum Shipping {Home, retirePoint}
-enum paymentMethod {CreditCard, PayPal}
-
-String maskCardNumber(String number) {
-  if (number.length < 4) return number;
-  String last4 = number.substring(number.length - 4);
-  return '**** **** **** $last4';
-}
 
 
 class _PurchaseScreenState extends State<PurchaseScreen> {
-  Shipping? shipping = Shipping.Home;
-  paymentMethod? payment = paymentMethod.CreditCard;
+  Shipping? shipping = Shipping.home;
+  PaymentMethod? payment = PaymentMethod.creditCard;
+
+  String maskCardNumber(String number) {
+    if (number.length < 4) return number;
+    String last4 = number.substring(number.length - 4);
+    return '**** **** **** $last4';
+  }
 
   @override
   Widget build(BuildContext context) {
-    final ComicsProvider provider = context.read<ComicsProvider>();
+    final UserProvider userProviderRead = context.read<UserProvider>();
+    final UserProvider userProviderWatch = context.watch<UserProvider>();
+    final ComicsProvider comicsProviderRead = context.read<ComicsProvider>();
 
     return Scaffold(
       appBar: ComicSansAppBar(
@@ -79,16 +82,16 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
               SizedBox(height: 20),
               Text("Metodo di spedizione", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               ListTile(
-                  title: Text("Spedisci a casa", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                  leading: Radio<Shipping>(
-                    value: Shipping.Home,
-                    groupValue: shipping,
-                    onChanged: (Shipping? value) {
-                      setState(() {
-                        shipping = value;
-                      });
-                    }
-                  )
+                title: Text("Spedisci a casa", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                leading: Radio<Shipping>(
+                  value: Shipping.home,
+                  groupValue: shipping,
+                  onChanged: (Shipping? value) {
+                    setState(() {
+                      shipping = value;
+                    });
+                  }
+                )
               ),
               ListTile(
                 title: Text("Punto di ritiro", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
@@ -104,7 +107,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
               ),
               SizedBox(height: 20),
               Text("Indirizzo di spedizione", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              if(shipping == Shipping.Home)
+              if(shipping == Shipping.home)
                 Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -123,9 +126,15 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(widget.user.addr!.name + " " + widget.user.addr!.lastName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                            Text(widget.user.addr!.address, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                            Text(widget.user.addr!.cap.toString(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                            Text(
+                              "${userProviderWatch.loggedInUser!.address?.name ?? ''} ${userProviderWatch.loggedInUser?.address?.lastName ?? ''}",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400
+                              )
+                            ),
+                            Text(userProviderWatch.loggedInUser!.address?.address ?? '', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                            Text(userProviderWatch.loggedInUser!.address?.cap.toString() ?? '', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
                           ],
                         ),
                       ),
@@ -139,15 +148,61 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                 ),
               if(shipping == Shipping.retirePoint)
                 Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                      )
+                    ]
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: userProviderWatch.loggedInUser!.address != null
+                          ? [
+                            Text(
+                              "${userProviderWatch.loggedInUser!.address?.name ?? ''} ${userProviderWatch.loggedInUser?.address?.lastName ?? ''}",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400
+                              )
+                            ),
+                            Text(userProviderWatch.loggedInUser!.address?.address ?? '', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                            Text(userProviderWatch.loggedInUser!.address?.cap.toString() ?? '', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                          ]
+                          : [
+                            Text("Nessun indirizzo inserito", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400))
+                          ]
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap:() {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => ChangeShippingAddressScreen()
+                          ));
+                        },
+                        child: Text("Cambia", style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, decoration: TextDecoration.underline))
+                      ),
+                    ]
+                  )
+                  ),
+                if(shipping == Shipping.retirePoint)
+                  Container(
                     padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                          )
-                        ]
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                        )
+                      ]
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,137 +210,85 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: widget.user.addr != null
-                            ? [
-                              Text(widget.user.addr!.name + " " +widget.user.addr!.lastName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                              Text(widget.user.addr!.address, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                              Text(widget.user.addr!.cap.toString(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                            ]
-                            : [
-                              Text("Nessun indirizzo inserito", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400))
-                            ]
+                            children: [
+                              Text("Armadietto 1", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                              Text("Via Banca 3", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                              Text("06055", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                            ],
                           ),
-                        ),
-                        GestureDetector(
-                          onTap:() async {
-                            final result = await Navigator.push(context, MaterialPageRoute(
-                                builder: (context){
-                                  return ChangeShippingAddressScreen(user: widget.user);
-                                }
-                              )
-                            );
-                            if(result == true){
-                              setState(() {});
-                            }
-                          },
-                          child: Text("Cambia", style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, decoration: TextDecoration.underline))
                         ),
                       ]
                     )
                   ),
-                if(shipping == Shipping.retirePoint)
-                  Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                            )
-                          ]
-                      ),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Armadietto 1", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                                  Text("Via Banca 3", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                                  Text("06055", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                                ],
-                              ),
-                            ),
-                          ]
-                      )
-                  ),
                 SizedBox(height: 20),
                 Text("Pagamento", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 ListTile(
-                    title: Text("Carta di credito", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                    leading: Radio<paymentMethod>(
-                        value: paymentMethod.CreditCard,
-                        groupValue: payment,
-                        onChanged: (paymentMethod? value) {
-                          setState(() {
-                            payment = value;
-                          });
-                        }
-                    )
+                  title: Text("Carta di credito", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                  leading: Radio<PaymentMethod>(
+                    value: PaymentMethod.creditCard,
+                    groupValue: payment,
+                    onChanged: (PaymentMethod? value) {
+                      setState(() {
+                        payment = value;
+                      });
+                    }
+                  )
                 ),
-                if(payment == paymentMethod.CreditCard)
+                if(payment == PaymentMethod.creditCard)
                   Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                            )
-                          ]
-                      ),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: widget.user.card != null
-                                ? [
-                                  Text(widget.user.card!.holder, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                                  Text(maskCardNumber(widget.user.card!.number.toString()), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                                  Text(widget.user.card!.expiration, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                                  Text(widget.user.card!.cvv.toString(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                                ]
-                                : [
-                                  Text("Nessuna carta di credito inserita", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400))
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                                onTap: () async {
-                                  final result = await Navigator.push(context, MaterialPageRoute(
-                                      builder: (context){
-                                        return ChangeCreditCardScreen(user: widget.user);
-                                      }
-                                    )
-                                  );
-                                  if(result == true){
-                                    setState(() {});
-                                  }
-                                },
-                                child: Text("Cambia", style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.normal,
-                                    decoration: TextDecoration.underline))
-                            ),
-                          ]
-                      )
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                        )
+                      ]
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: userProviderWatch.loggedInUser!.card != null
+                            ? [
+                              Text(userProviderWatch.loggedInUser!.card!.holder, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                              Text(maskCardNumber(userProviderWatch.loggedInUser!.card!.number.toString()), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                              Text(userProviderWatch.loggedInUser!.card!.expiration, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                              Text(userProviderWatch.loggedInUser!.card!.cvv.toString(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                            ]
+                            : [
+                              Text("Nessuna carta di credito inserita", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400))
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => ChangeCreditCardScreen()
+                            ));
+                          },
+                          child: Text("Cambia", style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal,
+                            decoration: TextDecoration.underline))
+                        ),
+                      ]
+                    )
                   ),
                 ListTile(
-                    title: Text("PayPal", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                    leading: Radio<paymentMethod>(
-                        value: paymentMethod.PayPal,
-                        groupValue: payment,
-                        onChanged: (paymentMethod? value) {
-                          setState(() {
-                            payment = value;
-                          });
-                        }
-                    )
+                  title: Text("PayPal", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                  leading: Radio<PaymentMethod>(
+                    value: PaymentMethod.payPal,
+                    groupValue: payment,
+                    onChanged: (PaymentMethod? value) {
+                      setState(() {
+                        payment = value;
+                      });
+                    }
+                  )
                 ),
                 SizedBox(height: 20),
                 SizedBox(
@@ -294,83 +297,74 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                   child: ComicSansButton(
                     onPressed: () {
                       bool canPurchase = true;
-                      if(shipping == Shipping.Home && widget.user.addr == null) {
+                      if(shipping == Shipping.home && userProviderWatch.loggedInUser!.address == null) {
                         canPurchase = false;
                         showDialog(
                           context: context,
-                          builder: (context) =>
-                              AlertDialog(
-                                  content: Text("Inserisci un indirizzo di spedizione!"),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("OK")
-                                    )
-                                  ]
+                          builder: (context) => AlertDialog(
+                            content: Text("Inserisci un indirizzo di spedizione!"),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("OK")
                               )
+                            ]
+                            )
                         );
                       }
-                      if(payment == paymentMethod.CreditCard && widget.user.card == null) {
+                      if(payment == PaymentMethod.creditCard && userProviderWatch.loggedInUser!.card == null) {
                         canPurchase = false;
                         showDialog(
-                            context: context,
-                            builder: (context) =>
-                                AlertDialog(
-                                    content: Text("Inserisci una carta di credito!"),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text("OK")
-                                      )
-                                    ]
-                                )
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Text("Inserisci una carta di credito!"),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("OK")
+                              )
+                            ]
+                            )
                         );
                       }
-                      if(payment == paymentMethod.PayPal && widget.user.connectedAccount == false) {
+                      if(payment == PaymentMethod.payPal && userProviderWatch.loggedInUser!.connectedAccount == false) {
                         canPurchase = false;
                         showDialog(
-                            context: context,
-                            builder: (context) =>
-                                AlertDialog(
-                                    content: Text("Account non connesso!"),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text("OK")
-                                      )
-                                    ]
-                                )
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Text("Account non connesso!"),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("OK")
+                              )
+                            ]
+                            )
                         );
                       }
                       if(canPurchase) {
-                        widget.user.purchases.add(widget.comic);
+                        userProviderRead.updatePuchases(widget.comic);
                         widget.comic.seller.sellings.add(widget.comic);
                         widget.comic.seller.comicsSale.remove(widget.comic);
                         SampleData.allComics.remove(widget.comic);
 
-                        Navigator.pushNamed(context, '/', arguments: widget.user);
+                        Navigator.pushReplacementNamed(context, '/');
                       }
                     },
                     text: "Paga"
                   ),
                 ),
               ListTile(
-                  title: Text("PayPal", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                  leading: Radio<paymentMethod>(
-                      value: paymentMethod.PayPal,
-                      groupValue: payment,
-                      onChanged: (paymentMethod? value) {
-                        setState(() {
-                          payment = value;
-                        });
-                      }
-                  )
+                title: Text("PayPal", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                leading: Radio<PaymentMethod>(
+                  value: PaymentMethod.payPal,
+                  groupValue: payment,
+                  onChanged: (PaymentMethod? value) {
+                    setState(() {
+                      payment = value;
+                    });
+                  }
+                )
               ),
               SizedBox(height: 20),
               SizedBox(
@@ -378,10 +372,10 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    widget.user.purchases.add(widget.comic);
+                    userProviderRead.updatePuchases(widget.comic);
                     widget.comic.seller.sellings.add(widget.comic);
                     widget.comic.seller.comicsSale.remove(widget.comic);
-                    provider.removeComic(widget.comic);
+                    comicsProviderRead.removeComic(widget.comic);
 
                     Navigator.pushReplacementNamed(context, '/');
                   },
@@ -396,7 +390,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                 ),
               ),
             ],
-            ),
+          ),
         ),
       ),
     );

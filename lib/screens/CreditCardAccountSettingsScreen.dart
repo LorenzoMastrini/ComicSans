@@ -1,18 +1,22 @@
+import 'package:comicsans/providers/user_provider.dart';
+import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../Components/ComicSansButton.dart';
-import '../CreditCard.dart';
-import '../components/ComicSansAppBar.dart';
-import '../components/ComicSansTextInput.dart';
-import '../user.dart';
+import 'package:comicsans/components/ComicSansButton.dart';
+import 'package:comicsans/components/ComicSansAppBar.dart';
+import 'package:comicsans/components/ComicSansTextInput.dart';
+import 'package:provider/provider.dart';
+
+
 
 class CreditCardAccountSettingsScreen extends StatefulWidget{
-  User user;
-  CreditCardAccountSettingsScreen({super.key, required this.user});
+  const CreditCardAccountSettingsScreen({super.key});
 
   @override
   State<CreditCardAccountSettingsScreen> createState() => _CreditCardAccountSettingsScreenState();
 }
+
+
 
 class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSettingsScreen> {
   late TextEditingController _holderController;
@@ -24,11 +28,16 @@ class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSetti
   @override
   void initState() {
     super.initState();
-    _holderController = TextEditingController(text: widget.user.card?.holder);
-    _numberController = TextEditingController(text: widget.user.card?.number.toString());
-    _expirationController = TextEditingController(text: widget.user.card?.expiration);
-    _cvvController = TextEditingController(text: widget.user.card?.cvv.toString());
-    isConnected = widget.user.connectedAccount;
+    // Safe access to provider without triggering rebuilds
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userProvider = Provider.of<UserProvider>(context, listen: true);
+      CreditCard? card = userProvider.loggedInUser!.card;
+      _holderController = TextEditingController(text: card?.holder);
+      _numberController = TextEditingController(text: card?.number.toString());
+      _expirationController = TextEditingController(text: card?.expiration);
+      _cvvController = TextEditingController(text: card?.cvv.toString());
+      isConnected = userProvider.loggedInUser!.connectedAccount;
+    });
   }
 
   @override
@@ -40,13 +49,15 @@ class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSetti
     super.dispose();
   }
 
-  void toggleAccount(){
+  void toggleAccount() {
+    UserProvider userProviderRead = context.read<UserProvider>();
+
     setState(() {
       if(isConnected){
-        widget.user.connectedAccount = false;
+        userProviderRead.loggedInUser!.connectedAccount = false;
       }
       else{
-        widget.user.connectedAccount = true;
+        userProviderRead.loggedInUser!.connectedAccount = true;
       }
       isConnected = !isConnected;
     });
@@ -54,10 +65,11 @@ class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSetti
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
+    final UserProvider userProviderRead = context.read<UserProvider>();
 
     void updateCreditCardData() {
-      if(_formKey.currentState!.validate()){
+      if(formKey.currentState!.validate()){
         final newCard = CreditCard(
           holder: _holderController.text,
           number: int.parse(_numberController.text),
@@ -65,7 +77,7 @@ class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSetti
           cvv: int.parse(_cvvController.text),
         );
 
-        widget.user.card = newCard;
+        userProviderRead.loggedInUser!.card = newCard;
         Navigator.pop(context, true);
       }
     }
@@ -79,7 +91,7 @@ class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSetti
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Form (
-            key: _formKey,
+            key: formKey,
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -91,44 +103,46 @@ class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSetti
                   const SizedBox(height: 10),
 
                   ComicSansTextInput(
-                      title: 'Numero della carta',
-                      controller: _numberController,
-                      keyboardType: TextInputType.number,
-                      validator: (value){
-                        if(value?.length != 16)
-                          return 'Numero della carta non valido';
-
-                        return null;
+                    title: 'Numero della carta',
+                    controller: _numberController,
+                    keyboardType: TextInputType.number,
+                    validator: (value){
+                      if(value?.length != 16) {
+                        return 'Numero della carta non valido';
                       }
+
+                      return null;
+                    }
                   ),
                   const SizedBox(height: 10),
 
                   Row(
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          child: ComicSansTextInput(
-                            title: 'Scadenza',
-                            keyboardType: TextInputType.emailAddress,
-                            controller: _expirationController,
-                          ),
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        child: ComicSansTextInput(
+                          title: 'Scadenza',
+                          keyboardType: TextInputType.emailAddress,
+                          controller: _expirationController,
                         ),
-                        SizedBox(width: 20),
-                        SizedBox(
-                          width: 150,
-                          child: ComicSansTextInput(
-                              title: 'CVV',
-                              controller: _cvvController,
-                              keyboardType: TextInputType.number,
-                              validator: (value){
-                                if(value?.length != 3)
-                                  return 'CVV non valido';
+                      ),
+                      SizedBox(width: 20),
+                      SizedBox(
+                        width: 150,
+                        child: ComicSansTextInput(
+                          title: 'CVV',
+                          controller: _cvvController,
+                          keyboardType: TextInputType.number,
+                          validator: (value){
+                            if(value?.length != 3) {
+                              return 'CVV non valido';
+                            }
 
-                                return null;
-                              }
-                          ),
+                            return null;
+                          }
                         ),
-                      ]
+                      ),
+                    ]
                   ),
                   const SizedBox(height: 10),
                   Row(
@@ -141,17 +155,17 @@ class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSetti
                         onPressed: () {
                           toggleAccount();
                         },
-                        child: Text(
-                            isConnected ? 'Scollega' : 'Collega',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: isConnected ? 16 : 16,
-                                fontWeight: FontWeight.normal)),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(7),
                           ),
                         ),
+                        child: Text(
+                          isConnected ? 'Scollega' : 'Collega',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: isConnected ? 16 : 16,
+                            fontWeight: FontWeight.normal)),
                       ),
                     ],
                   ),

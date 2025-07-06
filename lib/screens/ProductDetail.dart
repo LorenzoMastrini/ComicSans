@@ -1,6 +1,6 @@
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
-import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ImagesDisplay.dart';
 import 'package:comicsans/screens/PurchaseScreen.dart';
 import 'package:comicsans/screens/VendorScreen.dart';
@@ -10,16 +10,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:comicsans/components/ComicSansButton.dart';
 import 'package:comicsans/components/PanelWidget.dart';
 import 'package:comicsans/components/ReviewWidget.dart';
-import 'package:comicsans/user.dart';
+
+
 
 class ProductDetail extends StatefulWidget {
   final Comic comic;
-  final User user;
 
-  const ProductDetail({super.key, required this.comic, required this.user});
+  const ProductDetail({super.key, required this.comic});
   @override
   State<ProductDetail> createState() => _ProductDetailState();
 }
@@ -41,8 +40,12 @@ class _ProductDetailState extends State<ProductDetail> {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_handleScroll);
-    final provider = context.read<ComicsProvider>();
-    isFavourite = provider.checkFavorite(widget.comic);
+    // Safe access to provider without triggering rebuilds
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      isFavourite = userProvider.checkFavorite(widget.comic);
+      setState(() {});
+    });
   }
 
   @override
@@ -64,22 +67,14 @@ class _ProductDetailState extends State<ProductDetail> {
     }
   }
 
-  String formatCondition(Conditions cond) {
-    switch (cond) {
-      case Conditions.daEdicola: return "Da edicola";
-      case Conditions.ottime: return "Ottime";
-      case Conditions.buone: return "Buone";
-      case Conditions.moltoUsato: return "Molto usata";
-    }
-  }
-
   void toggleFavourite(){
-    final provider = context.read<ComicsProvider>();
+    final userProviderRead = context.read<UserProvider>();
+
     setState(() {
       changed = true;
       isFavourite
-        ? provider.removeFavorite(widget.comic)
-        : provider.addFavorite(widget.comic);
+        ? userProviderRead.removeFavorite(widget.comic)
+        : userProviderRead.addFavorite(widget.comic);
       isFavourite = !isFavourite;
     });
   }
@@ -126,12 +121,13 @@ class _ProductDetailState extends State<ProductDetail> {
                       padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                       child: Row(children: <Widget>[
                         Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
-                            child: Icon(FontAwesomeIcons.truck, color: Colors.black, size: 18)),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
+                          child: Icon(FontAwesomeIcons.truck, color: Colors.black, size: 18)),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text("Spedizione a partire da: 0€",
-                              style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
+                          child: Text(
+                            "Spedizione a partire da: 0€",
+                            style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
                         ),
                       ]),
                     ),
@@ -183,8 +179,8 @@ class _ProductDetailState extends State<ProductDetail> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(widget.comic.seller.username,
-                                  style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
-                              ReviewWidget(user: widget.comic.seller),
+                                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
+                              ReviewWidget(),
                               GestureDetector(
                                 child: Text("Recensioni",
                                   style: TextStyle(
@@ -202,19 +198,17 @@ class _ProductDetailState extends State<ProductDetail> {
                       onTap: () {
                         Navigator.push(
                           context, MaterialPageRoute(
-                          builder: (context){
-                            return VendorScreen(seller: widget.comic.seller, user: widget.user);
-                          }
-                        )
-                        );
+                          builder: (context) => VendorScreen(seller: widget.comic.seller)
+                        ));
                       },
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: Row(children: <Widget>[
                         Icon(FontAwesomeIcons.locationDot, color: Colors.black, size: 25),
-                        Text(widget.comic.seller.addr!.country,
-                            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
+                        Text(
+                          widget.comic.seller.address!.country,
+                          style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
                       ]),
                     ),
                   ]),
@@ -261,7 +255,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(widget.comic.conditions != null ? formatCondition(widget.comic.conditions) : "N/D",
+                    child: Text(conditionsToString(widget.comic.conditions),
                         style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
                   ),
                 ),
@@ -269,16 +263,18 @@ class _ProductDetailState extends State<ProductDetail> {
                   padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Descrizione",
-                        style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
+                    child: Text(
+                      "Descrizione",
+                      style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(widget.comic.description,
-                        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
+                    child: Text(
+                      widget.comic.description,
+                      style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
                   ),
                 ),
                 Padding(
@@ -351,7 +347,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(
                           builder: (context) {
-                            return ImagesDisplay(comicImages: widget.comic.uploadedImages);
+                            return ImagesDisplay(comicImages: widget.comic.otherImagesPath);
                           }
                         )
                         );
@@ -367,7 +363,7 @@ class _ProductDetailState extends State<ProductDetail> {
                               current = index;
                             });
                           }),
-                        items: widget.comic.uploadedImages.map((item) => SizedBox(
+                        items: widget.comic.otherImagesPath.map((item) => SizedBox(
                           width: double.infinity,
                           height: double.infinity,
                           child: Image.asset(
@@ -386,7 +382,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       right: 0,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: widget.comic.uploadedImages.asMap().entries.map((entry) {
+                        children: widget.comic.otherImagesPath.asMap().entries.map((entry) {
                           return GestureDetector(
                             onTap: () => controller.animateToPage(entry.key),
                             child: Container(
@@ -396,7 +392,7 @@ class _ProductDetailState extends State<ProductDetail> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)
-                                    .withOpacity(current == entry.key ? 0.9 : 0.4)),
+                                  .withOpacity(current == entry.key ? 0.9 : 0.4)),
                             ),
                           );
                         }).toList(),
@@ -441,7 +437,7 @@ class _ProductDetailState extends State<ProductDetail> {
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context){
-                  return PurchaseScreen(comic: widget.comic, user: widget.user);
+                  return PurchaseScreen(comic: widget.comic);
                 }
               ));
             },
