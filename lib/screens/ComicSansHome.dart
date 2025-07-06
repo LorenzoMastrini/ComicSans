@@ -27,7 +27,6 @@ class ComicSansHome extends StatefulWidget {
 }
 
 class _ComicSansHomeState extends State<ComicSansHome> {
-  int _selectedTabIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -54,47 +53,37 @@ class _ComicSansHomeState extends State<ComicSansHome> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = <Widget>[
-      SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            MySearchBar(user: widget.user),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(5, 5, 0, 2),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                    "Esplora",
-                    style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              MySearchBar(user: widget.user),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(5, 5, 0, 2),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                      "Esplora",
+                      style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)
+                  ),
                 ),
               ),
-            ),
-            CategoriesGrid(),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(5, 5, 0, 2),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                    "Consigliati per te",
-                    style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)
+              CategoriesGrid(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(5, 5, 0, 2),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                      "Consigliati per te",
+                      style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)
+                  ),
                 ),
               ),
-            ),
-            ProductGrid(user: widget.user),
-          ],
+              ProductGrid(user: widget.user),
+            ],
+          ),
         ),
-      ),
-      Container(color: Colors.blue),
-      Container(color: Colors.yellow),
-      Profile(user: widget.user),
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: IndexedStack(
-        index: _selectedTabIndex,
-        children: _pages
-      ),
-    );
+      );
   }
 }

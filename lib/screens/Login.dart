@@ -3,8 +3,60 @@ import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:flutter/material.dart';
 
-class Login extends StatelessWidget {
+import '../SampleData.dart';
+import '../user.dart';
+
+class Login extends StatefulWidget {
   const Login({super.key});
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+
+class _LoginState extends State<Login> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void login(){
+    String email = _emailController.text.trim();
+    String password = _passwordController.text;
+
+    User? matchedUser;
+    for(var user in SampleData.allUsers){
+      if(user.email == email && user.password == password){
+        matchedUser = user;
+        break;
+      }
+    }
+
+    if(matchedUser != null){
+      Navigator.pushReplacementNamed(context, '/', arguments: matchedUser); // Go to the main screen
+    }
+    else {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+              content: Text("Email o password errati!"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("OK")
+                )
+              ]
+          )
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +77,14 @@ class Login extends StatelessWidget {
                     ComicSansTextInput(
                       title: 'Indirizzo email',
                       keyboardType: TextInputType.emailAddress,
+                      controller: _emailController,
                     ),
                     SizedBox(height: 20),
-        
+
                     ComicSansTextInput(
                       title: 'Password',
                       passwordField: true,
+                      controller: _passwordController,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -40,7 +94,7 @@ class Login extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-        
+
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(60),
@@ -48,7 +102,7 @@ class Login extends StatelessWidget {
                           borderRadius: BorderRadius.circular(7),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () => Navigator.pushNamed(context, '/', arguments: SampleData.allUsers[0]),
                       child: Row(
                         mainAxisSize: MainAxisSize.min, // evita che si allarghi troppo
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +120,7 @@ class Login extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 15),
-        
+
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(60),
@@ -74,7 +128,7 @@ class Login extends StatelessWidget {
                           borderRadius: BorderRadius.circular(7),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () => Navigator.pushNamed(context, '/', arguments: SampleData.allUsers[0]),
                       child: Row(
                         mainAxisSize: MainAxisSize.min, // Avoid to enlarge too much
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +139,7 @@ class Login extends StatelessWidget {
                           ),
                           const SizedBox(width: 12),
                           const Text(
-                            'Accedi con Google',
+                            'Accedi con Facebook',
                             style: TextStyle(color: Colors.black),
                           ),
                         ],
@@ -93,7 +147,7 @@ class Login extends StatelessWidget {
                     ),
                   ],
                 ),
-        
+
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                   child: Column(
@@ -124,12 +178,10 @@ class Login extends StatelessWidget {
                           ]
                         ),
                       ),
-        
+
                       ComicSansButton (
                         text: 'Accedi',
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/'); // Go to the main screen
-                        },
+                        onPressed: login// Go to the main screen
                       ),
                     ]
                   ),

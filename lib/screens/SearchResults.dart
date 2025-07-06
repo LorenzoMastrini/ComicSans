@@ -6,6 +6,7 @@ import 'package:comicsans/user.dart';
 
 import '../Components/ComicCard.dart';
 import '../comic.dart';
+import '../components/ComicSansBottomBar.dart';
 
 class SearchResults extends StatefulWidget{
   List<Comic> comicsResults;
@@ -66,11 +67,12 @@ class _SearchResultsState extends State<SearchResults> {
                         child: MySearchBar(user: widget.user)
                     ),
                     SizedBox(width: 10),
-                    Container(
-                        height: 50,
-                        width: 50,
-                        child: Icon(Icons.filter_list, color: Colors.black, size: 30)
-                    )
+                    IconButton(
+                      icon: const Icon(Icons.filter_list, size: 30),
+                      tooltip: 'Filtri',
+                      onPressed: () {
+                      },
+                    ),
                   ]
               ),
             ),

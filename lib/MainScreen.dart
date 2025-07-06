@@ -12,24 +12,28 @@ import 'package:flutter/material.dart';
 
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  User user;
+  MainScreen({super.key, required this.user});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
-
-
 class _MainScreenState extends State<MainScreen> {
   int _navigationBarIndex = 0; //(0: Home, 1: Favorite, 2: Sell, 3: Inbox, 4: Profile)
+  late List<Widget> _pageContents;
 
-  static List<Widget> _pageContents = <Widget>[
-    ComicSansHome(user: SampleData.allUsers[0], purchaseConfirmed: false),
-    ComicSansFavorite(user: SampleData.allUsers[0]),
-    // No page fo Sell1 because it opens a modal
-    ComicSansInbox(),
-    ComicSansProfile(user: SampleData.allUsers[0]),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _pageContents = <Widget>[
+      ComicSansHome(user: widget.user, purchaseConfirmed: false),
+      ComicSansFavorite(user: widget.user),
+      // No page fo Sell1 because it opens a modal
+      ComicSansInbox(),
+      ComicSansProfile(user: widget.user),
+    ];
+  }
 
   void _onBottomNavItemTapped(int navBarIndex) {
     if (navBarIndex == 2) { // Item "Sell"
@@ -38,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
         isScrollControlled: true,
         useSafeArea: true,
         builder: (BuildContext modalContext) {
-          return const ComicSansSell1();
+          return ComicSansSell1();
         },
       );
       // Don't update _navigationBarIndex cause modal is temporary and last page must remain active

@@ -1,6 +1,11 @@
 import 'package:comicsans/Components/app_bar.dart';
 import 'package:flutter/material.dart';
 import '../user.dart';
+import 'ChangeCreditCardScreen.dart';
+import 'ChangeShippingAddressScreen.dart';
+import 'CreditCardAccountSettingsScreen.dart';
+
+import 'ProfileDataScreen.dart';
 
 class AccountSettingsScreen extends StatefulWidget{
   User user;
@@ -28,7 +33,13 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               ),
             ),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context){
+                      return ProfileDataScreen(user: widget.user);
+                    }
+                ));
+              },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -49,7 +60,13 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               ),
             ),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context){
+                      return CreditCardAccountSettingsScreen(user: widget.user);
+                    }
+                ));
+              },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -70,7 +87,13 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               ),
             ),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context){
+                    return ChangeShippingAddressScreen(user: widget.user);
+                  }
+                ));
+              },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -94,7 +117,9 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 ),
               ),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),

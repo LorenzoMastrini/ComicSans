@@ -39,11 +39,12 @@ static void init(){
       comicsSale: [],
       reviews: [],
       sellings: [],
-      purchases: []
+      purchases: [],
+      connectedAccount: false
   );
   user2 = User(
       id: 2,
-      username: "Sex Machine",
+      username: "Giobo",
       name: "Giovanni",
       lastName: "Carlini",
       email: "prova2@prova.com",
@@ -70,7 +71,8 @@ static void init(){
       followedUsers: [],
       comicsSale: [],
       sellings: [],
-      purchases: []
+      purchases: [],
+      connectedAccount: false
   );
   comic1 = Comic(
     id: 1,

@@ -13,6 +13,7 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppBarActionType actionType; // Tipo di azione principale
   final VoidCallback? onOverflowMenuPressed; // Callback per il menu a tre puntini
   final VoidCallback? onCloseButtonPressed;
+  final Color? backgroundColor;
 
   const ComicSansAppBar({
     super.key,
@@ -21,7 +22,8 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showCloseButton = false,
     this.actionType = AppBarActionType.none,
     this.onOverflowMenuPressed,
-    this.onCloseButtonPressed
+    this.onCloseButtonPressed,
+    this.backgroundColor
   });
 
   @override
@@ -56,6 +58,7 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 
     return AppBar(
+      backgroundColor: backgroundColor ?? Colors.transparent,
       toolbarHeight: 40,
       title: title != null ?
         Row(

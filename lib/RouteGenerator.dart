@@ -1,9 +1,8 @@
 import 'package:comicsans/MainScreen.dart';
 import 'package:comicsans/screens/Login.dart';
 import 'package:comicsans/screens/Registration.dart';
+import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
-
-
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -13,11 +12,17 @@ class RouteGenerator {
       case '/login':
         return MaterialPageRoute(builder: (_) => const Login());
       case '/forgot_password':
-        return MaterialPageRoute(builder: (_) => const MainScreen());
+        if(args is User) {
+          return MaterialPageRoute(builder: (_) => MainScreen(user: args));
+        }
+        return _errorRoute();
       case '/registration':
         return MaterialPageRoute(builder: (_) => const Registration());
       case '/':
-        return MaterialPageRoute(builder: (_) => const MainScreen()); // Main screen with the bottom bar
+        if(args is User) {
+          return MaterialPageRoute(builder: (_) => MainScreen(user: args));
+        } // Main screen with the bottom bar
+        return _errorRoute();
       default:
         return _errorRoute();
     }

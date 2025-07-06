@@ -1,10 +1,24 @@
 import 'package:comicsans/address.dart';
 import 'package:comicsans/CreditCard.dart';
 import 'package:comicsans/comic.dart';
-import 'package:comicsans/Components//ReviewComponent.dart';
+import 'package:comicsans/Components/ReviewComponent.dart';
 import 'package:comicsans/review.dart';
 
 enum Gender {Maschio, Femmina, Altro}
+
+extension GenderExtension on Gender {
+  String get label {
+    switch (this) {
+      case Gender.Maschio:
+        return 'Maschio';
+      case Gender.Femmina:
+        return 'Femmina';
+      case Gender.Altro:
+        return 'Altro';
+    }
+  }
+}
+
 class User{
   int? id;
   String username;
@@ -24,6 +38,7 @@ class User{
   int rating;
   List<Comic> sellings;
   List<Comic> purchases;
+  bool connectedAccount;
 
   User(
   {
@@ -44,7 +59,8 @@ class User{
     required this.rating,
     required this.sellings,
     required this.purchases,
-    required this.reviews
+    required this.reviews,
+    required this.connectedAccount
   });
 
   bool checkFavourites(User user, Comic comic){
@@ -82,5 +98,8 @@ class User{
   }
   List<Comic> getPurchases(){
     return purchases;
+  }
+  static List<Gender> getAllGenders(){
+    return Gender.values;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:comicsans/screens/FiltersScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/user.dart';
@@ -51,6 +52,18 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.filter_list),
+        tooltip: 'Filtri',
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) => FiltersScreen(
+            ),
+          ));
+        },
+      ),
+    ];
   }
 
   @override
