@@ -1,10 +1,12 @@
 import 'package:comicsans/address.dart';
 import 'package:comicsans/CreditCard.dart';
 import 'package:comicsans/comic.dart';
-import 'package:comicsans/Components//ReviewComponent.dart';
 import 'package:comicsans/review.dart';
 
+
+
 enum Gender {Maschio, Femmina, Altro}
+
 class User{
   int? id;
   String username;
@@ -25,8 +27,7 @@ class User{
   List<Comic> sellings;
   List<Comic> purchases;
 
-  User(
-  {
+  User({
     this.id,
     required this.username,
     this.name,
@@ -47,32 +48,14 @@ class User{
     required this.reviews
   });
 
-  bool checkFavourites(User user, Comic comic){
-    bool isFavourite = false;
-    for(int i=0; i < user.favouriteComics!.length; i++){
-      if(user.favouriteComics![i].id == comic.id){
-        return isFavourite = true;
-      }
-    }
-    return isFavourite;
-  }
-  void addFavourite(Comic comic){
-    favouriteComics.add(comic);
-  }
   void addFollowing(User user){
-    followedUsers!.add(user);
+    followedUsers.add(user);
   }
   void removeFollowing(User user){
-    followedUsers!.remove(user);
-  }
-  void removeFavourite(Comic comic) {
-    favouriteComics.remove(comic);
+    followedUsers.remove(user);
   }
   void removeComicsSale(Comic comic) {
     comicsSale.remove(comic);
-  }
-  List<Comic> getFavourites(){
-    return favouriteComics;
   }
   List<Comic> getComicsSale(){
     return comicsSale;

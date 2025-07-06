@@ -1,5 +1,7 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
+import 'package:comicsans/SampleData.dart';
+import 'package:comicsans/comic.dart';
+import 'package:comicsans/global_constants.dart';
+import 'package:flutter/material.dart';
 
 
 
@@ -26,9 +28,9 @@ class SellInfoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? _conditions;
-  String? get conditions => _conditions;
-  set conditions(String? value) {
+  Conditions? _conditions;
+  Conditions? get conditions => _conditions;
+  set conditions(Conditions? value) {
     _conditions = value;
     notifyListeners();
   }
@@ -36,33 +38,33 @@ class SellInfoProvider extends ChangeNotifier {
 
   // PHOTOS
   // Cover photo
-  File? cover;
-
-  void updateCover(File? newCover) {
-    cover = newCover;
+  String? _coverPath;
+  String? get coverPath => _coverPath;
+  void updateCover(String? newCoverPath) {
+    _coverPath = newCoverPath;
     notifyListeners();
   }
 
   // Other photos
-  List<File?> _uploadedImages = [];
-  List<File?> get uploadedImages => List.unmodifiable(_uploadedImages);
+  final List<String> _otherImagesPaths = [];
+  List<String?> get otherImagesPaths => List.unmodifiable(_otherImagesPaths);
 
-  void addPhoto(File newImage) {
-    if (_uploadedImages.length >= 9) return;
-    _uploadedImages.add(newImage);
+  void addPhoto(String newImagePath) {
+    if (_otherImagesPaths.length >= 9) return;
+    _otherImagesPaths.add(newImagePath);
     notifyListeners();
   }
 
-  void replacePhotoAt(int index, File newImage) {
-    if (index >= 0 && index < _uploadedImages.length) {
-      _uploadedImages[index] = newImage;
+  void replacePhotoAt(int index, String newImagePath) {
+    if (index >= 0 && index < _otherImagesPaths.length) {
+      _otherImagesPaths[index] = newImagePath;
       notifyListeners();
     }
   }
 
   void removePhotoAt(int index) {
-    if (index >= 0 && index < _uploadedImages.length) {
-      _uploadedImages.removeAt(index);
+    if (index >= 0 && index < _otherImagesPaths.length) {
+      _otherImagesPaths.removeAt(index);
       notifyListeners();
     }
   }
@@ -98,25 +100,26 @@ class SellInfoProvider extends ChangeNotifier {
   }
 
   // Genres
-  List<String> _genres = [];
-  List<String> get genres => List.unmodifiable(_genres);
+  List<Genre> _genre = [];
+  List<Genre> get genre => List.unmodifiable(_genre);
 
-  void updateGenre(String genreTitle, bool isSelected) {
+  void updateGenre(Genre genreTitle, bool isSelected) {
     if (isSelected) {
-      if (!_genres.contains(genreTitle)) {
-        _genres.add(genreTitle);
+      if (!_genre.contains(genreTitle)) {
+        _genre.add(genreTitle);
       }
     } else {
-      _genres.remove(genreTitle);
+      _genre.remove(genreTitle);
     }
     notifyListeners();
   }
 
-  set genres(List<String> newGenres) {
-    _genres = List.from(newGenres);
+  set genre(List<Genre> newGenres) {
+    _genre = List.from(newGenres);
     notifyListeners();
   }
 
+  // Language
   String? _language;
   String? get language => _language;
   set language(String? newLanguage) {
@@ -152,17 +155,10 @@ class SellInfoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? _bookbinding;
-  String? get bookbinding => _bookbinding;
-  set bookbinding(String? value) {
+  Binding? _bookbinding;
+  Binding? get bookbinding => _bookbinding;
+  set bookbinding(Binding? value) {
     _bookbinding = value;
-    notifyListeners();
-  }
-
-  String? _isbn;
-  String? get isbn => _isbn;
-  set isbn(String? value) {
-    _isbn = value;
     notifyListeners();
   }
 
@@ -177,6 +173,13 @@ class SellInfoProvider extends ChangeNotifier {
   int? get editionYear => _editionYear;
   set editionYear(int? value) {
     _editionYear = value;
+    notifyListeners();
+  }
+
+  int? _isbn;
+  int? get isbn => _isbn;
+  set isbn(int? value) {
+    _isbn = value;
     notifyListeners();
   }
 
@@ -199,5 +202,56 @@ class SellInfoProvider extends ChangeNotifier {
   set signed(bool? value) {
     _signed = value;
     notifyListeners();
+  }
+
+  void resetInformations() {
+    _title = null;
+    _description = null;
+    _price = null;
+    _conditions = null;
+    _coverPath = null;
+    _otherImagesPaths.clear();
+    _authors = [''];
+    _genre = [];
+    _language = null;
+    _italianPublisher = null;
+    _originalPublisher = null;
+    _series = null;
+    _country = null;
+    _bookbinding = null;
+    _publicationYear = null;
+    _editionYear = null;
+    _isbn = null;
+    _variant = null;
+    _graded = null;
+    _signed = null;
+    notifyListeners();
+  }
+
+  Comic createComic () {
+    return Comic (
+      id: 5, // Sample data arrive at 4
+      seller: SampleData.user2,
+      title: _title!,
+      description: _description!,
+      price: _price!,
+      conditions: _conditions!,
+      cover: _coverPath!,
+      uploadedImages: _otherImagesPaths,
+      authors: authors,
+      genre: genre,
+      publicationYear: _publicationYear,
+      editionYear: _editionYear,
+      language: _language,
+      italianPublisher: _italianPublisher,
+      originalPublisher: _originalPublisher,
+      series: _series,
+      country: _country,
+      variant: _variant,
+      graded: _graded,
+      signed: _signed,
+      bookbinding: _bookbinding,
+      isbn: _isbn,
+    );
   }
 }

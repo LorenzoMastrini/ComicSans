@@ -1,6 +1,6 @@
-import 'package:comicsans/Components/app_bar.dart';
+import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:flutter/material.dart';
-import '../user.dart';
+import 'package:comicsans/user.dart';
 
 class AccountSettingsScreen extends StatefulWidget{
   User user;

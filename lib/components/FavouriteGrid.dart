@@ -1,8 +1,11 @@
+import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/SampleData.dart';
-import 'package:comicsans/Components/ComicCard.dart';
+import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
-import '../../user.dart';
+import 'package:provider/provider.dart';
+
+
 
 class FavouriteGrid extends StatefulWidget{
   User user;
@@ -14,7 +17,9 @@ class FavouriteGrid extends StatefulWidget{
 
 class _FavouriteGridState extends State<FavouriteGrid> {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
+    final provider = context.watch<ComicsProvider>();
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
       child: GridView.builder(
@@ -26,22 +31,16 @@ class _FavouriteGridState extends State<FavouriteGrid> {
         ),
         itemBuilder: (context, index){
           return GestureDetector(
-              onTap: () async {
-                final result = await Navigator.push(context, MaterialPageRoute(
-                    builder: (context){
-                      return ProductDetail(comic: widget.user.getFavourites()[index], user: widget.user);
-                    }
-                  )
-                );
-                if (result == true){
-                    setState(() {
-                    }
-                  );
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context){
+                  return ProductDetail(comic: provider.favorite[index], user: widget.user);
                 }
-              },
-              child: ComicCard(comic: widget.user.getFavourites()[index], user: widget.user));
+              ));
+            },
+            child: ComicCard(comic: provider.favorite[index], user: widget.user));
         },
-        itemCount: widget.user.favouriteComics.length,
+        itemCount: provider.favorite.length,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,

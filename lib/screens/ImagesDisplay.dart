@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:comicsans/Components/app_bar.dart';
+import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 

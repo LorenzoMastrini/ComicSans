@@ -1,11 +1,13 @@
-import 'package:comicsans/GlobalConstants.dart';
+import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'package:comicsans/components/ComicSansRadioButtons.dart';
-import 'package:comicsans/providers/SellInfoProvider.dart';
+import 'package:comicsans/providers/sell_informations_provider.dart';
 import 'package:comicsans/screens/ComicSansSell2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+
 
 class ComicSansSell1 extends StatefulWidget {
   const ComicSansSell1({super.key});
@@ -30,7 +32,7 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
     _titleController = TextEditingController(text: provider.title ?? '');
     _descriptionController = TextEditingController(text: provider.description ?? '');
     _priceController = TextEditingController(text: provider.price?.toString() ?? '');
-    _conditionsController = TextEditingController(text: provider.isbn ?? '');
+    _conditionsController = TextEditingController(text: provider.conditions?.toString() ?? '');
   }
 
   @override
@@ -48,7 +50,7 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
     const double btnBottomPadding = 15; // Bottom padding for the button
     const double btnHeight = 60;
     const double bottomSpaceForButton = btnHeight + btnBottomPadding * 5;
-    final provider = Provider.of<SellInfoProvider>(context, listen: false);
+    final provider = context.read<SellInfoProvider>();
 
     return Scaffold(
       appBar: const ComicSansAppBar(
@@ -139,17 +141,17 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                   // Conditions
                   ComicSansRadioButtons(
                     title: 'Condizioni',
-                    options: GlobalConstants.availableConditions,
+                    options: Conditions.values.map((condition) => conditionsToString(condition)).toList(),
                     inputRequired: true,
                     controller: _conditionsController,
                     onChanged: (newValue) {
-                      provider.conditions = newValue;
+                      provider.conditions = stringToConditions(newValue);
                       if (_conditionsController.text != (newValue ?? '')) {
                         _conditionsController.text = newValue ?? '';
                       }
                       setState(() {});
                     },
-                    selectedValue: context.watch<SellInfoProvider>().conditions // Selected value from provider
+                    selectedValue: conditionsToString(context.watch<SellInfoProvider>().conditions) // Selected value from provider
                   ),
                   const SizedBox(height: bottomSpaceForButton),
                 ]

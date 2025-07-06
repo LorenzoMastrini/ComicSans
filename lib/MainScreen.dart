@@ -1,12 +1,10 @@
-import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansBottomBar.dart';
 import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/screens/ComicSansFavorite.dart';
 import 'package:comicsans/screens/ComicSansHome.dart';
 import 'package:comicsans/screens/ComicSansInbox.dart';
 import 'package:comicsans/screens/ComicSansProfile.dart';
-import 'package:comicsans/screens/ComicSansSell1.dart'; // Page for the modal
-import 'package:comicsans/user.dart';
+import 'package:comicsans/screens/ComicSansSell1.dart';
 import 'package:flutter/material.dart';
 
 
@@ -23,7 +21,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _navigationBarIndex = 0; //(0: Home, 1: Favorite, 2: Sell, 3: Inbox, 4: Profile)
 
-  static List<Widget> _pageContents = <Widget>[
+  static final List<Widget> _pageContents = <Widget>[
     ComicSansHome(user: SampleData.allUsers[0], purchaseConfirmed: false),
     ComicSansFavorite(user: SampleData.allUsers[0]),
     // No page fo Sell1 because it opens a modal
@@ -47,16 +45,6 @@ class _MainScreenState extends State<MainScreen> {
         _navigationBarIndex = navBarIndex;
       });
     }
-  }
-
-  // Handle the offset of the index
-  String _getTitleForActualPage(int actualPageIndex) {
-    if (actualPageIndex == 0) return '';
-    if (actualPageIndex == 1) return 'Preferiti';
-    // actualPageIndex per _pageContents non sarà mai l'equivalente di 'Sell'
-    if (actualPageIndex == 2) return 'Inbox'; // Correspond to _pageContents[2]
-    if (actualPageIndex == 3) return 'Profilo'; // Correspond to _pageContents[3]
-    return '';
   }
 
     @override

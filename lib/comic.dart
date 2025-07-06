@@ -1,51 +1,53 @@
+import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/user.dart';
-enum Conditions {DaEdicola, Ottime, Buone, MoltoUsato}
-enum Genre {Avventura, Azione, Crime, Dramma, Fantasy, Horror, Poliziesco, Romantico, SciFi, Soprannaturale, Supereroi, Thriller, Umoristico, Altro}
-enum binding {Spillato, Cartonato, Brossurato, Altro}
+
+
 
 class Comic {
   int id;
   User seller;
   String title;
   String description;
-  int price;
-  Conditions cond;
-  List<String> imagesPath;
-  String coverPath;
+  double price;
+  Conditions conditions;
+  String? cover;
+  List<String> uploadedImages;
   List<String> authors;
-  List<Genre> gen;
-  int? publishYear;
-  String language;
-  String italianEditor;
-  String originalPublisher;
-  String series;
-  String originCountry;
-  bool variant;
-  bool graded;
-  bool signed;
+  List<Genre> genre;
+  int? publicationYear;
+  String? language;
+  String? italianPublisher;
+  String? originalPublisher;
+  String? series;
+  String? country;
+  bool? variant;
+  bool? graded;
+  bool? signed;
+  Binding? bookbinding;
   int? editionYear;
   int? isbn;
 
   Comic({
-    this.id = 0,
+    required this.id,
     required this.seller,
-    this.title = "",
-    this.description = "",
-    this.price = 1,
-    this.cond = Conditions.DaEdicola,
-    this.imagesPath = const [],
-    this.coverPath = "",
+    required this.title,
+    required this.description,
+    required this.price,
+    required this.conditions,
+    this.uploadedImages = const [],
+    this.cover,
     this.authors = const [],
-    this.gen = const [],
-    this.publishYear,
-    this.language = "",
-    this.italianEditor = "",
-    this.originalPublisher = "",
-    this.series = "",
-    this.originCountry = "",
-    this.variant = false,
-    this.graded = false,
-    this.signed = false,
+    this.genre = const [],
+    this.publicationYear,
+    this.language,
+    this.italianPublisher,
+    this.originalPublisher,
+    this.series,
+    this.country,
+    this.variant,
+    this.graded,
+    this.signed,
+    this.bookbinding,
     this.editionYear,
     this.isbn,
   });

@@ -1,6 +1,6 @@
-import 'dart:io'; // Per File
+import 'dart:io'; // Import "File" class
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // Se usi image_picker
+import 'package:image_picker/image_picker.dart';
 
 
 
@@ -8,8 +8,8 @@ class ImageUploadSlot extends StatefulWidget {
   final double width;
   final double height;
   final BorderRadiusGeometry borderRadius;
-  final File? initialImage;
-  final ValueChanged<File?> onImageSelected; // Callback quando un'immagine viene selezionata/rimossa
+  final String? initialImagePath;
+  final ValueChanged<String?> onImageSelected; // Callback quando un'immagine viene selezionata/rimossa
 
   // Constructor
   const ImageUploadSlot({
@@ -17,7 +17,7 @@ class ImageUploadSlot extends StatefulWidget {
     this.width = 330.0,
     this.height = 330.0,
     this.borderRadius = BorderRadius.zero,
-    this.initialImage,
+    this.initialImagePath,
     required this.onImageSelected,
   });
 
@@ -30,20 +30,20 @@ class ImageUploadSlot extends StatefulWidget {
 // State
 class _ImageUploadSlotState extends State<ImageUploadSlot> {
   final ImagePicker _picker = ImagePicker();
-  File? _uploadedImage;
+  String? _uploadedImagePath;
 
   @override
   void initState() {
     super.initState();
-    _uploadedImage = widget.initialImage;
+    _uploadedImagePath = widget.initialImagePath;
   }
 
   @override
   void didUpdateWidget(covariant ImageUploadSlot oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.initialImage?.path != oldWidget.initialImage?.path) {
+    if (widget.initialImagePath != oldWidget.initialImagePath) {
       setState(() {
-        _uploadedImage = widget.initialImage;
+        _uploadedImagePath = widget.initialImagePath;
       });
     }
   }
@@ -54,16 +54,16 @@ class _ImageUploadSlotState extends State<ImageUploadSlot> {
 
     if (image != null) {
       setState(() {
-        _uploadedImage = File(image.path);
+        _uploadedImagePath = image.path;
       });
-      widget.onImageSelected(_uploadedImage);
+      widget.onImageSelected(_uploadedImagePath);
     }
   }
 
   // Function to remove the selected image
   void _removeImage() {
     setState(() {
-      _uploadedImage = null;
+      _uploadedImagePath = null;
       widget.onImageSelected(null);
     });
   }
@@ -91,11 +91,11 @@ class _ImageUploadSlotState extends State<ImageUploadSlot> {
           alignment: Alignment.center,
           children: [
             // Mostra l'immagine se presente
-            if (_uploadedImage != null)
+            if (_uploadedImagePath != null)
               ClipRRect( // To apply borderRadius to the image also
                 borderRadius: widget.borderRadius, // Leggermente meno del bordo del container
                 child: Image.file(
-                  _uploadedImage!, // Image is loaded (!= null)
+                  File(_uploadedImagePath!), // Image is loaded (!= null)
                   width: widget.width,
                   height: widget.height,
                   fit: BoxFit.cover, // Cover the area maintaining the aspect ratio
@@ -103,7 +103,7 @@ class _ImageUploadSlotState extends State<ImageUploadSlot> {
               ),
 
             // Show "+" icon if no image is selected
-            if (_uploadedImage == null)
+            if (_uploadedImagePath == null)
               Icon(
                 Icons.add,
                 size: plusIconSize, // Dimension of the "+" icon

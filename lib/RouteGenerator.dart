@@ -1,4 +1,6 @@
+import 'package:comicsans/Chat.dart';
 import 'package:comicsans/MainScreen.dart';
+import 'package:comicsans/screens/ChatScreen.dart';
 import 'package:comicsans/screens/Login.dart';
 import 'package:comicsans/screens/Registration.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const MainScreen());
       case '/registration':
         return MaterialPageRoute(builder: (_) => const Registration());
+      case '/chat':
+        if (args is Chat) {
+          return MaterialPageRoute(builder: (_) => ChatScreen(chat: args));
+        } else {
+          return _errorRoute();
+        }
       case '/':
         return MaterialPageRoute(builder: (_) => const MainScreen()); // Main screen with the bottom bar
       default:

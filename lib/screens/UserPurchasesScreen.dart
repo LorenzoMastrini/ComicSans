@@ -1,9 +1,8 @@
-import 'package:comicsans/Components/app_bar.dart';
-import 'package:comicsans/Components/ComicCardWoutButton.dart';
+import 'package:comicsans/components/ComicSansAppBar.dart';
+import 'package:comicsans/components/ComicCardWoutButton.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
-import '../Components/ComicCard.dart';
-import '../user.dart';
+import 'package:comicsans/user.dart';
 
 class UserPurchasesScreen extends StatefulWidget{
   User user;
@@ -29,19 +28,19 @@ class _UserPurchasesScreenState extends State<UserPurchasesScreen> {
           ),
           itemBuilder: (context, index){
             return GestureDetector(
-                onTap: () async {
-                  final result = await Navigator.push(context, MaterialPageRoute(
-                      builder: (context){
-                        return ProductDetail(comic: widget.user.getPurchases()[index], user: widget.user);
-                      })
+              onTap: () async {
+                final result = await Navigator.push(context, MaterialPageRoute(
+                  builder: (context) =>
+                    ProductDetail(comic: widget.user.getPurchases()[index], user: widget.user)
+                  )
+                );
+                if (result == true){
+                    setState(() {
+                    }
                   );
-                  if (result == true){
-                      setState(() {
-                      }
-                    );
-                  }
-                },
-                child: ComicCardWoutButton(comic: widget.user.getPurchases()[index], user: widget.user)
+                }
+              },
+              child: ComicCardWoutButton(comic: widget.user.getPurchases()[index], user: widget.user)
             );
           },
           itemCount: widget.user.getPurchases().length,

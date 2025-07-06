@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ImageUploadSlot.dart';
-import 'package:comicsans/providers/SellInfoProvider.dart';
+import 'package:comicsans/providers/sell_informations_provider.dart';
 import 'package:comicsans/screens/ComicSansSell3.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,9 +21,9 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
 
   // Grid of (maximum) 9 photos
   Widget photoGrid(SellInfoProvider provider) {
-    final uploadedImages = provider.uploadedImages;
-    bool canAddImages = uploadedImages.length < 9;
-    int totalImageCount = uploadedImages.length + (canAddImages ? 1 : 0);
+    final otherImagesPaths = provider.otherImagesPaths;
+    bool canAddImages = otherImagesPaths.length < 9;
+    int totalImageCount = otherImagesPaths.length + (canAddImages ? 1 : 0);
 
     return GridView.builder(
       itemCount: totalImageCount,
@@ -33,17 +33,17 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
         crossAxisCount: 3, // 3 photos per row
       ),
       itemBuilder: (_, index) {
-        final uploadedImages = provider.uploadedImages;
+        final uploadedImagesPaths = provider.otherImagesPaths;
 
         // Slot for an loaded image
-        if(index < uploadedImages.length) {
-          final image = uploadedImages[index];
+        if(index < uploadedImagesPaths.length) {
+          final image = uploadedImagesPaths[index];
           return ImageUploadSlot(
-            key: ValueKey(image!.path),
-            initialImage: image,
-            onImageSelected: (File? selectedImage) {
-              if (selectedImage != null) {
-                provider.replacePhotoAt(index, selectedImage);
+            key: ValueKey(image),
+            initialImagePath: image,
+            onImageSelected: (String? selectedImagePath) {
+              if (selectedImagePath != null) {
+                provider.replacePhotoAt(index, selectedImagePath);
               } else {
                 provider.removePhotoAt(index);
               }
@@ -52,9 +52,9 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
         } else {
           return ImageUploadSlot(
             key: const ValueKey("add_new_image_slot"),
-            onImageSelected: (File? selectedImage) {
-              if (selectedImage != null && uploadedImages.length < 9) {
-                provider.addPhoto(selectedImage);
+            onImageSelected: (String? selectedImagePath) {
+              if (selectedImagePath != null && uploadedImagesPaths.length < 9) {
+                provider.addPhoto(selectedImagePath);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Puoi caricare fino a 10 foto totali.')),
@@ -113,9 +113,9 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(50, 10, 50, 0),
                       child: ImageUploadSlot(
-                        initialImage: sellInfoProvider.cover,
-                        onImageSelected: (File? selectedImage) {
-                          sellInfoProvider.updateCover(selectedImage);
+                        initialImagePath: sellInfoProvider.coverPath,
+                        onImageSelected: (String? selectedImagePath) {
+                          sellInfoProvider.updateCover(selectedImagePath);
                         }
                       ),
                     ),

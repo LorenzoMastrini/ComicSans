@@ -1,9 +1,8 @@
-import 'package:comicsans/Components/app_bar.dart';
-import 'package:comicsans/Components/ComicCardWoutButton.dart';
+import 'package:comicsans/components/ComicSansAppBar.dart';
+import 'package:comicsans/components/ComicCardWoutButton.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
-import '../Components/ComicCard.dart';
-import '../user.dart';
+import 'package:comicsans/user.dart';
 
 class UserSellingsScreen extends StatefulWidget{
   User user;

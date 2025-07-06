@@ -1,13 +1,16 @@
 import 'dart:io';
-import 'package:comicsans/GlobalConstants.dart';
+import 'package:comicsans/comic.dart';
+import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansCheckbox.dart';
 import 'package:comicsans/components/ComicSansDropdown.dart';
 import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'package:comicsans/components/ComicSansRadioButtons.dart';
 import 'package:comicsans/components/ComicSansToggle.dart';
-import 'package:comicsans/providers/SellInfoProvider.dart';
+import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/providers/sell_informations_provider.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -54,8 +57,8 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
     _collanaController = TextEditingController(text: provider.series ?? '');
     _countryController = TextEditingController(text: provider.country ?? '');
     _editionYearController = TextEditingController(text: provider.editionYear?.toString() ?? '');
-    _isbnController = TextEditingController(text: provider.isbn ?? '');
-    _bookbindingsController = TextEditingController(text: provider.bookbinding ?? '');
+    _isbnController = TextEditingController(text: provider.isbn?.toString() ?? '');
+    _bookbindingsController = TextEditingController(text: provider.bookbinding?.toString() ?? '');
 
     _syncAuthors(provider);
   }
@@ -121,8 +124,8 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
     const double btnBottomPadding = 15; // Bottom padding for the button
     const double btnHeight = 60;
     const double bottomSpaceForButton = btnHeight + btnBottomPadding * 5; // Space for the ListView to avoid content under the button
-    final sellInfo = context.watch<SellInfoProvider>();
-    final provider = Provider.of<SellInfoProvider>(context, listen: false);
+    final providerWatch = context.watch<SellInfoProvider>();
+    final providerRead = context.read<SellInfoProvider>();
 
     return Scaffold(
       appBar: const ComicSansAppBar(
@@ -144,11 +147,11 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
 
                     // Authors
                     Text(
-                        'Autori',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        )
+                      'Autori',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      )
                     ),
                     ListView.builder(
                       shrinkWrap: true,
@@ -162,7 +165,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                               hintText: 'Sceneggiatore, disegnatore',
                               labelText: '',
                               controller: _authorControllers[i],
-                              onChanged: (val) => sellInfo.updateAuthor(i, val),
+                              onChanged: (val) => providerWatch.updateAuthor(i, val),
                             ),
                           ),
                           if (_authorControllers.length > 1)
@@ -187,12 +190,12 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Genres
                     ComicSansCheckbox(
                       title: 'Genere',
-                      options: GlobalConstants.availableGenreTitles.map((title) => {
-                        'title': title,
-                        'value': sellInfo.genres.contains(title), // Provider initial state
+                      options: Genre.values.map((genre) => {
+                        'title': genreToString(genre),
+                        'value': providerWatch.genre.contains(genre), // Provider initial state
                       }).toList(),
                       onChanged: (title, value) =>
-                        context.read<SellInfoProvider>().updateGenre(title, value)
+                        context.read<SellInfoProvider>().updateGenre(stringToGenre(title), value)
                     ),
                     SizedBox(height: 20),
 
@@ -203,16 +206,16 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                       labelText: 'Inserisci la data di pubblicazione dell\'opera',
                       keyboardType: TextInputType.number,
                       controller: _publicationYearController,
-                      onFieldSubmitted: (value) => provider.publicationYear = int.tryParse(value) ?? 0
+                      onFieldSubmitted: (value) => providerRead.publicationYear = int.tryParse(value)
                     ),
                     SizedBox(height: 20),
 
                     ComicSansDropdown(
                       title: 'Lingua',
-                      options: GlobalConstants.availableLanguages,
+                      options: availableLanguages,
                       controller: _languageController,
-                      onChanged: (newValue) => provider.language = newValue,
-                      value: sellInfo.language
+                      onChanged: (newValue) => providerRead.language = newValue,
+                      value: providerWatch.language
                     ),
                     SizedBox(height: 20),
 
@@ -222,7 +225,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                       hintText: 'Editore italiano',
                       labelText: 'Inserisci l\'editore italiano del fumetto',
                       controller: _italianPublisherController,
-                      onFieldSubmitted: (value) => provider.italianPublisher = value,
+                      onFieldSubmitted: (value) => providerRead.italianPublisher = value,
                     ),
                     SizedBox(height: 20),
 
@@ -232,17 +235,17 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                       hintText: 'Editore paese di origine',
                       labelText: 'Inserisci l\'editore originale del fumetto',
                       controller: _originalPublisherController,
-                      onFieldSubmitted: (value) => provider.originalPublisher = value,
+                      onFieldSubmitted: (value) => providerRead.originalPublisher = value,
                     ),
                     SizedBox(height: 20),
 
-                    // Collana
+                    // Series
                     ComicSansTextInput(
                       title: 'Collana',
                       hintText: 'Collana',
                       labelText: 'Inserisci la collana di appartenenza del fumetto',
                       controller: _collanaController,
-                      onFieldSubmitted: (value) => provider.series = value,
+                      onFieldSubmitted: (value) => providerRead.series = value,
                     ),
                     SizedBox(height: 20),
 
@@ -252,46 +255,46 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                       hintText: 'Paese di origine',
                       labelText: 'Inserisci il paese di origine del fumetto',
                       controller: _countryController,
-                      onFieldSubmitted: (value) => provider.country = value,
+                      onFieldSubmitted: (value) => providerRead.country = value,
                     ),
                     SizedBox(height: 20),
 
                     // Variant
                     ComicSansToggle(
                       title: 'Variant',
-                      value: sellInfo.variant ?? false,
-                      onChanged: (value) => provider.variant = value,
+                      value: providerWatch.variant ?? false,
+                      onChanged: (value) => providerRead.variant = value,
                     ),
                     SizedBox(height: 20),
 
                     // Bookbinding
                     ComicSansRadioButtons(
                       title: 'Rilegatura',
-                      options: GlobalConstants.availableBookbindings,
+                      options: Binding.values.map((binding) => bindingToString(binding)).toList(),
                       controller: _bookbindingsController,
                       onChanged: (newValue) {
-                        provider.bookbinding = newValue;
+                        providerRead.bookbinding = stringToBinding(newValue);
                         if (_bookbindingsController.text != (newValue ?? '')) {
                            _bookbindingsController.text = newValue ?? '';
                         }
                       },
-                      selectedValue: sellInfo.bookbinding // Selected value from provider
+                      selectedValue: bindingToString(providerWatch.bookbinding) // Selected value from provider
                     ),
                     SizedBox(height: 20),
 
                     // Graded
                     ComicSansToggle(
                       title: 'Gradato',
-                      value: sellInfo.graded ?? false,
-                      onChanged: (value) => provider.graded = value,
+                      value: providerWatch.graded ?? false,
+                      onChanged: (value) => providerRead.graded = value,
                     ),
                     SizedBox(height: 20),
 
                     // Signed
                     ComicSansToggle(
                       title: 'Firmato',
-                      value: sellInfo.signed ?? false,
-                      onChanged: (value) => provider.signed = value,
+                      value: providerWatch.signed ?? false,
+                      onChanged: (value) => providerRead.signed = value,
                     ),
                     SizedBox(height: 20),
 
@@ -302,7 +305,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                       labelText: 'Inserisci la data di uscita dell\'edizione',
                       keyboardType: TextInputType.number,
                       controller: _editionYearController,
-                      onFieldSubmitted: (value) => provider.editionYear = int.tryParse(value) ?? 0,
+                      onFieldSubmitted: (value) => providerRead.editionYear = int.tryParse(value),
                     ),
                     SizedBox(height: 20),
 
@@ -313,7 +316,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                       labelText: 'Inserisci l\'ISBN del volume',
                       controller: _isbnController,
                       keyboardType: TextInputType.number,
-                      onFieldSubmitted: (value) => provider.isbn = value,
+                      onFieldSubmitted: (value) => providerRead.isbn = int.tryParse(value),
                     ),
                     SizedBox(height: bottomSpaceForButton)
                   ]
@@ -325,7 +328,18 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                   child: ComicSansButton (
                     text: 'Pubblica',
                     onPressed: () {
-                      Navigator.pushNamed(context, '/'); // return to the main screen
+                      final ComicsProvider comicsProvider = context.read<ComicsProvider>();
+                      final UserProvider userProvider = context.read<UserProvider>();
+
+                      // create Comic object with the informations from provider
+                      Comic newComic = providerRead.createComic();
+                      comicsProvider.addComic(newComic); // Add the comic to the global list
+                      userProvider.addComicToLibrary(newComic); // Add comic to the user's library
+                      providerRead.resetInformations(); // Reset the provider (clear fields)
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/', // return to the main screen
+                        (route) => false, // remove from the stack all the visited routes
+                      );
                     },
                   ),
                 )

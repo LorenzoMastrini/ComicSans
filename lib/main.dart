@@ -1,8 +1,11 @@
 import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/MainScreen.dart';
 import 'package:comicsans/RouteGenerator.dart';
-import 'package:comicsans/providers/SellInfoProvider.dart';
+import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/providers/messages_provider.dart';
+import 'package:comicsans/providers/sell_informations_provider.dart';
 import 'package:comicsans/SampleData.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,7 +33,10 @@ class _ComicSansAppState extends State<ComicSansApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => SellInfoProvider())
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => ComicsProvider()),
+        ChangeNotifierProvider(create: (context) => SellInfoProvider()),
+        ChangeNotifierProvider(create: (context) => MessagesProvider()),
       ],
       child: SafeArea( // Avoids the UI elements of the OS
         child: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -44,7 +50,7 @@ class _ComicSansAppState extends State<ComicSansApp> {
             title: "ComicSans",
             //theme: mainTheme,
             initialRoute: '/login',
-            onGenerateRoute: RouteGenerator.generateRoute,
+            onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
           ),
         ),
       ),
