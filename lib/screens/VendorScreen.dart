@@ -1,23 +1,24 @@
-import 'package:comicsans/Components/ProductGrid.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/SampleData.dart';
-import 'package:comicsans/comic.dart';
-import '../Components/app_bar.dart';
-import '../Components/ComicCard.dart';
-import '../Components/ReviewComponent.dart';
-import '../Components/ReviewWidget.dart';
-import '../user.dart';
+import 'package:comicsans/components/ComicSansAppBar.dart';
+import 'package:comicsans/components/ComicCard.dart';
+import 'package:comicsans/components/ReviewComponent.dart';
+import 'package:comicsans/components/ReviewWidget.dart';
+import 'package:comicsans/user.dart';
+
+
 
 class VendorScreen extends StatefulWidget{
   User seller;
   User user;
+
   VendorScreen({super.key, required this.seller, required this.user});
 
   @override
   State<VendorScreen> createState() => _VendorScreenState();
 }
+
+
 
 class _VendorScreenState extends State<VendorScreen> {
   late bool isFollowed;
@@ -25,17 +26,14 @@ class _VendorScreenState extends State<VendorScreen> {
   @override
   void initState(){
     super.initState();
-    isFollowed = widget.user.followedUsers!.contains(widget.seller);
+    isFollowed = widget.user.followedUsers.contains(widget.seller);
   }
 
-  void toggleFavourite(){
+  void _toggleFollow() {
     setState(() {
-      if(isFollowed){
-        widget.user.removeFollowing(widget.seller);
-      }
-      else{
-        widget.user.addFollowing(widget.seller);
-      }
+      isFollowed
+        ? widget.user.removeFollowing(widget.seller)
+        : widget.user.addFollowing(widget.seller);
       isFollowed = !isFollowed;
     });
   }
@@ -45,7 +43,7 @@ class _VendorScreenState extends State<VendorScreen> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: PreferredSize(
+        appBar: const PreferredSize(
             preferredSize: Size.fromHeight(40),
             child: ComicSansAppBar(showBackButton: true)
         ),
@@ -72,18 +70,19 @@ class _VendorScreenState extends State<VendorScreen> {
                         height: 25,
                         child: ElevatedButton(
                           onPressed: () {
-                            toggleFavourite();
+                            _toggleFollow();
                           },
-                          child: Text(
-                              isFollowed ? 'Non seguire più' : 'Segui',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: isFollowed ? 10 : 16,
-                                  fontWeight: FontWeight.normal)),
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(7),
                             ),
+                          ),
+                          child: Text(
+                            isFollowed ? 'Non seguire più' : 'Segui',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: isFollowed ? 10 : 16,
+                            )
                           ),
                         ),
                       ),
@@ -92,7 +91,6 @@ class _VendorScreenState extends State<VendorScreen> {
                 ],
               ),
             ),
-
 
             TabBar(
               tabs: [
@@ -105,51 +103,42 @@ class _VendorScreenState extends State<VendorScreen> {
               indicatorColor: Colors.black,
             ),
 
-
             Expanded(
               child: TabBarView(
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
                     child: GridView.builder(
+                      itemCount: widget.seller.getComicsSale().length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         mainAxisSpacing: 10,
                         crossAxisSpacing: 10,
                         childAspectRatio: .65,
                       ),
-                      itemBuilder: (context, index){
+                      itemBuilder: (context, index) {
+                        final comic = widget.seller.getComicsSale()[index];
+
                         return GestureDetector(
-                            onTap: () async {
-                              final result = await Navigator.push(context, MaterialPageRoute(
-                                  builder: (context){
-                                    return ProductDetail(comic: widget.seller.getComicsSale()[index], user: widget.user);
-                                  }
-                              )
-                              );
-                              if (result == true){
-                                setState(() {
-                                }
-                                );
-                              }
-                            },
-                            child: ComicCard(comic: widget.seller.getComicsSale()[index], user: widget.user)
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (_) =>
+                                  ProductDetail(comic: comic, user: widget.user)
+                            ));
+                          },
+                          child: ComicCard(comic: comic, user: widget.user)
                         );
                       },
-                      itemCount: widget.seller.getComicsSale().length,
-                      shrinkWrap: false,
-                      padding: EdgeInsets.zero,
                     ),
                   ),
                   ListView.builder(
-                    itemBuilder: (context, index){
-                      return ReviewComponent(review: widget.seller.reviews![index]);
-                    },
-                    itemCount: widget.seller.reviews!.length,
+                    itemCount: widget.seller.reviews.length,
                     shrinkWrap: true,
+                    itemBuilder: (context, index) =>
+                      ReviewComponent(review: widget.seller.reviews[index])
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                    padding: const EdgeInsets.all(15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -173,16 +162,16 @@ class _VendorScreenState extends State<VendorScreen> {
                         SizedBox(height: 30),
                         Text("Posizione",
                           style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500
                           ),
                         ),
                         Text(widget.seller.addr!.country,
                           style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.normal
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal
                           ),
                         ),
                       ],

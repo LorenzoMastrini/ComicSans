@@ -1,4 +1,6 @@
+import 'package:comicsans/Chat.dart';
 import 'package:comicsans/MainScreen.dart';
+import 'package:comicsans/screens/ChatScreen.dart';
 import 'package:comicsans/screens/Login.dart';
 import 'package:comicsans/screens/Registration.dart';
 import 'package:comicsans/user.dart';
@@ -18,6 +20,12 @@ class RouteGenerator {
         return _errorRoute();
       case '/registration':
         return MaterialPageRoute(builder: (_) => const Registration());
+      case '/chat':
+        if (args is Chat) {
+          return MaterialPageRoute(builder: (_) => ChatScreen(chat: args));
+        } else {
+          return _errorRoute();
+        }
       case '/':
         if(args is User) {
           return MaterialPageRoute(builder: (_) => MainScreen(user: args));

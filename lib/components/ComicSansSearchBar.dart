@@ -1,10 +1,11 @@
 import 'package:comicsans/screens/FiltersScreen.dart';
+import 'package:comicsans/providers/comics_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/user.dart';
 import 'package:comicsans/screens/SearchResults.dart';
-
-import '../comic.dart';
+import 'package:comicsans/comic.dart';
+import 'package:provider/provider.dart';
 
 class MySearchBar extends StatefulWidget{
   User user;
@@ -83,7 +84,7 @@ class MySearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     List<Comic> matchQuery = [];
-    for (var c in SampleData.allComics) {
+    for (var c in context.watch<ComicsProvider>().allComics) {
       if (c.title.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(c);
       }
@@ -116,7 +117,7 @@ class MySearchDelegate extends SearchDelegate {
             },
             style: TextButton.styleFrom(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero, // <-- rettangolare
+                borderRadius: BorderRadius.zero, // Rectangular
               ),
             ),
             child: ListTile(
@@ -130,7 +131,7 @@ class MySearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     List<Comic> matchQuery = [];
-    for(var c in SampleData.allComics){
+    for(var c in context.watch<ComicsProvider>().allComics){
       if(c.title.toLowerCase().contains(query.toLowerCase())){
         matchQuery.add(c);
       }
@@ -170,7 +171,7 @@ class MySearchDelegate extends SearchDelegate {
                 },
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero, // <-- rettangolare
+                    borderRadius: BorderRadius.zero, // Rectangular
                   ),
                 ),
                 child: ListTile(

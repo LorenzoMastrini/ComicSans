@@ -1,17 +1,9 @@
-import 'package:comicsans/components/ComicSansBottomBar.dart';
-import 'package:comicsans/screens/ComicSansFavorite.dart';
-import 'package:comicsans/screens/ComicSansInbox.dart';
-import 'package:comicsans/screens/ComicSansProfile.dart';
-import 'package:comicsans/Components/app_bar.dart';
-import 'package:comicsans/Components/ProductGrid.dart';
-import 'package:comicsans/Components/ComicSansSearchBarFavourite.dart';
-import 'package:comicsans/screens/Profile.dart';
+import 'package:comicsans/components/ProductGrid.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/Components/CategoriesGrid.dart';
-import 'package:comicsans/Components/ComicSansSearchBar.dart' hide SearchBar;
-import '../Components/FavouriteGrid.dart';
-import '../SampleData.dart';
-import '../user.dart';
+import 'package:comicsans/components/CategoriesGrid.dart';
+import 'package:comicsans/components/ComicSansSearchBar.dart';
+import 'package:comicsans/user.dart';
+
 
 
 class ComicSansHome extends StatefulWidget {

@@ -1,16 +1,14 @@
-import 'package:comicsans/components/ComicSansAppBar.dart';
-import 'package:comicsans/components/ComicSansBottomBar.dart';
-import 'package:comicsans/screens/Profile.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/UserPurchasesScreen.dart';
 import 'package:comicsans/screens/UserSellingsScreen.dart';
 import 'package:comicsans/screens/UserVendorScreen.dart';
 import 'package:flutter/material.dart';
-
-import '../Components/ReviewWidget.dart';
-import '../user.dart';
-import 'AccountSettingsScreen.dart';
-import 'AssitanceScreen.dart';
-import 'FollowedUsersScreen.dart';
+import 'package:comicsans/components/ReviewWidget.dart';
+import 'package:comicsans/user.dart';
+import 'package:comicsans/screens/AccountSettingsScreen.dart';
+import 'package:comicsans/screens/AssitanceScreen.dart';
+import 'package:comicsans/screens/FollowedUsersScreen.dart';
+import 'package:provider/provider.dart';
 
 class ComicSansProfile extends StatefulWidget {
   User user;
@@ -23,6 +21,8 @@ class ComicSansProfile extends StatefulWidget {
 class _ComicSansProfileState extends State<ComicSansProfile> {
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = context.watch<UserProvider>();
+
     return ListView(
       children: <Widget> [
         DecoratedBox(
@@ -32,50 +32,45 @@ class _ComicSansProfileState extends State<ComicSansProfile> {
             ),
           ),
           child: TextButton(
-            onPressed: () async {
-              final result = await Navigator.push(context, MaterialPageRoute(
-                  builder: (context){
-                    return UserVendorScreen(user: widget.user);
-                  })
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context){
+                  return UserVendorScreen(user: widget.user);
+                })
               );
-              if (result == true){
-                setState(() {
-                }
-                );
-              }
             },
             style: TextButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 16),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
             child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children:<Widget>[
-                          Text(widget.user.username, style: TextStyle(color: Colors.black, fontSize: 24)),
-                          ReviewWidget(user: widget.user),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: RichText(
-                                text: TextSpan(
-                                    children: [
-                                      TextSpan(text: widget.user.comicsSale.length.toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
-                                      TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
-                                      TextSpan(text: widget.user.reviews.length.toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
-                                      TextSpan(text: " recensioni", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
-                                    ]
-                                )
-                            ),
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:<Widget>[
+                      Text(widget.user.username, style: TextStyle(color: Colors.black, fontSize: 24)),
+                      ReviewWidget(user: widget.user),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(text: userProvider.getLibraryLength().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
+                              TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
+                              TextSpan(text: widget.user.reviews.length.toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
+                              TextSpan(text: " recensioni", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
+                            ]
                           )
-                        ]
-                    ),
+                        ),
+                      )
+                    ]
                   ),
-                  Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
-                ]
+                ),
+                Spacer(),
+                Icon(Icons.arrow_forward_ios, color: Colors.black),
+              ]
             ),
           ),
         ),
@@ -123,11 +118,11 @@ class _ComicSansProfileState extends State<ComicSansProfile> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
             child: Row(
-                children: <Widget>[
-                  Text("Vendite effettuate", style: TextStyle(color: Colors.black, fontSize: 16)),
-                  Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
-                ]
+              children: <Widget>[
+                Text("Vendite effettuate", style: TextStyle(color: Colors.black, fontSize: 16)),
+                Spacer(),
+                Icon(Icons.arrow_forward_ios, color: Colors.black),
+              ]
             ),
           ),
         ),
@@ -198,9 +193,9 @@ class _ComicSansProfileState extends State<ComicSansProfile> {
           child: TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(
-                  builder: (context){
-                    return Assistance();
-                  })
+                builder: (context){
+                  return Assistance();
+                })
               );
             },
             style: TextButton.styleFrom(
@@ -208,11 +203,11 @@ class _ComicSansProfileState extends State<ComicSansProfile> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
             child: Row(
-                children: <Widget>[
-                  Text("Assistenza", style: TextStyle(color: Colors.black, fontSize: 16)),
-                  Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
-                ]
+              children: <Widget>[
+                Text("Assistenza", style: TextStyle(color: Colors.black, fontSize: 16)),
+                Spacer(),
+                Icon(Icons.arrow_forward_ios, color: Colors.black),
+              ]
             ),
           ),
         ),
@@ -229,11 +224,11 @@ class _ComicSansProfileState extends State<ComicSansProfile> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
             child: Row(
-                children: <Widget>[
-                  Text("Invia un feedback", style: TextStyle(color: Colors.black, fontSize: 16)),
-                  Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
-                ]
+              children: <Widget>[
+                Text("Invia un feedback", style: TextStyle(color: Colors.black, fontSize: 16)),
+                Spacer(),
+                Icon(Icons.arrow_forward_ios, color: Colors.black),
+              ]
             ),
           ),
         ),

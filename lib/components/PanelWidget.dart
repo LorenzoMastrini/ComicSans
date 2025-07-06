@@ -1,3 +1,4 @@
+import 'package:comicsans/global_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/comic.dart';
 
@@ -20,11 +21,12 @@ class PanelWidget extends StatelessWidget {
     return gen.map((g) => g.name).join(", ");
   }
 
-  String formatBoolean(bool boolean) {
+  String formatBoolean(bool? boolean) {
+    if (boolean == null) return "";
     return boolean ? "Sì" : "No";
   }
 
-  Widget _infoRow(String label, String value) {
+  Widget _infoRow(String label, String? value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -40,7 +42,7 @@ class PanelWidget extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              value,
+              value ?? "",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 18,
@@ -50,7 +52,7 @@ class PanelWidget extends StatelessWidget {
         ],
       ),
     );
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +69,10 @@ class PanelWidget extends StatelessWidget {
             ),
           ),
           _infoRow("Autori", formatAuthors(comic.authors)),
-          _infoRow("Genere", formatGenre(comic.gen)),
-          _infoRow("Anno di pubblicazione", comic.publishYear.toString()),
+          _infoRow("Genere", formatGenre(comic.genre)),
+          _infoRow("Anno di pubblicazione", comic.publicationYear.toString()),
           _infoRow("Lingua", comic.language),
-          _infoRow("Editore italiano", comic.italianEditor),
+          _infoRow("Editore italiano", comic.italianPublisher),
           _infoRow("Editore del paese di origine", comic.originalPublisher),
           _infoRow("Collana", comic.series),
           _infoRow("Variant", formatBoolean(comic.variant)),

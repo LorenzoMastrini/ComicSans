@@ -1,18 +1,18 @@
 import 'package:comicsans/comic.dart';
+import 'package:comicsans/global_constants.dart';
+import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/screens/ImagesDisplay.dart';
-import 'package:comicsans/screens/PurchaseScreen.dart';
-import 'package:comicsans/screens/UserVendorScreen.dart';
-import 'package:comicsans/screens/VendorScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/Components/app_bar.dart';
+import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import '../Components/ComicSansButton.dart';
-import '../Components/PanelWidget.dart';
-import '../Components/ReviewWidget.dart';
-import '../SampleData.dart';
-import '../user.dart';
+import 'package:comicsans/components/PanelWidget.dart';
+import 'package:comicsans/user.dart';
+import 'package:comicsans/components/ComicSansButton.dart';
+import 'package:comicsans/components/ReviewWidget.dart';
+
+
 
 class ProductDetailsModifyScreen extends StatefulWidget {
   final Comic comic;
@@ -61,20 +61,20 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
 
   String formatCondition(Conditions cond) {
     switch (cond) {
-      case Conditions.DaEdicola:
+      case Conditions.daEdicola:
         return "Da edicola";
-      case Conditions.Ottime:
+      case Conditions.ottime:
         return "Ottime";
-      case Conditions.Buone:
+      case Conditions.buone:
         return "Buone";
-      case Conditions.MoltoUsato:
+      case Conditions.moltoUsato:
         return "Molto usata";
-      default:
-        return cond.toString().split('.').last;
     }
   }
 
   Widget buildMainContent(BuildContext context) {
+    final ComicsProvider provider = context.watch<ComicsProvider>();
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 0),
       child: SingleChildScrollView(
@@ -97,7 +97,7 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                           padding: const EdgeInsets.fromLTRB(15, 10, 0, 3),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(widget.comic.price.toString() + "€",
+                            child: Text("${widget.comic.price}€",
                                 style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.w500)),
                           ),
                         ),
@@ -120,7 +120,7 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                                 child: Text("Conferma"),
                                 onPressed: (){
                                   widget.user.removeComicsSale(widget.comic);
-                                  SampleData.allComics.removeWhere((c) => c.id == widget.comic.id);
+                                  provider.removeComic(widget.comic);
                                   Navigator.of(context).pop(true);
                                   widget.onDelete();
                                   /*Navigator.pushReplacement(context, MaterialPageRoute(
@@ -153,7 +153,7 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(widget.comic.cond != null ? formatCondition(widget.comic.cond!) : "N/D",
+                      child: Text(widget.comic.conditions != null ? formatCondition(widget.comic.conditions!) : "N/D",
                           style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
                     ),
                   ),
@@ -229,45 +229,58 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
         return false;
       },
       child: Scaffold(
-        body: Stack(
-          children: [
-            // Scrollable content
-            CustomScrollView(
-              controller: _scrollController,
-              slivers: [
-                // Carosello immagine
-                SliverToBoxAdapter(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => ImagesDisplay(comicImages: widget.comic.imagesPath),
-                      ));
-                    },
-                    child: Stack(
-                      children: [
-                        CarouselSlider(
-                          carouselController: controller,
-                          options: CarouselOptions(
-                            height: 550,
-                            viewportFraction: 1.0,
-                            enlargeCenterPage: false,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                current = index;
-                              });
-                            },
-                          ),
-                          items: widget.comic.imagesPath?.map((item) => Container(
-                            width: double.infinity,
-                            height: double.infinity,
-                            child: Image.asset(
-                              item,
-                              fit: BoxFit.contain,
+        body: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              expandedHeight: 550,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              automaticallyImplyLeading: false,
+              flexibleSpace: LayoutBuilder(
+                builder: (context, constraints) {
+                  double appBarHeight = constraints.biggest.height;
+                  double opacity = 0.0;
+
+                  if (appBarHeight <= kToolbarHeight + 50) {
+                    opacity = 1.0;
+                  }
+
+                  return Stack(
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return ImagesDisplay(comicImages: widget.comic.uploadedImages);
+                              }
+                            )
+                            );
+                          },
+                          child: CarouselSlider(
+                            carouselController: controller,
+                            options: CarouselOptions(
+                              height: 550,
+                              viewportFraction: 1.0,
+                              enlargeCenterPage: false,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  current = index;
+                                });
+                              }),
+                            items: widget.comic.uploadedImages.map((item) => SizedBox(
                               width: double.infinity,
                               height: double.infinity,
-                              alignment: Alignment.center,
-                            ),
-                          )).toList(),
+                              child: Image.asset(
+                                item,
+                                fit: BoxFit.contain,
+                                width: double.infinity,
+                                height: double.infinity,
+                                alignment: Alignment.center
+                              ),
+                            )).toList(),
+                          ),
                         ),
                         Positioned(
                           bottom: 0,
@@ -275,7 +288,7 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                           right: 0,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: widget.comic.imagesPath!.asMap().entries.map((entry) {
+                            children: widget.comic.uploadedImages.asMap().entries.map((entry) {
                               return GestureDetector(
                                 onTap: () => controller.animateToPage(entry.key),
                                 child: Container(
@@ -292,19 +305,28 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                             }).toList(),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // Contenuto sotto
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 80),
-                    child: buildMainContent(context),
-                  ),
-                ),
-              ],
+                        IgnorePointer(
+                          ignoring: true,
+                          child: Container(
+                            color: Colors.white.withOpacity(opacity),
+                          ),
+                        ),
+                        Positioned(
+                          top: MediaQuery.of(context).padding.top,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            child: ComicSansAppBar(
+                              showBackButton: true,
+                              backgroundColor: Colors.white.withOpacity(opacity),
+                              iconColor: iconColor,
+                            ),
+                          ),
+                        ),
+                      ]
+                  );
+                },
+              ),
             ),
 
             // AppBar fissa sopra tutto
@@ -317,6 +339,13 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                 backgroundColor: Color.lerp(Colors.transparent, Colors.black, opacity),
                 iconColor: Colors.white,
                 modified: changed,
+              ),
+            ),
+
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 80),
+                child: buildMainContent(context),
               ),
             ),
           ],

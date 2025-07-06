@@ -1,17 +1,21 @@
+import 'package:comicsans/providers/comics_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/user.dart';
+import 'package:comicsans/comic.dart';
+import 'package:comicsans/screens/SearchResults.dart';
+import 'package:provider/provider.dart';
 
-import '../comic.dart';
-import '../screens/SearchResults.dart';
 
-class MySearchBarFavourite extends StatefulWidget{
+
+class MySearchBarFavourite extends StatefulWidget {
   User user;
   MySearchBarFavourite({super.key, required this.user});
 
   @override
   State<MySearchBarFavourite> createState() => _MySearchBarFavourite();
 }
+
+
 
 class _MySearchBarFavourite extends State<MySearchBarFavourite> {
   @override
@@ -43,7 +47,7 @@ class _MySearchBarFavourite extends State<MySearchBarFavourite> {
   }
 }
 
-class MySearchDelegate extends SearchDelegate{
+class MySearchDelegate extends SearchDelegate {
   User user;
   MySearchDelegate({required this.user});
 
@@ -51,8 +55,7 @@ class MySearchDelegate extends SearchDelegate{
   String get searchFieldLabel => 'Ricerca...';
 
   @override
-  List<Widget>? buildActions(BuildContext context) {
-  }
+  List<Widget>? buildActions(BuildContext context) {}
 
   @override
   Widget? buildLeading(BuildContext context) {
@@ -66,20 +69,23 @@ class MySearchDelegate extends SearchDelegate{
 
   @override
   Widget buildResults(BuildContext context) {
+    final provider = context.watch<ComicsProvider>();
+
     List<Comic> matchQuery = [];
-    for(var c in user.getFavourites()){
+    for(var c in provider.favorite){
       if(c.title.toLowerCase().contains(query.toLowerCase())){
         matchQuery.add(c);
       }
     }
-
     return SearchResults(comicsResults: matchQuery, user: user, query: query);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final provider = context.watch<ComicsProvider>();
     List<Comic> matchQuery = [];
-    for(var c in user.getFavourites()){
+
+    for(var c in provider.favorite){
       if(c.title.toLowerCase().contains(query.toLowerCase())){
         matchQuery.add(c);
       }

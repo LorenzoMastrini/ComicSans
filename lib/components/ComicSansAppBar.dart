@@ -1,4 +1,6 @@
+import 'package:comicsans/providers/sell_informations_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum AppBarActionType {
   close, // "x" button to close the current process and return to main screen
@@ -7,23 +9,25 @@ enum AppBarActionType {
 }
 
 class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String? title;
+  final String title;
   final bool showBackButton; // Visibility of the back arrow
   final bool showCloseButton; // Visibility of the close button
   final AppBarActionType actionType; // Tipo di azione principale
   final VoidCallback? onOverflowMenuPressed; // Callback per il menu a tre puntini
   final VoidCallback? onCloseButtonPressed;
-  final Color? backgroundColor;
+  final Color backgroundColor;
+  final Color iconColor;
 
   const ComicSansAppBar({
     super.key,
-    this.title = 'Comic Sans',
+    this.title = '',
     this.showBackButton = false,
     this.showCloseButton = false,
     this.actionType = AppBarActionType.none,
     this.onOverflowMenuPressed,
     this.onCloseButtonPressed,
-    this.backgroundColor
+    this.backgroundColor = Colors.white,
+    this.iconColor = Colors.black,
   });
 
   @override
@@ -35,8 +39,29 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
       actionsList.add(
         IconButton(
           icon: const Icon(Icons.close),
-          onPressed: onCloseButtonPressed ?? () { // Use the given callback or the default
-              Navigator.pushNamed(context, '/'); // Return to the main screen
+          onPressed: onCloseButtonPressed ?? () async { // Use default callback or the given one
+            await showDialog<bool>(
+              context: context,
+              builder: (context) => AlertDialog(
+                content: Text("Interrompendo il processo, i dati inseriti andranno persi."),
+                actions: [
+                  TextButton(
+                    child: Text("Annulla"),
+                    onPressed: () => Navigator.of(context).pop(false),
+                  ),
+                  TextButton(
+                    child: Text("Conferma"),
+                    onPressed: (){
+                      Provider.of<SellInfoProvider>(context, listen: false).resetInformations();
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/', // return to the main screen
+                        (route) => false, // remove from the stack all the visited routes
+                      );
+                    },
+                  ),
+                ],
+              ),
+            );
           },
         ),
       );
@@ -58,21 +83,19 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 
     return AppBar(
+      scrolledUnderElevation: 0,
       backgroundColor: backgroundColor ?? Colors.transparent,
-      toolbarHeight: 40,
-      title: title != null ?
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Text(title!)
-            )
-          ],
-        )
-      : null, // title not given
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Flexible(
+            child: Text(title)
+          )
+        ],
+      ), // title not given
       automaticallyImplyLeading: false,
       leading: showBackButton ? IconButton(
-        icon: const Icon(Icons.arrow_back),
+        icon: Icon(Icons.arrow_back, color: iconColor ?? Colors.black,),
         onPressed: () {
           if (Navigator.canPop(context)) {
             Navigator.pop(context);

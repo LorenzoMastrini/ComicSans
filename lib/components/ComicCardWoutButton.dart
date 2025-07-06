@@ -30,7 +30,7 @@ class _ComicCardWoutButtonState extends State<ComicCardWoutButton> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(7),
                   child: Image.asset(
-                    widget.comic.coverPath,
+                    widget.comic.cover ?? "assets/no_image.png",
                     fit: BoxFit.fill,
                   ),
                 ),
