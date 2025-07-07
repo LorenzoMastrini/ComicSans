@@ -26,13 +26,23 @@ class _ChangeCreditCardScreenState extends State<ChangeCreditCardScreen> {
   @override
   void initState() {
     super.initState();
+
+    // Initialize controllers
+    _holderController = TextEditingController();
+    _numberController = TextEditingController();
+    _expirationController = TextEditingController();
+    _cvvController = TextEditingController();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       CreditCard? card = userProvider.loggedInUser!.card;
-      _holderController = TextEditingController(text: card?.holder);
-      _numberController = TextEditingController(text: card?.number.toString());
-      _expirationController = TextEditingController(text: card?.expiration);
-      _cvvController = TextEditingController(text: card?.cvv.toString());
+
+      setState(() {
+        _holderController = TextEditingController(text: card?.holder);
+        _numberController = TextEditingController(text: card?.number.toString());
+        _expirationController = TextEditingController(text: card?.expiration);
+        _cvvController = TextEditingController(text: card?.cvv.toString());
+      });
     });
   }
 
@@ -104,7 +114,6 @@ class _ChangeCreditCardScreenState extends State<ChangeCreditCardScreen> {
                         width: 150,
                         child: ComicSansTextInput(
                           title: 'Scadenza',
-                          keyboardType: TextInputType.emailAddress,
                           controller: _expirationController,
                         ),
                       ),

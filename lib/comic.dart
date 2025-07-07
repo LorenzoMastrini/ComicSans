@@ -1,8 +1,6 @@
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/user.dart';
 
-
-
 class Comic {
   int id;
   User seller;

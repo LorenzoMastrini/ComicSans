@@ -23,7 +23,7 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
   late TextEditingController _lastNameController;
   late TextEditingController _genderController;
   late TextEditingController _birthdayController;
-  Gender? selectedGender;
+  late Gender? selectedGender;
 
   List<String> getAllGenderLabels(){
     return Gender.values.map((gender) => gender.label).toList();
@@ -32,14 +32,24 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
   @override
   void initState() {
     super.initState();
+
+    // Initialize controllers
+    _nameController = TextEditingController();
+    _lastNameController = TextEditingController();
+    _genderController = TextEditingController();
+    _birthdayController = TextEditingController();
+    selectedGender = Gender.maschio;
+
     // Safe access to provider without triggering rebuilds
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
-      _nameController = TextEditingController(text: userProvider.loggedInUser!.name);
-      _lastNameController = TextEditingController(text: userProvider.loggedInUser!.lastName);
-      _genderController = TextEditingController(text: userProvider.loggedInUser!.gender?.label ?? '');
-      _birthdayController = TextEditingController(text: userProvider.loggedInUser!.birthday);
-      selectedGender = userProvider.loggedInUser!.gender;
+      setState(() {
+        _nameController = TextEditingController(text: userProvider.loggedInUser!.name);
+        _lastNameController = TextEditingController(text: userProvider.loggedInUser!.lastName);
+        _genderController = TextEditingController(text: userProvider.loggedInUser!.gender?.label ?? '');
+        _birthdayController = TextEditingController(text: userProvider.loggedInUser!.birthday);
+        selectedGender = userProvider.loggedInUser!.gender;
+      });
     });
   }
 

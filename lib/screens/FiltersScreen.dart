@@ -12,6 +12,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../comic.dart';
+import '../providers/comics_provider.dart';
+import '../providers/user_provider.dart';
+
 class FiltersScreen extends StatefulWidget{
   FiltersScreen({super.key});
 
@@ -21,7 +25,6 @@ class FiltersScreen extends StatefulWidget{
 
 class _FiltersScreenState extends State<FiltersScreen> {
   final List<TextEditingController> _authorControllers = [];
-  late TextEditingController _publicationYearController;
   late TextEditingController _languageController;
   late TextEditingController _italianPublisherController;
   late TextEditingController _originalPublisherController;
@@ -29,9 +32,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
   late TextEditingController _countryController;
   late TextEditingController _editionYearController;
   late TextEditingController _isbnController;
-  late TextEditingController _bookbindingsController;
-  late TextEditingController _priceStartController;
-  late TextEditingController _priceEndController;
+  late TextEditingController _bookbindingController;
+  late TextEditingController _fromPriceController;
+  late TextEditingController _toPriceController;
+  late TextEditingController _fromPublicationYear;
+  late TextEditingController _toPublicationYear;
 
   @override
   void initState() {
@@ -45,17 +50,18 @@ class _FiltersScreenState extends State<FiltersScreen> {
         provider.authors.map((text) => TextEditingController(text: text)));
 
     // Initializations of TextEditingController controllers
-    _publicationYearController = TextEditingController(text: provider.publicationYear?.toString() ?? '');
+    _fromPublicationYear = TextEditingController(text: '');
+    _toPublicationYear = TextEditingController(text: '');
     _languageController = TextEditingController(text: provider.language ?? '');
     _italianPublisherController = TextEditingController(text: provider.italianPublisher ?? '');
     _originalPublisherController = TextEditingController(text: provider.originalPublisher ?? '');
     _collanaController = TextEditingController(text: provider.series ?? '');
     _countryController = TextEditingController(text: provider.country ?? '');
     _editionYearController = TextEditingController(text: provider.editionYear?.toString() ?? '');
-    _isbnController = TextEditingController(text: provider.isbn.toString() ?? '');
-    _bookbindingsController = TextEditingController(text: provider.bookbinding.toString() ?? '');
-    _priceStartController = TextEditingController();
-    _priceEndController = TextEditingController();
+    _isbnController = TextEditingController(text: provider.isbn?.toString() ?? '');
+    _bookbindingController = TextEditingController(text: provider.bookbinding?.toString() ?? '');
+    _fromPriceController = TextEditingController(text: '');
+    _toPriceController = TextEditingController(text: '');
 
     _syncAuthors(provider);
   }
@@ -65,14 +71,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
     for (var c in _authorControllers) {
       c.dispose();
     }
-    _publicationYearController.dispose();
     _languageController.dispose();
     _italianPublisherController.dispose();
     _originalPublisherController.dispose();
     _collanaController.dispose();
     _countryController.dispose();
     _editionYearController.dispose();
-    _bookbindingsController.dispose();
+    _bookbindingController.dispose();
     _isbnController.dispose();
     super.dispose();
   }
@@ -92,13 +97,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
     }
   }
 
-// Add new author
+  // Add new author
   void _addAuthor() {
     context.read<SellInfoProvider>().addAuthor('');
     setState(() => _authorControllers.add(TextEditingController()));
   }
 
-// Remove existing author
+  // Remove existing author
   void _removeAuthor(int index) {
     final provider = context.read<SellInfoProvider>();
 
@@ -121,15 +126,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
     const double btnBottomPadding = 15; // Bottom padding for the button
     const double btnHeight = 60;
     const double bottomSpaceForButton = btnHeight + btnBottomPadding * 5; // Space for the ListView to avoid content under the button
-    final sellInfo = context.watch<SellInfoProvider>();
-    final provider = Provider.of<SellInfoProvider>(context, listen: false);
+    final providerWatch = context.watch<SellInfoProvider>();
+    final providerRead = context.read<SellInfoProvider>();
 
-    return Scaffold();
-/*
     return Scaffold(
         appBar: const ComicSansAppBar(
             showBackButton: true,
-            title: ''
         ),
         body: Form(
             child: Padding(
@@ -137,253 +139,235 @@ class _FiltersScreenState extends State<FiltersScreen> {
               child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    ListView(
-                        children: [
-                          Text(
-                              'Prezzo',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )
-                          ),
-                          Row(
-                              children: [
-                                SizedBox(
-                                  width: 150,
-                                  child: ComicSansTextInput(
-                                    title: 'Da',
-                                    keyboardType: TextInputType.emailAddress,
-                                    controller: _priceStartController,
-                                  ),
+                    Positioned.fill(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: bottomSpaceForButton),
+                        child: ListView(
+                            children: [
+                              Text(
+                                  'Prezzo',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  )
+                              ),
+                              Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 150,
+                                      child: ComicSansTextInput(
+                                        title: 'Da',
+                                        keyboardType: TextInputType.number,
+                                        controller: _fromPriceController,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                    SizedBox(
+                                      width: 150,
+                                      child: ComicSansTextInput(
+                                          title: 'A',
+                                          controller: _toPriceController,
+                                          keyboardType: TextInputType.number,
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Authors
+                              Text(
+                                  'Autori',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  )
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(), // Disable scrolling of inner ListView
+                                itemCount: _authorControllers.length,
+                                itemBuilder: (_, i) => Row (
+                                  children: [
+                                    Expanded(
+                                      child: ComicSansTextInput(
+                                        title: '',
+                                        hintText: 'Sceneggiatore, disegnatore',
+                                        labelText: '',
+                                        controller: _authorControllers[i],
+                                        onChanged: (val) => providerWatch.updateAuthor(i, val),
+                                      ),
+                                    ),
+                                    if (_authorControllers.length > 1)
+                                      IconButton(
+                                        icon: const Icon(Icons.remove_circle_outline),
+                                        onPressed: () => _removeAuthor(i),
+                                      ),
+                                  ],
                                 ),
-                                SizedBox(width: 20),
-                                SizedBox(
-                                  width: 150,
-                                  child: ComicSansTextInput(
-                                      title: 'A',
-                                      controller: _priceEndController,
-                                      keyboardType: TextInputType.number,
-                                      validator: (value){
-                                      }
-                                  ),
+                              ),
+                              // Button to add a new author
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton.icon(
+                                  icon: Icon(Icons.add),
+                                  label: Text('Aggiungi autore'),
+                                  onPressed: _addAuthor,
                                 ),
-                              ]
-                          ),
-                          SizedBox(height: 20),
-                          // Authors
-                          Text(
-                              'Autori',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )
-                          ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(), // Disable scrolling of inner ListView
-                            itemCount: _authorControllers.length,
-                            itemBuilder: (_, i) => Row (
-                              children: [
-                                Expanded(
-                                  child: ComicSansTextInput(
-                                    title: '',
-                                    hintText: 'Sceneggiatore, disegnatore',
-                                    labelText: '',
-                                    controller: _authorControllers[i],
-                                    onChanged: (val) => sellInfo.updateAuthor(i, val),
-                                  ),
-                                ),
-                                if (_authorControllers.length > 1)
-                                  IconButton(
-                                    icon: const Icon(Icons.remove_circle_outline),
-                                    onPressed: () => _removeAuthor(i),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          // Button to add a new author
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton.icon(
-                              icon: Icon(Icons.add),
-                              label: Text('Aggiungi autore'),
-                              onPressed: _addAuthor,
-                            ),
-                          ),
-                          SizedBox(height: 20),
-
-                          // Genres
-                          ComicSansCheckbox(
-                              title: 'Condizioni',
-                              options: Conditions.map((title) => {
-                                'title': title, // Provider initial state
-                              }).toList(),
-                              onChanged: (title, value) =>
-                                  context.read<SellInfoProvider>().updateCondition(title, value)
-                          ),
-                          SizedBox(height: 20),
-
-                          // Genres
-                          ComicSansCheckbox(
-                              title: 'Genere',
-                              options: GlobalConstants.availableGenreTitles.map((title) => {
-                                'title': title,
-                                'value': sellInfo.genres.contains(title), // Provider initial state
-                              }).toList(),
-                              onChanged: (title, value) =>
-                                  context.read<SellInfoProvider>().updateGenre(title, value)
-                          ),
-                          SizedBox(height: 20),
-
-                          Text(
-                              'Anno di pubblicazione',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )
-                          ),
-                          Row(
-                              children: [
-                                SizedBox(
-                                  width: 150,
-                                  child: ComicSansTextInput(
-                                    title: 'Da',
-                                    keyboardType: TextInputType.emailAddress,
-                                    controller: _priceStartController,
-                                  ),
-                                ),
-                                SizedBox(width: 20),
-                                SizedBox(
-                                  width: 150,
-                                  child: ComicSansTextInput(
-                                      title: 'A',
-                                      controller: _priceEndController,
-                                      keyboardType: TextInputType.number,
-                                      validator: (value){
-                                      }
-                                  ),
-                                ),
-                              ]
-                          ),
-
-                          ComicSansDropdown(
-                              title: 'Lingua',
-                              options: GlobalConstants.availableLanguages,
-                              controller: _languageController,
-                              onChanged: (newValue) => provider.language = newValue,
-                              value: sellInfo.language
-                          ),
-                          SizedBox(height: 20),
-
-                          // Italian publisher
-                          ComicSansTextInput(
-                            title: 'Editore italiano',
-                            hintText: 'Editore italiano',
-                            labelText: 'Inserisci l\'editore italiano del fumetto',
-                            controller: _italianPublisherController,
-                            onFieldSubmitted: (value) => provider.italianPublisher = value,
-                          ),
-                          SizedBox(height: 20),
-
-                          // Original publisher
-                          ComicSansTextInput(
-                            title: 'Editore paese di origine',
-                            hintText: 'Editore paese di origine',
-                            labelText: 'Inserisci l\'editore originale del fumetto',
-                            controller: _originalPublisherController,
-                            onFieldSubmitted: (value) => provider.originalPublisher = value,
-                          ),
-                          SizedBox(height: 20),
-
-                          // Collana
-                          ComicSansTextInput(
-                            title: 'Collana',
-                            hintText: 'Collana',
-                            labelText: 'Inserisci la collana di appartenenza del fumetto',
-                            controller: _collanaController,
-                            onFieldSubmitted: (value) => provider.series = value,
-                          ),
-                          SizedBox(height: 20),
-
-                          // Country of origin
-                          ComicSansTextInput(
-                            title: 'Paese di origine',
-                            hintText: 'Paese di origine',
-                            labelText: 'Inserisci il paese di origine del fumetto',
-                            controller: _countryController,
-                            onFieldSubmitted: (value) => provider.country = value,
-                          ),
-                          SizedBox(height: 20),
-
-                          // Variant
-                          ComicSansToggle(
-                            title: 'Variant',
-                            value: sellInfo.variant ?? false,
-                            onChanged: (value) => provider.variant = value,
-                          ),
-                          SizedBox(height: 20),
-
-                          // Bookbinding
-                          ComicSansCheckbox(
-                              title: 'Rilegatura',
-                              options: GlobalConstants.availableBookbindings.map((title) => {
-                                'title': title, // Provider initial state
-                              }).toList(),
-                              onChanged: (title, value) =>
-                                  context.read<SellInfoProvider>().updateBookbinding(title, value)
-                          ),
-                          SizedBox(height: 20),
-                          SizedBox(height: 20),
-
-                          // Graded
-                          ComicSansToggle(
-                            title: 'Gradato',
-                            value: sellInfo.graded ?? false,
-                            onChanged: (value) => provider.graded = value,
-                          ),
-                          SizedBox(height: 20),
-
-                          // Signed
-                          ComicSansToggle(
-                            title: 'Firmato',
-                            value: sellInfo.signed ?? false,
-                            onChanged: (value) => provider.signed = value,
-                          ),
-                          SizedBox(height: 20),
-
-                          // Edition year
-                          Text(
-                              'Anno edizione',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )
-                          ),
-                          Row(
-                              children: [
-                                SizedBox(
-                                  width: 150,
-                                  child: ComicSansTextInput(
-                                    title: 'Da',
-                                    keyboardType: TextInputType.emailAddress,
-                                    controller: _priceStartController,
-                                  ),
-                                ),
-                                SizedBox(width: 20),
-                                SizedBox(
-                                  width: 150,
-                                  child: ComicSansTextInput(
-                                      title: 'A',
-                                      controller: _priceEndController,
-                                      keyboardType: TextInputType.number,
-                                      validator: (value){
-                                      }
-                                  ),
-                                ),
-                              ]
-                          ),
-                          SizedBox(height: bottomSpaceForButton)
-                        ]
+                              ),
+                              SizedBox(height: 20),
+                        
+                              //Conditions
+                              ComicSansCheckbox(
+                                  title: 'Condizioni',
+                                  options: Conditions.values.map((cond) => {
+                                    'title': conditionsToString(cond),
+                                    'value': providerWatch.genre.contains(cond), // Provider initial state
+                                  }).toList(),
+                                  onChanged: (title, value) =>
+                                      context.read<SellInfoProvider>().updateGenre(stringToGenre(title), value)
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Genres
+                              ComicSansCheckbox(
+                                  title: 'Genere',
+                                  options: Genre.values.map((genre) => {
+                                    'title': genreToString(genre),
+                                    'value': providerWatch.genre.contains(genre), // Provider initial state
+                                  }).toList(),
+                                  onChanged: (title, value) =>
+                                      context.read<SellInfoProvider>().updateGenre(stringToGenre(title), value)
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Publication year
+                              Text(
+                                  'Anno di pubblicazione',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  )
+                              ),
+                              Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 150,
+                                      child: ComicSansTextInput(
+                                        title: 'Da',
+                                        controller: _fromPriceController,
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                    SizedBox(
+                                      width: 150,
+                                      child: ComicSansTextInput(
+                                        title: 'A',
+                                        controller: _toPriceController,
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                              SizedBox(height: 20),
+                        
+                              ComicSansDropdown(
+                                  title: 'Lingua',
+                                  options: availableLanguages,
+                                  controller: _languageController,
+                                  onChanged: (newValue) => providerRead.language = newValue,
+                                  value: providerWatch.language
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Italian publisher
+                              ComicSansTextInput(
+                                title: 'Editore italiano',
+                                hintText: 'Editore italiano',
+                                labelText: 'Inserisci l\'editore italiano del fumetto',
+                                controller: _italianPublisherController,
+                                onFieldSubmitted: (value) => providerRead.italianPublisher = value,
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Original publisher
+                              ComicSansTextInput(
+                                title: 'Editore paese di origine',
+                                hintText: 'Editore paese di origine',
+                                labelText: 'Inserisci l\'editore originale del fumetto',
+                                controller: _originalPublisherController,
+                                onFieldSubmitted: (value) => providerRead.originalPublisher = value,
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Series
+                              ComicSansTextInput(
+                                title: 'Collana',
+                                hintText: 'Collana',
+                                labelText: 'Inserisci la collana di appartenenza del fumetto',
+                                controller: _collanaController,
+                                onFieldSubmitted: (value) => providerRead.series = value,
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Country of origin
+                              ComicSansTextInput(
+                                title: 'Paese di origine',
+                                hintText: 'Paese di origine',
+                                labelText: 'Inserisci il paese di origine del fumetto',
+                                controller: _countryController,
+                                onFieldSubmitted: (value) => providerRead.country = value,
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Variant
+                              ComicSansToggle(
+                                title: 'Variant',
+                                value: providerWatch.variant ?? false,
+                                onChanged: (value) => providerRead.variant = value,
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Bookbinding
+                              ComicSansCheckbox(
+                                  title: 'Rilegatura',
+                                  options: Binding.values.map((binding) => {
+                                    'title': bindingToString(binding),
+                                    'value': providerWatch.genre.contains(binding), // Provider initial state
+                                  }).toList(),
+                                  onChanged: (title, value) =>
+                                      context.read<SellInfoProvider>().updateGenre(stringToGenre(title), value)
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Graded
+                              ComicSansToggle(
+                                title: 'Gradato',
+                                value: providerWatch.graded ?? false,
+                                onChanged: (value) => providerRead.graded = value,
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Signed
+                              ComicSansToggle(
+                                title: 'Firmato',
+                                value: providerWatch.signed ?? false,
+                                onChanged: (value) => providerRead.signed = value,
+                              ),
+                              SizedBox(height: 20),
+                        
+                              // Edition year
+                              ComicSansTextInput(
+                                title: 'Anno edizione',
+                                hintText: 'Anno edizione',
+                                labelText: 'Inserisci la data di uscita dell\'edizione',
+                                keyboardType: TextInputType.number,
+                                controller: _editionYearController,
+                                onFieldSubmitted: (value) => providerRead.editionYear = int.tryParse(value),
+                              ),
+                            ]
+                        ),
+                      ),
                     ),
                     Positioned(
                       bottom: 20,
@@ -392,7 +376,18 @@ class _FiltersScreenState extends State<FiltersScreen> {
                       child: ComicSansButton (
                         text: 'Pubblica',
                         onPressed: () {
-                          Navigator.pushNamed(context, '/'); // return to the main screen
+                          final ComicsProvider comicsProvider = context.read<ComicsProvider>();
+                          final UserProvider userProvider = context.read<UserProvider>();
+
+                          // create Comic object with the informations from provider
+                          Comic newComic = providerRead.createComic();
+                          comicsProvider.addComic(newComic); // Add the comic to the global list
+                          userProvider.addComicToLibrary(newComic); // Add comic to the user's library
+                          providerRead.resetInformations(); // Reset the provider (clear fields)
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/', // return to the main screen
+                                (route) => false, // remove from the stack all the visited routes
+                          );
                         },
                       ),
                     )
@@ -401,7 +396,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
             )
         )
     );
-    */
   }
 
   void _syncAuthors(SellInfoProvider provider) {

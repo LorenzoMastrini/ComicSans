@@ -27,15 +27,25 @@ class _ChangeShippingAddressScreenState extends State<ChangeShippingAddressScree
   @override
   void initState() {
     super.initState();
+
+    // Initialize controllers
+    _nameController = TextEditingController();
+    _lastNameController = TextEditingController();
+    _countryController = TextEditingController();
+    _addressController = TextEditingController();
+    _capController = TextEditingController();
+
     // Safe access to provider without triggering rebuilds
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       Address? addr = userProvider.loggedInUser!.address;
-      _nameController = TextEditingController(text: addr?.name);
-      _lastNameController = TextEditingController(text: addr?.lastName);
-      _countryController = TextEditingController(text: addr?.country);
-      _addressController = TextEditingController(text: addr?.address);
-      _capController = TextEditingController(text: addr?.cap.toString());
+      setState(() {
+        _nameController = TextEditingController(text: addr?.name);
+        _lastNameController = TextEditingController(text: addr?.lastName);
+        _countryController = TextEditingController(text: addr?.country);
+        _addressController = TextEditingController(text: addr?.address);
+        _capController = TextEditingController(text: addr?.cap.toString());
+      });
     });
   }
 

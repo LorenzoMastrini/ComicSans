@@ -20,7 +20,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _navigationBarIndex = 0; //(0: Home, 1: Favorite, 2: Sell, 3: Inbox, 4: Profile)
   final List<Widget> _pageContents = <Widget>[
-    ComicSansHome(purchaseConfirmed: false),
+    ComicSansHome(),
     ComicSansFavorite(),
     // No page fo Sell1 because it opens a modal
     ComicSansInbox(),

@@ -146,52 +146,6 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     ]
                   )
                 ),
-              if(shipping == Shipping.retirePoint)
-                Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                      )
-                    ]
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: userProviderWatch.loggedInUser!.address != null
-                          ? [
-                            Text(
-                              "${userProviderWatch.loggedInUser!.address?.name ?? ''} ${userProviderWatch.loggedInUser?.address?.lastName ?? ''}",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400
-                              )
-                            ),
-                            Text(userProviderWatch.loggedInUser!.address?.address ?? '', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                            Text(userProviderWatch.loggedInUser!.address?.cap.toString() ?? '', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                          ]
-                          : [
-                            Text("Nessun indirizzo inserito", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400))
-                          ]
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap:() {
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => ChangeShippingAddressScreen()
-                          ));
-                        },
-                        child: Text("Cambia", style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, decoration: TextDecoration.underline))
-                      ),
-                    ]
-                  )
-                  ),
                 if(shipping == Shipping.retirePoint)
                   Container(
                     padding: EdgeInsets.all(16),
@@ -348,47 +302,13 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                         widget.comic.seller.comicsSale.remove(widget.comic);
                         SampleData.allComics.remove(widget.comic);
 
+                        userProviderRead.setJustPurchased(true);
                         Navigator.pushReplacementNamed(context, '/');
                       }
                     },
                     text: "Paga"
                   ),
                 ),
-              ListTile(
-                title: Text("PayPal", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                leading: Radio<PaymentMethod>(
-                  value: PaymentMethod.payPal,
-                  groupValue: payment,
-                  onChanged: (PaymentMethod? value) {
-                    setState(() {
-                      payment = value;
-                    });
-                  }
-                )
-              ),
-              SizedBox(height: 20),
-              SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    userProviderRead.updatePuchases(widget.comic);
-                    widget.comic.seller.sellings.add(widget.comic);
-                    widget.comic.seller.comicsSale.remove(widget.comic);
-                    comicsProviderRead.removeComic(widget.comic);
-
-                    Navigator.pushReplacementNamed(context, '/');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shadowColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text('Paga', style: TextStyle(color: Colors.black)),
-                ),
-              ),
             ],
           ),
         ),

@@ -12,6 +12,12 @@ class UserProvider extends ChangeNotifier {
       _loggedInUser = user;
       notifyListeners();
   }
+  bool _justPurchased = false;
+  bool get justPurchased => _justPurchased;
+  void setJustPurchased (bool value) {
+    _justPurchased = value;
+    notifyListeners();
+  }
 
   // favorite comics for the current user
   List<Comic> getFavoriteComics() {

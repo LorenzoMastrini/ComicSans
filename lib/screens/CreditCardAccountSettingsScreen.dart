@@ -28,15 +28,24 @@ class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSetti
   @override
   void initState() {
     super.initState();
+    _holderController = TextEditingController();
+    _numberController = TextEditingController();
+    _expirationController = TextEditingController();
+    _cvvController = TextEditingController();
+    isConnected = false;
+
     // Safe access to provider without triggering rebuilds
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final userProvider = Provider.of<UserProvider>(context, listen: true);
-      CreditCard? card = userProvider.loggedInUser!.card;
-      _holderController = TextEditingController(text: card?.holder);
-      _numberController = TextEditingController(text: card?.number.toString());
-      _expirationController = TextEditingController(text: card?.expiration);
-      _cvvController = TextEditingController(text: card?.cvv.toString());
-      isConnected = userProvider.loggedInUser!.connectedAccount;
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      CreditCard? card = userProvider.loggedInUser?.card;
+
+      setState(() {
+        _holderController.text = card?.holder ?? '';
+        _numberController.text = card?.number.toString() ?? '';
+        _expirationController.text = card?.expiration ?? '';
+        _cvvController.text = card?.cvv.toString() ?? '';
+        isConnected = userProvider.loggedInUser?.connectedAccount ?? false;
+      });
     });
   }
 

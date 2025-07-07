@@ -1,3 +1,4 @@
+import 'package:comicsans/Components/ComicSansAppBar.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/FollowedUserComponent.dart';
@@ -13,8 +14,9 @@ class FollowedUsersScreen extends StatelessWidget{
     UserProvider userProviderWatch = context.watch<UserProvider>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Utenti seguiti"),
+      appBar: ComicSansAppBar(
+        title: 'Utenti seguiti',
+        showBackButton: true,
       ),
       body: ListView.builder(
         itemBuilder: (context, index){

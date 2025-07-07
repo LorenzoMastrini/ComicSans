@@ -30,8 +30,6 @@ Conditions? stringToConditions(String? stringCondition) {
   }
 }
 
-
-
 enum Genre { avventura, azione, crime, drammatico, fantasy, horror, poliziesco, romantico, sciFi, soprannaturale, supereroi, thriller, umoristico, altro }
 
 String genreToString(Genre genre) {

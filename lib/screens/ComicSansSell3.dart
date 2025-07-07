@@ -23,8 +23,6 @@ class ComicSansSell3 extends StatefulWidget {
   State<ComicSansSell3> createState() => _ComicSansSell3State();
 }
 
-
-
 class _ComicSansSell3State extends State<ComicSansSell3> {
   final List<TextEditingController> _authorControllers = [];
   late TextEditingController _publicationYearController;

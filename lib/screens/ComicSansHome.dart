@@ -2,13 +2,15 @@ import 'package:comicsans/components/ProductGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/CategoriesGrid.dart';
 import 'package:comicsans/components/ComicSansSearchBar.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/user_provider.dart';
 
 
 
 class ComicSansHome extends StatefulWidget {
   final String title;
-  final bool purchaseConfirmed;
-  const ComicSansHome({super.key, this.title = "", this.purchaseConfirmed = false});
+  const ComicSansHome({super.key, this.title = ""});
 
   @override
   State<ComicSansHome> createState() {
@@ -20,8 +22,10 @@ class _ComicSansHomeState extends State<ComicSansHome> {
   @override
   void initState() {
     super.initState();
-    if(widget.purchaseConfirmed){
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userProvider = context.read<UserProvider>();
+      if (userProvider.justPurchased) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -32,13 +36,14 @@ class _ComicSansHomeState extends State<ComicSansHome> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("OK")
+                child: Text("OK"),
               )
-            ]
-          )
+            ],
+          ),
         );
-      });
-    }
+        userProvider.setJustPurchased(false); // resetta il flag
+      }
+    });
   }
 
   @override

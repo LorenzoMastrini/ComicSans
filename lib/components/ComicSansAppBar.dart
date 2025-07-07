@@ -26,7 +26,7 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actionType = AppBarActionType.none,
     this.onOverflowMenuPressed,
     this.onCloseButtonPressed,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor = Colors.transparent,
     this.iconColor = Colors.black,
   });
 
