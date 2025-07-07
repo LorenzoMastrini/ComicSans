@@ -1,15 +1,17 @@
+import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/FiltersScreen.dart';
-import 'package:comicsans/providers/comics_provider.dart';
-import 'package:flutter/material.dart';
 import 'package:comicsans/screens/SearchResults.dart';
+import 'package:flutter/material.dart';
 import 'package:comicsans/comic.dart';
 import 'package:provider/provider.dart';
 
 
 
-class ComicSansSearchBar extends StatelessWidget{
-  const ComicSansSearchBar({super.key});
+class ComicSansSearchBar extends StatelessWidget {
+  final SearchContent searchContent;
+
+  const ComicSansSearchBar({super.key, required this.searchContent});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class ComicSansSearchBar extends StatelessWidget{
         onTap:(){
           showSearch(
             context: context,
-            delegate: MySearchDelegate()
+            delegate: MySearchDelegate(searchContent: searchContent)
           );
         },
       ),
@@ -41,6 +43,10 @@ class ComicSansSearchBar extends StatelessWidget{
 
 
 class MySearchDelegate extends SearchDelegate {
+  final SearchContent searchContent;
+
+  MySearchDelegate({required this.searchContent});
+
   @override
   String get searchFieldLabel => 'Ricerca...';
 
@@ -65,9 +71,7 @@ class MySearchDelegate extends SearchDelegate {
       children: <Widget>[
         IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            close(context, null);
-          },
+          onPressed: () => close(context, null)
         ),
       ]
     );
@@ -75,10 +79,21 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    UserProvider userProvider = context.watch<UserProvider>();
+    UserProvider userProviderWatch = context.watch<UserProvider>();
+    final List<Comic> comicsList; // Grid elements varies based on the page in which it's displayed
+
+    // Based on the type of content to search (purchasable or favorite comics)
+    switch (searchContent) {
+      case SearchContent.purchasableComics:
+        comicsList = userProviderWatch.getPurchasableComics();
+        break;
+      case SearchContent.favoriteComics:
+        comicsList = userProviderWatch.getFavoriteComics();
+        break;
+    }
 
     List<Comic> matchQuery = [];
-    for (var c in context.watch<ComicsProvider>().allComics) {
+    for (var c in comicsList) {
       if (c.title.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(c);
       }
@@ -87,8 +102,9 @@ class MySearchDelegate extends SearchDelegate {
       close(context, query);
       Navigator.push(context, MaterialPageRoute(
         builder: (context) => SearchResults(
-          comicsResults: userProvider.getPurchasableComics(),
+          comicsResults: comicsList,
           query: query,
+          searchContent: searchContent,
         ),
       ));
     });
@@ -97,8 +113,21 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    UserProvider userProviderWatch = context.watch<UserProvider>();
+    final List<Comic> comicsList; // Grid elements varies based on the page in which it's displayed
+
+    // Based on the type of content to search (purchasable or favorite comics)
+    switch (searchContent) {
+      case SearchContent.purchasableComics:
+        comicsList = userProviderWatch.getPurchasableComics();
+        break;
+      case SearchContent.favoriteComics:
+        comicsList = userProviderWatch.getFavoriteComics();
+        break;
+    }
+
     List<Comic> matchQuery = [];
-    for(var c in context.watch<UserProvider>().getPurchasableComics()){
+    for(var c in comicsList){
       if(c.title.toLowerCase().contains(query.toLowerCase())){
         matchQuery.add(c);
       }
@@ -130,7 +159,7 @@ class MySearchDelegate extends SearchDelegate {
                 onPressed: () {
                   close(context, query);
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => SearchResults(comicsResults: [comics], query: query)
+                    builder: (context) => SearchResults(comicsResults: [comics], query: query, searchContent: searchContent)
                   ));
                 },
                 style: TextButton.styleFrom(

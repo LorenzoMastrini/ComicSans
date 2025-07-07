@@ -1,4 +1,5 @@
 import 'package:comicsans/components/ComicSansSearchBar.dart';
+import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicCard.dart';
@@ -9,7 +10,8 @@ import 'package:comicsans/comic.dart';
 class SearchResults extends StatelessWidget {
   final List<Comic> comicsResults;
   final String query;
-  const SearchResults({super.key, required this.comicsResults, required this.query});
+  final SearchContent searchContent;
+  const SearchResults({super.key, required this.comicsResults, required this.query, required this.searchContent});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class SearchResults extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    child: ComicSansSearchBar()
+                    child: ComicSansSearchBar(searchContent: searchContent,)
                   ),
                   SizedBox(width: 10),
                   SizedBox(
@@ -49,7 +51,7 @@ class SearchResults extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    child: ComicSansSearchBar()
+                    child: ComicSansSearchBar(searchContent: searchContent)
                   ),
                   SizedBox(width: 10),
                   IconButton(

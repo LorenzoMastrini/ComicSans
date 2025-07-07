@@ -9,7 +9,6 @@ import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:comicsans/components/PanelWidget.dart';
 import 'package:comicsans/components/ReviewWidget.dart';
 
@@ -26,14 +25,11 @@ class ProductDetail extends StatefulWidget {
 
 
 class _ProductDetailState extends State<ProductDetail> {
-  bool isFavourite = false;
+  late bool isFavourite;
   int current = 0;
   late ScrollController _scrollController;
   Color iconColor = Colors.white;
   final CarouselSliderController controller = CarouselSliderController();
-  final PanelController panelController = PanelController();
-  bool isPanelVisibile = false;
-  bool changed = false;
 
   @override
   void initState() {
@@ -43,8 +39,7 @@ class _ProductDetailState extends State<ProductDetail> {
     // Safe access to provider without triggering rebuilds
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
-      isFavourite = userProvider.checkFavorite(widget.comic);
-      setState(() {});
+      setState(() {isFavourite = userProvider.checkFavorite(widget.comic);});
     });
   }
 
@@ -71,7 +66,6 @@ class _ProductDetailState extends State<ProductDetail> {
     final userProviderRead = context.read<UserProvider>();
 
     setState(() {
-      changed = true;
       isFavourite
         ? userProviderRead.removeFavorite(widget.comic)
         : userProviderRead.addFavorite(widget.comic);
@@ -352,7 +346,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             });
                           },
                         ),
-                        items: widget.comic.otherImagesPath?.map((item) => Container(
+                        items: widget.comic.otherImagesPath.map((item) => SizedBox(
                           width: double.infinity,
                           height: double.infinity,
                           child: Image.asset(
@@ -370,7 +364,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         right: 0,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: widget.comic.otherImagesPath!.asMap().entries.map((entry) {
+                          children: widget.comic.otherImagesPath.asMap().entries.map((entry) {
                             return GestureDetector(
                               onTap: () => controller.animateToPage(entry.key),
                               child: Container(
@@ -430,9 +424,7 @@ class _ProductDetailState extends State<ProductDetail> {
           child: ElevatedButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(
-                builder: (context){
-                  return PurchaseScreen(comic: widget.comic);
-                }
+                builder: (context) => PurchaseScreen(comic: widget.comic)
               ));
             },
             style: ElevatedButton.styleFrom(

@@ -103,7 +103,6 @@ class UserVendorScreen extends StatelessWidget{
                           },
                           child: ComicCardDelete(
                             comic: userProviderWatch.getLibrary()[index],
-                            user: userProviderWatch.loggedInUser!,
                             onDelete: () {}
                           )
                         );
@@ -133,7 +132,7 @@ class UserVendorScreen extends StatelessWidget{
                         RichText(
                           text: TextSpan(
                             children: <TextSpan>[
-                              TextSpan(text: userProviderWatch.getNumberOfSellings().toString(), style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
+                              TextSpan(text: userProviderWatch.getNumberOfSales().toString(), style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
                               TextSpan(text: " vendite, ", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
                               TextSpan(text: userProviderWatch.getNumberOfPurchases().toString(), style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
                               TextSpan(text: " acquisti", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal))

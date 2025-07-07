@@ -1,5 +1,6 @@
+import 'package:comicsans/comic.dart';
+import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
-import 'package:comicsans/components/ComicCardWoutButton.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
@@ -7,19 +8,26 @@ import 'package:provider/provider.dart';
 
 
 
-class UserSellingsScreen extends StatefulWidget{
-  const UserSellingsScreen({super.key});
+enum MovementType { sales, purchases }
 
-  @override
-  State<UserSellingsScreen> createState() => _UserSellingsScreenState();
-}
+class UserMovementHistory extends StatelessWidget {
+  final MovementType movementType;
 
+  const UserMovementHistory({super.key, required this.movementType});
 
-
-class _UserSellingsScreenState extends State<UserSellingsScreen> {
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProviderWatch = context.watch<UserProvider>();
+    final UserProvider userProviderWatch = context.watch<UserProvider>(); // Provider
+    final List<Comic> comicsList; // Elements varies based on the page (sales or purchases)
+
+    switch (movementType) {
+      case MovementType.sales:
+        comicsList = userProviderWatch.getSales();
+        break;
+      case MovementType.purchases:
+        comicsList = userProviderWatch.getPurchases();
+        break;
+    }
 
     return Scaffold(
       appBar: ComicSansAppBar(showBackButton: true, title: "Vendite"),
@@ -36,13 +44,13 @@ class _UserSellingsScreenState extends State<UserSellingsScreen> {
             return GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => ProductDetail(comic: userProviderWatch.getSellings()[index])
+                    builder: (context) => ProductDetail(comic: comicsList[index])
                 ));
               },
-              child: ComicCardWoutButton(comic: userProviderWatch.getSellings()[index])
+              child: ComicCard(comic: comicsList[index], showFavoriteButton: false)
             );
           },
-          itemCount: userProviderWatch.getNumberOfSellings(),
+          itemCount: comicsList.length,
           shrinkWrap: false,
           padding: EdgeInsets.zero,
         ),

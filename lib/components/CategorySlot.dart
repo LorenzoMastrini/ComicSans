@@ -32,7 +32,6 @@ class _CategorySlotState extends State<CategorySlot> {
             style: const TextStyle(fontWeight: FontWeight.w500)
         ),
       ],
-    )
-    ;
+    );
   }
 }

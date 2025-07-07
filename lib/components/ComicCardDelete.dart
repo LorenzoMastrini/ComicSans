@@ -1,20 +1,20 @@
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/user.dart';
 import 'package:provider/provider.dart';
+
 
 
 class ComicCardDelete extends StatefulWidget{
   final Comic comic;
-  final User user;
   final VoidCallback onDelete;
 
-  const ComicCardDelete ({required this.comic, required this.user, required this.onDelete});
+  const ComicCardDelete ({super.key, required this.comic, required this.onDelete});
 
   @override
   State<ComicCardDelete> createState() => _ComicCardDeleteState();
 }
+
 
 class _ComicCardDeleteState extends State<ComicCardDelete> {
   @override

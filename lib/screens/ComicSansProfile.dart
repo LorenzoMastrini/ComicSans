@@ -1,6 +1,5 @@
 import 'package:comicsans/providers/user_provider.dart';
-import 'package:comicsans/screens/UserPurchasesScreen.dart';
-import 'package:comicsans/screens/UserSellingsScreen.dart';
+import 'package:comicsans/screens/UserMovementHistory.dart';
 import 'package:comicsans/screens/UserVendorScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/ReviewWidget.dart';
@@ -76,7 +75,7 @@ class ComicSansProfile extends StatelessWidget {
           child: TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(
-                builder: (context) => UserPurchasesScreen()
+                builder: (context) => UserMovementHistory(movementType: MovementType.purchases)
               ));
             },
             style: TextButton.styleFrom(
@@ -102,7 +101,7 @@ class ComicSansProfile extends StatelessWidget {
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(
                   builder: (context){
-                    return UserSellingsScreen();
+                    return UserMovementHistory(movementType: MovementType.sales);
                   })
               );},
             style: TextButton.styleFrom(

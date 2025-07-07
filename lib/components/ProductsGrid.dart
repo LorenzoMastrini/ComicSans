@@ -7,13 +7,27 @@ import 'package:provider/provider.dart';
 
 
 
-class ProductGrid extends StatelessWidget {
-  const ProductGrid({super.key});
+// Types of grid varies with the page in which it's displayed
+enum GridContent { purchasableComics, favoriteComics }
+
+class ProductsGrid extends StatelessWidget {
+  final GridContent gridContent;
+
+  const ProductsGrid({super.key, required this.gridContent});
 
   @override
   Widget build(BuildContext context) {
     final userProviderWatch = context.watch<UserProvider>();
-    final List<Comic> comicsList = userProviderWatch.getPurchasableComics();
+    final List<Comic> comicsList; // Grid elements varies based on the page in which it's displayed
+
+    switch (gridContent) {
+      case GridContent.purchasableComics:
+        comicsList = userProviderWatch.getPurchasableComics();
+        break;
+      case GridContent.favoriteComics:
+        comicsList = userProviderWatch.getFavoriteComics();
+        break;
+    }
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
@@ -26,12 +40,12 @@ class ProductGrid extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) => ProductDetail(comic: comicsList[index])
-              ));
-            },
-            child: ComicCard(comic: comicsList[index])
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => ProductDetail(comic: comicsList[index])
+                ));
+              },
+              child: ComicCard(comic: comicsList[index])
           );
         },
         itemCount: comicsList.length,

@@ -60,18 +60,16 @@ class _LoginState extends State<Login> {
     }
     else {
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-              content: Text("Email o password errati!"),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("OK")
-                )
-              ]
-          )
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text("Email o password errati!"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("OK")
+            )
+          ]
+        )
       );
     }
   }
@@ -108,7 +106,7 @@ class _LoginState extends State<Login> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: TextButton.icon(
-                        icon: const Icon(Icons.lock_open, size: 16), // opzionale
+                        icon: const Icon(Icons.lock_open, size: 16), // Optional
                         label: const Text('Password dimenticata?'),
                         onPressed: () =>
                             Navigator.pushNamed(context, '/forgot_password'),
@@ -124,8 +122,10 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(7),
                         ),
                       ),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, '/'),
+                      onPressed: () {
+                        userProvider.loggedInUser = SampleData.user1; // To speed up tests
+                        Navigator.pushNamed(context, '/');
+                      },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -152,8 +152,7 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(7),
                         ),
                       ),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, '/'),
+                      onPressed: () => Navigator.pushNamed(context, '/'),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,

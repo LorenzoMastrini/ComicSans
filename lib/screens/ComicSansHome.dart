@@ -1,4 +1,5 @@
-import 'package:comicsans/components/ProductGrid.dart';
+import 'package:comicsans/components/ProductsGrid.dart';
+import 'package:comicsans/global_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/CategoriesGrid.dart';
 import 'package:comicsans/components/ComicSansSearchBar.dart';
@@ -53,7 +54,7 @@ class _ComicSansHomeState extends State<ComicSansHome> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            ComicSansSearchBar(),
+            ComicSansSearchBar(searchContent: SearchContent.purchasableComics),
             Padding(
               padding: const EdgeInsets.fromLTRB(5, 5, 0, 2),
               child: Align(
@@ -75,7 +76,7 @@ class _ComicSansHomeState extends State<ComicSansHome> {
                 ),
               ),
             ),
-            ProductGrid(),
+            ProductsGrid(gridContent: GridContent.purchasableComics),
           ],
         ),
       ),

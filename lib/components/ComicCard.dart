@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 
 class ComicCard extends StatefulWidget{
   final Comic comic;
-  const ComicCard ({super.key, required this.comic});
+  final bool showFavoriteButton;
+  const ComicCard ({super.key, required this.comic, this.showFavoriteButton = true});
 
   @override
   State<ComicCard> createState() => _ComicCardState();
@@ -90,7 +91,7 @@ class _ComicCardState extends State<ComicCard> {
                       ]
                     ),
                   ),
-                  IconButton(
+                  widget.showFavoriteButton? IconButton(
                     icon: isFavourite ? Icon(Icons.bookmark, color: Colors.white) : Icon(Icons.bookmark_border, color: Colors.white),
                     onPressed: () async {
                       if (isFavourite) {
@@ -119,6 +120,7 @@ class _ComicCardState extends State<ComicCard> {
                       }
                     },
                   )
+                  : Container()
                 ]
               ),
             ),

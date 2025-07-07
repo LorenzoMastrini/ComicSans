@@ -98,11 +98,11 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Comic> getSellings(){
+  List<Comic> getSales(){
     return _loggedInUser!.sellings;
   }
 
-  int getNumberOfSellings(){
+  int getNumberOfSales(){
     return _loggedInUser!.sellings.length;
   }
 

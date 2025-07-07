@@ -1,7 +1,8 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
+import 'package:comicsans/components/ComicSansSearchBar.dart';
+import 'package:comicsans/components/ProductsGrid.dart';
+import 'package:comicsans/global_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/components/FavouriteGrid.dart';
-import 'package:comicsans/components/ComicSansSearchBarFavourite.dart';
 
 
 
@@ -25,7 +26,7 @@ class ComicSansFavorite extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    child: MySearchBarFavourite()
+                    child: ComicSansSearchBar(searchContent: SearchContent.favoriteComics)
                   ),
                   SizedBox(width: 10),
                   SizedBox(
@@ -72,7 +73,7 @@ class ComicSansFavorite extends StatelessWidget {
                 ]
               ),
             ),
-            FavouriteGrid(),
+            ProductsGrid(gridContent: GridContent.favoriteComics),
           ],
         )
       ),

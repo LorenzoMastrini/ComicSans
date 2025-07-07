@@ -147,3 +147,6 @@ const List<String> availableLanguages = [
 enum Shipping { home, retirePoint }
 enum PaymentMethod { creditCard, payPal }
 enum Gender { maschio, femmina, altro }
+
+// To distinguish the two kinds of search bars (the one in the homepage and the one in the favorite page)
+enum SearchContent { purchasableComics, favoriteComics }
