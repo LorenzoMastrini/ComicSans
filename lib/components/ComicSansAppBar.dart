@@ -2,10 +2,13 @@ import 'package:comicsans/providers/sell_informations_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/comics_provider.dart';
+
 enum AppBarActionType {
   close, // "x" button to close the current process and return to main screen
   overflowMenu, // three-dot menu (not implemented)
   none, // No actions
+  reset
 }
 
 class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -15,6 +18,7 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppBarActionType actionType; // Tipo di azione principale
   final VoidCallback? onOverflowMenuPressed; // Callback per il menu a tre puntini
   final VoidCallback? onCloseButtonPressed;
+  final VoidCallback? onResetPressed;
   final Color backgroundColor;
   final Color iconColor;
 
@@ -28,6 +32,7 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onCloseButtonPressed,
     this.backgroundColor = Colors.transparent,
     this.iconColor = Colors.black,
+    this.onResetPressed
   });
 
   @override
@@ -65,7 +70,8 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
       );
-    } else if (actionType == AppBarActionType.overflowMenu) {
+    }
+    else if (actionType == AppBarActionType.overflowMenu) {
       actionsList.add(
         IconButton(
           icon: const Icon(Icons.more_vert),
@@ -79,8 +85,16 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       );
     }
-
-
+    else if (actionType == AppBarActionType.reset) {
+      actionsList.add(
+        TextButton(
+          child: Text("Reset", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18, decoration: TextDecoration.underline)),
+          onPressed: onResetPressed ?? () {
+            Provider.of<ComicsProvider>(context, listen: false).resetInformations();
+          },
+        )
+      );
+    }
 
     return AppBar(
       scrolledUnderElevation: 0,

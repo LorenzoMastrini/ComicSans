@@ -1,6 +1,7 @@
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/FiltersScreen.dart';
 import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/screens/IsbnSearchScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/screens/SearchResults.dart';
 import 'package:comicsans/comic.dart';
@@ -38,8 +39,6 @@ class ComicSansSearchBar extends StatelessWidget{
   }
 }
 
-
-
 class MySearchDelegate extends SearchDelegate {
   @override
   String get searchFieldLabel => 'Ricerca...';
@@ -52,7 +51,7 @@ class MySearchDelegate extends SearchDelegate {
         tooltip: 'Filtri',
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(
-            builder: (context) => FiltersScreen(),
+            builder: (context) => FiltersScreen(query: query),
           ));
         },
       ),
@@ -76,7 +75,7 @@ class MySearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     UserProvider userProvider = context.watch<UserProvider>();
-
+    List<Comic> purchasableComics = userProvider.getPurchasableComics();
     List<Comic> matchQuery = [];
     for (var c in context.watch<ComicsProvider>().allComics) {
       if (c.title.toLowerCase().contains(query.toLowerCase())) {
@@ -87,7 +86,7 @@ class MySearchDelegate extends SearchDelegate {
       close(context, query);
       Navigator.push(context, MaterialPageRoute(
         builder: (context) => SearchResults(
-          comicsResults: userProvider.getPurchasableComics(),
+          comicsResults: purchasableComics.where((comic) => matchQuery.contains(comic)).toList(),
           query: query,
         ),
       ));
@@ -113,7 +112,9 @@ class MySearchDelegate extends SearchDelegate {
             label: Text("Ricerca per ISBN"),
             selected: false,
             onSelected: (bool value) {
-              // TODO: logica ordinamento
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => IsbnSearchScreen(),
+              ));
             },
             avatar: Icon(Icons.search, size: 18),
             shape: RoundedRectangleBorder(

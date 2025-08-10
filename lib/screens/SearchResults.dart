@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/comic.dart';
 
+import '../components/ComicSansBottomBar.dart';
+import 'FiltersScreen.dart';
+import 'IsbnSearchScreen.dart';
+
 
 
 class SearchResults extends StatelessWidget {
@@ -26,11 +30,17 @@ class SearchResults extends StatelessWidget {
                     child: ComicSansSearchBar()
                   ),
                   SizedBox(width: 10),
-                  SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Icon(Icons.filter_list, color: Colors.black, size: 30)
-                  )
+                  IconButton(
+                    icon: const Icon(Icons.filter_list, size: 30),
+                    tooltip: 'Filtri',
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context){
+                            return FiltersScreen(query: query);
+                          }
+                      ));
+                    },
+                  ),
                 ]
               ),
             ),
@@ -40,6 +50,8 @@ class SearchResults extends StatelessWidget {
       );
     }
     return Scaffold(
+      /*bottomNavigationBar: ComicSansBottomBar(
+      ),*/
       body: SingleChildScrollView(
         child: Column(
           children:<Widget>[
@@ -56,6 +68,11 @@ class SearchResults extends StatelessWidget {
                     icon: const Icon(Icons.filter_list, size: 30),
                     tooltip: 'Filtri',
                     onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context){
+                          return FiltersScreen(query: query);
+                        }
+                      ));
                     },
                   ),
                 ]
@@ -85,8 +102,10 @@ class SearchResults extends StatelessWidget {
                         label: Text("Ricerca per ISBN"),
                         selected: false,
                         onSelected: (bool value) {
-                          // TODO: logica ordinamento
-                        },
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => IsbnSearchScreen(),
+                            ));
+                          },
                         avatar: Icon(Icons.search, size: 18),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),

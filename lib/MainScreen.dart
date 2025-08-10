@@ -15,8 +15,6 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-
-
 class _MainScreenState extends State<MainScreen> {
   int _navigationBarIndex = 0; //(0: Home, 1: Favorite, 2: Sell, 3: Inbox, 4: Profile)
   final List<Widget> _pageContents = <Widget>[
