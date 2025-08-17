@@ -56,7 +56,7 @@ class _IsbnSearchScreenState extends State<IsbnSearchScreen> {
                   String isbnInput = _isbnController.text;
                   int? isbnInt = int.tryParse(isbnInput);
 
-                  List<Comic> comicResult = providerRead.getComicByISBN(context.read<UserProvider>().loggedInUser, isbnInt!);
+                  List<Comic> comicResult = providerRead.getPurchasableComicByISBN(context.read<UserProvider>().loggedInUser, isbnInt!);
                   print(comicResult);
                   Navigator.push(context, MaterialPageRoute(
                       builder: (context) => SearchResults(comicsResults: comicResult, query: "")

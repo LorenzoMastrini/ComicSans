@@ -73,7 +73,25 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
     else if (actionType == AppBarActionType.overflowMenu) {
       actionsList.add(
-        IconButton(
+        PopupMenuButton(
+          itemBuilder: (context) {
+            return [
+              PopupMenuItem(
+                child: Text("Segnala"),
+                onTap: () {
+                  print("Opzione 1 selezionata");
+                },
+              ),
+              PopupMenuItem(
+                child: Text("Condividi"),
+                onTap: () {
+                  print("Opzione 2 selezionata");
+                },
+              )
+            ];
+          },
+        )
+        /*IconButton(
           icon: const Icon(Icons.more_vert),
           onPressed: onOverflowMenuPressed ?? () {
             // Implementa qui la logica di default per l'overflow menu
@@ -81,8 +99,26 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
             print("Overflow menu pressed (default action)");
             // Esempio: Scaffold.of(context).openEndDrawer(); // Se hai un endDrawer
             // O mostra un PopupMenuButton
+            PopupMenuButton(
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    child: Text("Segnala"),
+                    onTap: () {
+                      print("Opzione 1 selezionata");
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: Text("Condividi"),
+                    onTap: () {
+                      print("Opzione 2 selezionata");
+                    },
+                  )
+                ];
+              },
+            );
           },
-        ),
+        ),*/
       );
     }
     else if (actionType == AppBarActionType.reset) {

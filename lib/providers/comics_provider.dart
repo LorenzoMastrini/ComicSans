@@ -3,7 +3,10 @@ import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/SampleData.dart';
+import 'package:comicsans/providers//user_provider.dart';
 
+enum SortType { none, alphabetical, price }
+enum SortDirection {ascending, descending}
 
 class ComicsProvider extends ChangeNotifier {
   // List of all comics available (from all users)
@@ -27,6 +30,10 @@ class ComicsProvider extends ChangeNotifier {
 
   List<Comic> getPurchasableComics(User user) {
     return _allComics.where((comic) => comic.seller.id != user.id).toList();
+  }
+
+  List<Comic> getFavouriteComics(User user) {
+    return user.favouriteComics;
   }
 
   //FILTERS
@@ -217,7 +224,21 @@ class ComicsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Comic> filterComics(User? user, String? query){
+  SortType _sortType = SortType.none;
+  SortType get sortType => _sortType;
+  set sortType(SortType value) {
+    _sortType = value;
+    notifyListeners();
+  }
+
+  SortDirection _sortDirection = SortDirection.ascending;
+  SortDirection get sortDirection => _sortDirection;
+  set sortDirection(SortDirection value) {
+    _sortDirection = value;
+    notifyListeners();
+  }
+
+  List<Comic> filterPurchasableComics(User? user, String? query){
     return getPurchasableComics(user!).where((comic){
       if(query != null && !comic.title.toLowerCase().contains(query.toLowerCase())) return false;
 
@@ -273,11 +294,75 @@ class ComicsProvider extends ChangeNotifier {
     }).toList();
   }
 
-  List<Comic> getComicByISBN(User? user, int isbn){
+  List<Comic> filterFavouriteComics(User? user, String? query){
+    return getFavouriteComics(user!).where((comic){
+      if(query != null && !comic.title.toLowerCase().contains(query.toLowerCase())) return false;
+
+      //check price
+      if(_fromPrice != null && comic.price < _fromPrice!) return false;
+      if(_toPrice != null && comic.price > _toPrice!) return false;
+
+      //check authors
+      if(_authors.isNotEmpty && !_authors.any((author) => comic.authors.contains(author))) return false;
+
+      //check genre
+      if(_genre.isNotEmpty && !_genre.any((genre) => comic.genre.contains(genre))) return false;
+
+      //check conditions
+      if(_conditions.isNotEmpty && !_conditions.contains(comic.conditions)) return false;
+
+      //check language
+      if(_language != null && comic.language != _language) return false;
+
+      //check italian publisher
+      if(_italianPublisher != null && comic.italianPublisher != _italianPublisher) return false;
+
+      //check original publisher
+      if(_originalPublisher != null && comic.originalPublisher != _originalPublisher) return false;
+
+      //check series
+      if(_series != null && comic.series != _series) return false;
+
+      //check country
+      if(_country != null && comic.country != _country) return false;
+
+      //check publication year
+      if(_fromPublicationYear != null && comic.publicationYear! < _fromPublicationYear!) return false;
+      if(_toPublicationYear != null && comic.publicationYear! > _toPublicationYear!) return false;
+
+      //check edition year
+      if(_fromEditionYear != null && comic.editionYear! < _fromEditionYear!) return false;
+      if(_toEditionYear != null && comic.editionYear! > _toEditionYear!) return false;
+
+      //check variant
+      if(_variant != null && comic.variant != _variant) return false;
+
+      //check binding
+      if (_binding.isNotEmpty && !_binding.contains(comic.bookbinding)) return false;
+
+      //check graded
+      if(_graded != null && comic.graded != _graded) return false;
+
+      //check signed
+      if(_signed != null && comic.signed != _signed) return false;
+
+      return true;
+    }).toList();
+  }
+
+  List<Comic> getPurchasableComicByISBN(User? user, int isbn){
     return getPurchasableComics(user!).where((comic){
       return comic.isbn == isbn;
     }).toList();
   }
+
+  List<Comic> getFavouriteComicByISBN(User? user, int isbn){
+    return getFavouriteComics(user!).where((comic){
+      return comic.isbn == isbn;
+    }).toList();
+  }
+
+
 
   void resetInformations() {
     _fromPrice = null;

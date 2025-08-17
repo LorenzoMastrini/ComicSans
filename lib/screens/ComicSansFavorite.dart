@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:comicsans/components/FavouriteGrid.dart';
 import 'package:comicsans/components/ComicSansSearchBarFavourite.dart';
 
+import 'FiltersScreen.dart';
+import 'FitlersFavouriteScreen.dart';
+import 'IsbnFavouriteSearchScreen.dart';
+import 'IsbnSearchScreen.dart';
+
 
 
 class ComicSansFavorite extends StatelessWidget {
@@ -31,7 +36,18 @@ class ComicSansFavorite extends StatelessWidget {
                   SizedBox(
                     height: 50,
                     width: 50,
-                    child: Icon(Icons.filter_list, color: Colors.black, size: 30)
+                    child:
+                    IconButton(
+                      icon: const Icon(Icons.filter_list, size: 30),
+                      tooltip: 'Filtri',
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context){
+                              return FiltersFavouriteScreen(query: "");
+                            }
+                        ));
+                      },
+                    ),
                   )
                 ]
               ),
@@ -60,7 +76,9 @@ class ComicSansFavorite extends StatelessWidget {
                         label: Text("Ricerca per ISBN"),
                         selected: false,
                         onSelected: (bool value) {
-                          // TODO: logica ordinamento
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => IsbnFavouriteSearchScreen(),
+                          ));
                         },
                         avatar: Icon(Icons.search, size: 18),
                         shape: RoundedRectangleBorder(

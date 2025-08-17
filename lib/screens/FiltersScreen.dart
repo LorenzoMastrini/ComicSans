@@ -413,7 +413,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                       child: ComicSansButton (
                         text: 'Applica',
                         onPressed: () {
-                          List<Comic> filtered = providerRead.filterComics(context.read<UserProvider>().loggedInUser, widget.query);
+                          List<Comic> filtered = providerRead.filterPurchasableComics(context.read<UserProvider>().loggedInUser, widget.query);
 
                           Navigator.push(context, MaterialPageRoute(
                             builder: (context) => SearchResults(comicsResults: filtered, query: widget.query)

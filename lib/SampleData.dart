@@ -151,7 +151,7 @@ class SampleData{
       seller: user2,
       title: "Batman 5",
       description: "Batman 5",
-      price: 5,
+      price: 3,
       conditions: Conditions.daEdicola,
       otherImagesPath: ['assets/comic_cover/spiderman-cover.jpg', 'assets/comic_cover/spiderman-cover.jpg'],
       coverPath: 'assets/comic_cover/spiderman-cover.jpg',

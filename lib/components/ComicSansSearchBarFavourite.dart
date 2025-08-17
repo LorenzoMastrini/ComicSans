@@ -4,6 +4,9 @@ import 'package:comicsans/comic.dart';
 import 'package:comicsans/screens/SearchResults.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/FiltersScreen.dart';
+import '../screens/IsbnSearchScreen.dart';
+
 
 
 class MySearchBarFavourite extends StatelessWidget {
@@ -43,7 +46,17 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   List<Widget>? buildActions(BuildContext context) {
-    return null;
+    return [
+      IconButton(
+        icon: Icon(Icons.filter_list),
+        tooltip: 'Filtri',
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) => FiltersScreen(query: query),
+          ));
+        },
+      ),
+    ];
   }
 
   @override
@@ -66,7 +79,17 @@ class MySearchDelegate extends SearchDelegate {
         matchQuery.add(c);
       }
     }
-    return SearchResults(comicsResults: matchQuery, query: query);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      close(context, query);
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) => SearchResults(
+          comicsResults: matchQuery,
+          query: query,
+        ),
+      ));
+    });
+    return Container();
   }
 
   @override
@@ -88,7 +111,9 @@ class MySearchDelegate extends SearchDelegate {
             label: Text("Ricerca per ISBN"),
             selected: false,
             onSelected: (bool value) {
-              // TODO: logica ordinamento
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => IsbnSearchScreen(),
+              ));
             },
             avatar: Icon(Icons.search, size: 18),
             shape: RoundedRectangleBorder(
