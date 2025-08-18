@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:comicsans/category.dart';
 
+import '../screens/CategoryScreen.dart';
+
 class CategorySlot extends StatefulWidget{
   final Category category;
   const CategorySlot({super.key, required this.category});
@@ -15,16 +17,18 @@ class _CategorySlotState extends State<CategorySlot> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ElevatedButton(
-          onPressed: () {
-            // Azione del pulsante
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context){
+                  return CategoryScreen(categoryName: widget.category.name);
+                }
+            ));
           },
-          style: ElevatedButton.styleFrom(
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.all(25),
-            backgroundColor: Colors.blue, // colore sfondo
+          child: CircleAvatar(
+            radius: 40,
+            backgroundImage: widget.category.icon,
           ),
-          child: Icon(widget.category.icon),
         ),
         const SizedBox(height: 10),
         Text(
