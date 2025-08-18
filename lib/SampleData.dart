@@ -1,5 +1,4 @@
 import 'package:comicsans/Chat.dart';
-import 'package:comicsans/Message.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/review.dart';
@@ -182,12 +181,12 @@ class SampleData{
 
   // Simulated chat 1
   static Message c1_msg1 = Message(
-    isSentByMe: false,
+    sender: user2,
     text: "Ciao. A quanto lo vendi il numero 3 di Spider-Man?",
     date: DateTime(2025, 7, 2)
   );
   static Message c1_msg2 = Message(
-    isSentByMe: true,
+    sender: user1,
     text: "Salve. Il prezzo pubblicato è 3€ ma posso fare uno sconto",
     date: DateTime(2025, 7, 3)
   );
@@ -195,12 +194,12 @@ class SampleData{
 
   // Simulated chat 2
   static Message c2_msg1 = Message(
-    isSentByMe: false,
+    sender: user2,
     text:  "Ciao. Voglio tutto a 1€",
     date: DateTime(2025, 6, 29)
   );
   static Message c2_msg2 = Message(
-    isSentByMe: true,
+    sender: user1,
     text: "Ok va bene",
     date: DateTime(2025, 6, 30)
   );

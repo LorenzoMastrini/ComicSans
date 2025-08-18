@@ -4,21 +4,22 @@ import 'package:comicsans/providers/messages_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
+
 class ComicSansInbox extends StatelessWidget {
   const ComicSansInbox({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final MessagesProvider provider = context.watch<MessagesProvider>();
+    final MessagesProvider messagesProviderWatch = context.watch<MessagesProvider>();
 
     return Column(
       children: [
         ComicSansAppBar(title: 'Messaggi',),
         ListView.builder(
-          itemBuilder: (context, index) {
-            return _buildChatComponent(context: context, chat: provider.chats[index], itemIndex: index);
-          },
-          itemCount: provider.chats.length,
+          itemBuilder: (context, index) =>
+              _buildChatComponent(context: context, chat: messagesProviderWatch.chats[index], itemIndex: index),
+          itemCount: messagesProviderWatch.chats.length,
           shrinkWrap: true,
         ),
       ],
@@ -73,7 +74,7 @@ class ComicSansInbox extends StatelessWidget {
                       padding: EdgeInsets.only(top: 5),
                       child: chat.newMessages
                         ? Icon(Icons.circle, color: Colors.blue, size: 10)
-                        : Container(),
+                        : null,
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 35),

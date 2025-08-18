@@ -2,7 +2,9 @@ import 'package:comicsans/Components/CategorySlot.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/category.dart';
 
-class CategoriesGrid extends StatefulWidget{
+
+
+class CategoriesGrid extends StatelessWidget{
   final List<Category> categories = [
     Category(name: 'Italiano', icon: Icons.bookmark_border),
     Category(name: 'Americano', icon: Icons.bookmark_border),
@@ -12,11 +14,8 @@ class CategoriesGrid extends StatefulWidget{
     Category(name: 'ciao6', icon: Icons.bookmark_border),
   ];
 
-  @override
-  State<CategoriesGrid> createState() => _CategoriesGridState();
-}
+  CategoriesGrid({super.key});
 
-class _CategoriesGridState extends State<CategoriesGrid> {
   @override
   Widget build(BuildContext context){
     return Padding(
@@ -28,11 +27,11 @@ class _CategoriesGridState extends State<CategoriesGrid> {
           crossAxisSpacing: 8,
           childAspectRatio: 1,
         ),
-        itemBuilder: (context, index){
-          final category = widget.categories[index];
+        itemBuilder: (context, index) {
+          final category = categories[index];
           return CategorySlot(category: category);
         },
-        itemCount: widget.categories.length,
+        itemCount: categories.length,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,

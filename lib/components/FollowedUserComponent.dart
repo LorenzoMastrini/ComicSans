@@ -53,9 +53,7 @@ class _FollowedUserComponentState extends State<FollowedUserComponent> {
               width: 120,
               height: 25,
               child: ElevatedButton(
-                onPressed: () {
-                  toggleFavourite();
-                },
+                onPressed: () => toggleFavourite(),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(7),

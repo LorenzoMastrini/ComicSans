@@ -117,4 +117,10 @@ class UserProvider extends ChangeNotifier {
   int getNumberOfReviews(){
     return _loggedInUser!.reviews.length;
   }
+
+  void resetInformations() {
+    _loggedInUser = null;
+    _justPurchased = false;
+    notifyListeners();
+  }
 }
