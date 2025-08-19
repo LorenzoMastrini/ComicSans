@@ -4,12 +4,10 @@ import 'package:comicsans/category.dart';
 
 class CategoriesGrid extends StatefulWidget{
   final List<Category> categories = [
-    Category(name: 'Italiano', icon: Icons.bookmark_border),
-    Category(name: 'Americano', icon: Icons.bookmark_border),
-    Category(name: 'Giapponese', icon: Icons.bookmark_border),
-    Category(name: 'Francese', icon: Icons.bookmark_border),
-    Category(name: 'ciao5', icon: Icons.bookmark_border),
-    Category(name: 'ciao6', icon: Icons.bookmark_border),
+    Category(name: 'Italiano', icon: AssetImage('assets/categories_icons/italian_icon.jpg')),
+    Category(name: 'Americano', icon: AssetImage('assets/categories_icons/american_icon.jpg')),
+    Category(name: 'Giapponese', icon: AssetImage('assets/categories_icons/japanese_icon.jpg')),
+    Category(name: 'Francese', icon: AssetImage('assets/categories_icons/french_icon.jpg')),
   ];
 
   @override
@@ -23,9 +21,9 @@ class _CategoriesGridState extends State<CategoriesGrid> {
       padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          mainAxisSpacing: 2,
-          crossAxisSpacing: 8,
+          crossAxisCount: 2,
+          mainAxisSpacing: 0,
+          crossAxisSpacing: 40,
           childAspectRatio: 1,
         ),
         itemBuilder: (context, index){

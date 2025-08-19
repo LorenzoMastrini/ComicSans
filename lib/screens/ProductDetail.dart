@@ -411,6 +411,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     : 0.0),
                 ) ?? Colors.transparent,
                 iconColor: Colors.white,
+              actionType: AppBarActionType.overflowMenu,
             ),
           ),
         ],

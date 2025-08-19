@@ -63,6 +63,7 @@ flutter:
   assets:
     - assets/
     - assets/comic_cover/
+    - assets/categories_icons/
 
 
   # The following line ensures that the Material Icons font is

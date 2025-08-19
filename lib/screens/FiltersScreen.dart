@@ -1,3 +1,4 @@
+import 'package:comicsans/screens/SearchResults.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
@@ -11,13 +12,15 @@ import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:provider/provider.dart';
+import 'package:comicsans/providers/comics_provider.dart';
 import '../comic.dart';
 import '../providers/comics_provider.dart';
 import '../providers/user_provider.dart';
 
 class FiltersScreen extends StatefulWidget{
-  FiltersScreen({super.key});
+  final String query;
+  FiltersScreen({super.key, required this.query});
 
   @override
   State<FiltersScreen> createState() => _FiltersScreenState();
@@ -30,40 +33,42 @@ class _FiltersScreenState extends State<FiltersScreen> {
   late TextEditingController _originalPublisherController;
   late TextEditingController _collanaController;
   late TextEditingController _countryController;
-  late TextEditingController _editionYearController;
-  late TextEditingController _isbnController;
-  late TextEditingController _bookbindingController;
   late TextEditingController _fromPriceController;
   late TextEditingController _toPriceController;
-  late TextEditingController _fromPublicationYear;
-  late TextEditingController _toPublicationYear;
+  late TextEditingController _fromPublicationYearController;
+  late TextEditingController _toPublicationYearController;
+  late TextEditingController _fromEditionYearController;
+  late TextEditingController _toEditionYearController;
 
   @override
   void initState() {
     super.initState();
-    final provider = context.read<SellInfoProvider>();
+    final provider = context.read<ComicsProvider>();
 
-    if(provider.authors.isEmpty) {
-      provider.addAuthor('');
-    }
-    _authorControllers.addAll(
-        provider.authors.map((text) => TextEditingController(text: text)));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      /*if (provider.authors.isEmpty) {
+        provider.addAuthor('');
+      }*/
+
+      _authorControllers.addAll(
+          provider.authors.map((text) => TextEditingController(text: text)));
+
+      _syncAuthors(provider); // anche questa è sicura qui
+    });
 
     // Initializations of TextEditingController controllers
-    _fromPublicationYear = TextEditingController(text: '');
-    _toPublicationYear = TextEditingController(text: '');
     _languageController = TextEditingController(text: provider.language ?? '');
     _italianPublisherController = TextEditingController(text: provider.italianPublisher ?? '');
     _originalPublisherController = TextEditingController(text: provider.originalPublisher ?? '');
     _collanaController = TextEditingController(text: provider.series ?? '');
     _countryController = TextEditingController(text: provider.country ?? '');
-    _editionYearController = TextEditingController(text: provider.editionYear?.toString() ?? '');
-    _isbnController = TextEditingController(text: provider.isbn?.toString() ?? '');
-    _bookbindingController = TextEditingController(text: provider.bookbinding?.toString() ?? '');
-    _fromPriceController = TextEditingController(text: '');
-    _toPriceController = TextEditingController(text: '');
+    _fromPriceController = TextEditingController(text: provider.fromPrice?.toString() ?? '');
+    _toPriceController = TextEditingController(text: provider.toPrice?.toString() ?? '');
+    _fromPublicationYearController = TextEditingController(text: provider.fromPublicationYear?.toString() ?? '');
+    _toPublicationYearController = TextEditingController(text: provider.toPublicationYear?.toString() ?? '');
+    _fromEditionYearController = TextEditingController(text: provider.fromEditionYear?.toString() ?? '');
+    _toEditionYearController = TextEditingController(text: provider.toEditionYear?.toString() ?? '');
 
-    _syncAuthors(provider);
   }
 
   @override
@@ -76,16 +81,19 @@ class _FiltersScreenState extends State<FiltersScreen> {
     _originalPublisherController.dispose();
     _collanaController.dispose();
     _countryController.dispose();
-    _editionYearController.dispose();
-    _bookbindingController.dispose();
-    _isbnController.dispose();
+    _fromPriceController.dispose();
+    _toPriceController.dispose();
+    _fromPublicationYearController.dispose();
+    _toPublicationYearController.dispose();
+    _fromEditionYearController.dispose();
+    _toEditionYearController.dispose();
     super.dispose();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final provider = context.read<SellInfoProvider>();
+    final provider = context.read<ComicsProvider>();
     final authors = provider.authors;
 
     if (!listEquals(authors, _authorControllers.map((c) => c.text).toList())) {
@@ -99,13 +107,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   // Add new author
   void _addAuthor() {
-    context.read<SellInfoProvider>().addAuthor('');
+    context.read<ComicsProvider>().addAuthor('');
     setState(() => _authorControllers.add(TextEditingController()));
   }
 
   // Remove existing author
   void _removeAuthor(int index) {
-    final provider = context.read<SellInfoProvider>();
+    final provider = context.read<ComicsProvider>();
 
     if (index < 0 || index >= _authorControllers.length) return; // Check the index
 
@@ -126,12 +134,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
     const double btnBottomPadding = 15; // Bottom padding for the button
     const double btnHeight = 60;
     const double bottomSpaceForButton = btnHeight + btnBottomPadding * 5; // Space for the ListView to avoid content under the button
-    final providerWatch = context.watch<SellInfoProvider>();
-    final providerRead = context.read<SellInfoProvider>();
+    final providerWatch = context.watch<ComicsProvider>();
+    final providerRead = context.read<ComicsProvider>();
 
     return Scaffold(
-        appBar: const ComicSansAppBar(
+        appBar: ComicSansAppBar(
             showBackButton: true,
+            actionType: AppBarActionType.reset,
+            onResetPressed: _resetFilters
         ),
         body: Form(
             child: Padding(
@@ -141,7 +151,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   children: [
                     Positioned.fill(
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: bottomSpaceForButton),
+                        padding: const EdgeInsets.only(bottom: 100),
                         child: ListView(
                             children: [
                               Text(
@@ -159,6 +169,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                         title: 'Da',
                                         keyboardType: TextInputType.number,
                                         controller: _fromPriceController,
+                                        onChanged: (value) => providerRead.fromPrice = double.tryParse(value) ?? 0
                                       ),
                                     ),
                                     SizedBox(width: 20),
@@ -168,6 +179,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                           title: 'A',
                                           controller: _toPriceController,
                                           keyboardType: TextInputType.number,
+                                          onChanged: (value) => providerRead.toPrice = double.tryParse(value) ?? 0
                                       ),
                                     ),
                                   ]
@@ -221,10 +233,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                   title: 'Condizioni',
                                   options: Conditions.values.map((cond) => {
                                     'title': conditionsToString(cond),
-                                    'value': providerWatch.genre.contains(cond), // Provider initial state
+                                    'value': providerWatch.conditions.contains(cond), // Provider initial state
                                   }).toList(),
                                   onChanged: (title, value) =>
-                                      context.read<SellInfoProvider>().updateGenre(stringToGenre(title), value)
+                                      context.read<ComicsProvider>().updateConditions(stringToConditions(title), value)
                               ),
                               SizedBox(height: 20),
                         
@@ -236,7 +248,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                     'value': providerWatch.genre.contains(genre), // Provider initial state
                                   }).toList(),
                                   onChanged: (title, value) =>
-                                      context.read<SellInfoProvider>().updateGenre(stringToGenre(title), value)
+                                      context.read<ComicsProvider>().updateGenre(stringToGenre(title), value)
                               ),
                               SizedBox(height: 20),
                         
@@ -254,8 +266,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                       width: 150,
                                       child: ComicSansTextInput(
                                         title: 'Da',
-                                        controller: _fromPriceController,
+                                        controller: _fromPublicationYearController,
                                         keyboardType: TextInputType.number,
+                                        onChanged: (value) => providerRead.fromPublicationYear = int.tryParse(value) ?? 0
                                       ),
                                     ),
                                     SizedBox(width: 20),
@@ -263,8 +276,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                       width: 150,
                                       child: ComicSansTextInput(
                                         title: 'A',
-                                        controller: _toPriceController,
+                                        controller: _toPublicationYearController,
                                         keyboardType: TextInputType.number,
+                                        onChanged: (value) => providerRead.toPublicationYear = int.tryParse(value) ?? 0
                                       ),
                                     ),
                                   ]
@@ -286,7 +300,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                 hintText: 'Editore italiano',
                                 labelText: 'Inserisci l\'editore italiano del fumetto',
                                 controller: _italianPublisherController,
-                                onFieldSubmitted: (value) => providerRead.italianPublisher = value,
+                                onChanged: (value) => providerRead.italianPublisher = value,
                               ),
                               SizedBox(height: 20),
                         
@@ -296,7 +310,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                 hintText: 'Editore paese di origine',
                                 labelText: 'Inserisci l\'editore originale del fumetto',
                                 controller: _originalPublisherController,
-                                onFieldSubmitted: (value) => providerRead.originalPublisher = value,
+                                onChanged: (value) => providerRead.originalPublisher = value,
                               ),
                               SizedBox(height: 20),
                         
@@ -306,7 +320,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                 hintText: 'Collana',
                                 labelText: 'Inserisci la collana di appartenenza del fumetto',
                                 controller: _collanaController,
-                                onFieldSubmitted: (value) => providerRead.series = value,
+                                onChanged: (value) => providerRead.series = value,
                               ),
                               SizedBox(height: 20),
                         
@@ -316,7 +330,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                 hintText: 'Paese di origine',
                                 labelText: 'Inserisci il paese di origine del fumetto',
                                 controller: _countryController,
-                                onFieldSubmitted: (value) => providerRead.country = value,
+                                onChanged: (value) => providerRead.country = value,
                               ),
                               SizedBox(height: 20),
                         
@@ -333,10 +347,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                   title: 'Rilegatura',
                                   options: Binding.values.map((binding) => {
                                     'title': bindingToString(binding),
-                                    'value': providerWatch.genre.contains(binding), // Provider initial state
+                                    'value': providerWatch.binding.contains(binding), // Provider initial state
                                   }).toList(),
                                   onChanged: (title, value) =>
-                                      context.read<SellInfoProvider>().updateGenre(stringToGenre(title), value)
+                                      context.read<ComicsProvider>().updateBinding(stringToBinding(title), value)
                               ),
                               SizedBox(height: 20),
                         
@@ -357,14 +371,37 @@ class _FiltersScreenState extends State<FiltersScreen> {
                               SizedBox(height: 20),
                         
                               // Edition year
-                              ComicSansTextInput(
-                                title: 'Anno edizione',
-                                hintText: 'Anno edizione',
-                                labelText: 'Inserisci la data di uscita dell\'edizione',
-                                keyboardType: TextInputType.number,
-                                controller: _editionYearController,
-                                onFieldSubmitted: (value) => providerRead.editionYear = int.tryParse(value),
+                              Text(
+                                  'Anno edizione',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  )
                               ),
+                              Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 150,
+                                      child: ComicSansTextInput(
+                                        title: 'Da',
+                                        keyboardType: TextInputType.number,
+                                        controller: _fromEditionYearController,
+                                        onChanged: (value) => providerRead.fromEditionYear = int.tryParse(value) ?? 0
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                    SizedBox(
+                                      width: 150,
+                                      child: ComicSansTextInput(
+                                        title: 'A',
+                                        controller: _toEditionYearController,
+                                        keyboardType: TextInputType.number,
+                                        onChanged: (value) => providerRead.toEditionYear = int.tryParse(value) ?? 0
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                              SizedBox(height: 20),
                             ]
                         ),
                       ),
@@ -374,20 +411,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
                       left: 0,
                       right: 0,
                       child: ComicSansButton (
-                        text: 'Pubblica',
+                        text: 'Applica',
                         onPressed: () {
-                          final ComicsProvider comicsProvider = context.read<ComicsProvider>();
-                          final UserProvider userProvider = context.read<UserProvider>();
+                          List<Comic> filtered = providerRead.filterPurchasableComics(context.read<UserProvider>().loggedInUser, widget.query);
 
-                          // create Comic object with the informations from provider
-                          Comic newComic = providerRead.createComic();
-                          comicsProvider.addComic(newComic); // Add the comic to the global list
-                          userProvider.addComicToLibrary(newComic); // Add comic to the user's library
-                          providerRead.resetInformations(); // Reset the provider (clear fields)
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/', // return to the main screen
-                                (route) => false, // remove from the stack all the visited routes
-                          );
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => SearchResults(comicsResults: filtered, query: widget.query)
+                           ));
                         },
                       ),
                     )
@@ -398,7 +428,27 @@ class _FiltersScreenState extends State<FiltersScreen> {
     );
   }
 
-  void _syncAuthors(SellInfoProvider provider) {
+  void _resetFilters(){
+    final provider = context.read<ComicsProvider>();
+    provider.resetInformations();
+
+    setState(() {
+      for (var c in _authorControllers) c.clear();
+      _languageController.clear();
+      _italianPublisherController.clear();
+      _originalPublisherController.clear();
+      _collanaController.clear();
+      _countryController.clear();
+      _fromPriceController.clear();
+      _toPriceController.clear();
+      _fromPublicationYearController.clear();
+      _toPublicationYearController.clear();
+      _fromEditionYearController.clear();
+      _toEditionYearController.clear();
+    });
+  }
+
+  void _syncAuthors(ComicsProvider provider) {
     final authors = provider.authors;
 
     // If the number of controllers and authors differ, resync

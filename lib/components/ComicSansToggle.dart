@@ -17,8 +17,7 @@ class ComicSansToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: SwitchListTile(
+    return SwitchListTile(
         contentPadding: EdgeInsetsGeometry.symmetric(horizontal: 0),
         title: Text(
             title,
@@ -31,7 +30,6 @@ class ComicSansToggle extends StatelessWidget {
         onChanged: onChanged,
         activeColor: Theme.of(context).colorScheme.primary,
         // secondary: Icon(_isNotificationsEnabled ? Icons.notifications_active : Icons.notifications_off),
-      ),
     );
   }
 }

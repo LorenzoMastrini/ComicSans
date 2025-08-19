@@ -15,7 +15,7 @@ String conditionsToString(Conditions? condition) {
   }
 }
 
-Conditions? stringToConditions(String? stringCondition) {
+Conditions stringToConditions(String? stringCondition) {
   switch (stringCondition) {
     case "Da edicola":
       return Conditions.daEdicola;
@@ -26,7 +26,7 @@ Conditions? stringToConditions(String? stringCondition) {
     case "Molto usato":
       return Conditions.moltoUsato;
     default:
-      return null; // Error
+      return Conditions.daEdicola; // Error
   }
 }
 
@@ -118,7 +118,7 @@ String bindingToString(Binding? binding) {
   }
 }
 
-Binding? stringToBinding(String? bindingString) {
+Binding stringToBinding(String? bindingString) {
   switch (bindingString) {
     case "Brossurato":
       return Binding.brossurato;
@@ -129,7 +129,7 @@ Binding? stringToBinding(String? bindingString) {
     case "Altro":
       return Binding.altro;
     default:
-      return null; // Error
+      return Binding.altro; // Error
   }
 }
 

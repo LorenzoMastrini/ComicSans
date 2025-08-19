@@ -4,6 +4,15 @@ import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/comic.dart';
+import 'package:provider/provider.dart';
+
+import '../components/ComicSansBottomBar.dart';
+import '../components/ComicSansCheckbox.dart';
+import '../components/ComicSansRadioButtons.dart';
+import '../components/ComicSansToggle.dart';
+import '../providers/comics_provider.dart';
+import 'FiltersScreen.dart';
+import 'IsbnSearchScreen.dart';
 
 
 
@@ -15,6 +24,21 @@ class SearchResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final providerWatch = context.watch<ComicsProvider>();
+    final providerRead = context.read<ComicsProvider>();
+
+    List<Comic> sortedResults = List.from(comicsResults);
+
+    if (providerWatch.sortType == SortType.alphabetical) {
+      sortedResults.sort((a, b) => a.title.compareTo(b.title));
+    } else if (providerWatch.sortType == SortType.price) {
+      sortedResults.sort((a, b) => a.price.compareTo(b.price));
+    }
+
+    if (providerWatch.sortDirection == SortDirection.descending) {
+      sortedResults = sortedResults.reversed.toList();
+    }
+
     if (comicsResults.isEmpty) {
       return Scaffold(
         body: Column(
@@ -28,11 +52,17 @@ class SearchResults extends StatelessWidget {
                     child: ComicSansSearchBar(searchContent: searchContent,)
                   ),
                   SizedBox(width: 10),
-                  SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Icon(Icons.filter_list, color: Colors.black, size: 30)
-                  )
+                  IconButton(
+                    icon: const Icon(Icons.filter_list, size: 30),
+                    tooltip: 'Filtri',
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context){
+                            return FiltersScreen(query: query);
+                          }
+                      ));
+                    },
+                  ),
                 ]
               ),
             ),
@@ -42,6 +72,63 @@ class SearchResults extends StatelessWidget {
       );
     }
     return Scaffold(
+      /*bottomNavigationBar: ComicSansBottomBar(
+      ),*/
+      drawer: Drawer(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ComicSansToggle(
+                title: 'Prezzo',
+                value: providerWatch.sortType == SortType.price,
+                onChanged: (value) {
+                  providerRead.sortType = value ? SortType.price : SortType.none;
+                }
+              ),
+              ComicSansToggle(
+                title: 'Ordine alfabetico',
+                value: providerWatch.sortType == SortType.alphabetical,
+                onChanged: (value) {
+                  providerRead.sortType = value ? SortType.alphabetical : SortType.none;
+                }
+              ),
+              const Divider(),
+              RadioListTile<SortDirection>(
+                title: const Text("Crescente"),
+                value: SortDirection.ascending,
+                groupValue: providerWatch.sortDirection,
+                onChanged: (value) {
+                  providerRead.sortDirection = value!;
+                },
+              ),
+              RadioListTile<SortDirection>(
+                title: const Text("Decrescente"),
+                value: SortDirection.descending,
+                groupValue: providerWatch.sortDirection,
+                onChanged: (value) {
+                  providerRead.sortDirection = value!;
+                },
+              ),
+              /*ComicSansRadioButtons(
+                  title: '',
+                  options: Conditions.values.map((condition) => conditionsToString(condition)).toList(),
+                  controller: _conditionsController,
+                  onChanged: (newValue) {
+                    provider.conditions = stringToConditions(newValue);
+                    if (_conditionsController.text != (newValue ?? '')) {
+                      _conditionsController.text = newValue ?? '';
+                    }
+                    setState(() {});
+                  },
+                  selectedValue: conditionsToString(context.watch<SellInfoProvider>().conditions) // Selected value from provider
+              ),*/
+            ],
+          ),
+        )
+      ),
       body: SingleChildScrollView(
         child: Column(
           children:<Widget>[
@@ -58,6 +145,11 @@ class SearchResults extends StatelessWidget {
                     icon: const Icon(Icons.filter_list, size: 30),
                     tooltip: 'Filtri',
                     onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context){
+                          return FiltersScreen(query: query);
+                        }
+                      ));
                     },
                   ),
                 ]
@@ -72,23 +164,27 @@ class SearchResults extends StatelessWidget {
                     spacing: 10,
                     runSpacing: 10,
                     children: <Widget>[
-                      FilterChip(
-                        label: Text("Ordina per"),
-                        selected: false,
-                        onSelected: (bool value) {
-                          // TODO: logica ordinamento
-                        },
-                        avatar: Icon(Icons.swap_vert, size: 18),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        )
+                      Builder(
+                        builder: (context) => FilterChip(
+                          label: Text("Ordina per"),
+                          selected: false,
+                          onSelected: (bool value) {
+                            Scaffold.of(context).openDrawer();
+                          },
+                          avatar: Icon(Icons.swap_vert, size: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          )
+                        ),
                       ),
                       FilterChip(
                         label: Text("Ricerca per ISBN"),
                         selected: false,
                         onSelected: (bool value) {
-                          // TODO: logica ordinamento
-                        },
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => IsbnSearchScreen(),
+                            ));
+                          },
                         avatar: Icon(Icons.search, size: 18),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -113,11 +209,11 @@ class SearchResults extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context){
-                          return ProductDetail(comic: comicsResults[index]);
+                          return ProductDetail(comic: sortedResults[index]);
                         }
                       ));
                     },
-                    child: ComicCard(comic: comicsResults[index])
+                    child: ComicCard(comic: sortedResults[index])
                   );
                 },
                 itemCount: comicsResults.length,

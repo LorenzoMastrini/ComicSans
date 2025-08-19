@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 class ComicSansBottomBar extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onDestinationSelected; // Callback to notify the tap

@@ -1,6 +1,12 @@
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/FiltersScreen.dart';
+import 'package:comicsans/global_constants.dart';
+import 'package:comicsans/providers/user_provider.dart';
+import 'package:comicsans/screens/FiltersScreen.dart';
+import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/screens/IsbnSearchScreen.dart';
+import 'package:flutter/material.dart';
 import 'package:comicsans/screens/SearchResults.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/comic.dart';
@@ -40,8 +46,6 @@ class ComicSansSearchBar extends StatelessWidget {
   }
 }
 
-
-
 class MySearchDelegate extends SearchDelegate {
   final SearchContent searchContent;
 
@@ -58,7 +62,7 @@ class MySearchDelegate extends SearchDelegate {
         tooltip: 'Filtri',
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(
-            builder: (context) => FiltersScreen(),
+            builder: (context) => FiltersScreen(query: query),
           ));
         },
       ),
@@ -79,19 +83,8 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    UserProvider userProviderWatch = context.watch<UserProvider>();
-    final List<Comic> comicsList; // Grid elements varies based on the page in which it's displayed
-
-    // Based on the type of content to search (purchasable or favorite comics)
-    switch (searchContent) {
-      case SearchContent.purchasableComics:
-        comicsList = userProviderWatch.getPurchasableComics();
-        break;
-      case SearchContent.favoriteComics:
-        comicsList = userProviderWatch.getFavoriteComics();
-        break;
-    }
-
+    UserProvider userProvider = context.watch<UserProvider>();
+    List<Comic> purchasableComics = userProvider.getPurchasableComics();
     List<Comic> matchQuery = [];
     for (var c in comicsList) {
       if (c.title.toLowerCase().contains(query.toLowerCase())) {
@@ -102,7 +95,7 @@ class MySearchDelegate extends SearchDelegate {
       close(context, query);
       Navigator.push(context, MaterialPageRoute(
         builder: (context) => SearchResults(
-          comicsResults: comicsList,
+          comicsResults: purchasableComics.where((comic) => matchQuery.contains(comic)).toList(),
           query: query,
           searchContent: searchContent,
         ),
@@ -142,7 +135,9 @@ class MySearchDelegate extends SearchDelegate {
             label: Text("Ricerca per ISBN"),
             selected: false,
             onSelected: (bool value) {
-              // TODO: logica ordinamento
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => IsbnSearchScreen(),
+              ));
             },
             avatar: Icon(Icons.search, size: 18),
             shape: RoundedRectangleBorder(

@@ -98,7 +98,7 @@ class SampleData{
     graded: false,
     signed: false,
     editionYear: 2004,
-    isbn: 1234567890,
+    isbn: 3456789012,
   );
   comic2 = Comic(
     id: 2,
@@ -121,7 +121,7 @@ class SampleData{
     graded: false,
     signed: false,
     editionYear: 2004,
-    isbn: 1234567890,
+    isbn: 2345678901,
   );
   comic3 = Comic(
     id: 3,
@@ -151,7 +151,7 @@ class SampleData{
       seller: user2,
       title: "Batman 5",
       description: "Batman 5",
-      price: 5,
+      price: 3,
       conditions: Conditions.daEdicola,
       otherImagesPath: ['assets/comic_cover/spiderman-cover.jpg', 'assets/comic_cover/spiderman-cover.jpg'],
       coverPath: 'assets/comic_cover/spiderman-cover.jpg',
