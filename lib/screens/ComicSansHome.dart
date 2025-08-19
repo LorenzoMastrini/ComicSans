@@ -54,7 +54,7 @@ class _ComicSansHomeState extends State<ComicSansHome> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            ComicSansSearchBar(searchContent: SearchContent.purchasableComics),
+            ComicSansSearchBar(),
             Padding(
               padding: const EdgeInsets.fromLTRB(5, 5, 0, 2),
               child: Align(
@@ -76,7 +76,7 @@ class _ComicSansHomeState extends State<ComicSansHome> {
                 ),
               ),
             ),
-            ProductsGrid(gridContent: GridContent.purchasableComics),
+            ProductsGrid(),
           ],
         ),
       ),

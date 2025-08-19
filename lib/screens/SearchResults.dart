@@ -19,8 +19,7 @@ import 'IsbnSearchScreen.dart';
 class SearchResults extends StatelessWidget {
   final List<Comic> comicsResults;
   final String query;
-  final SearchContent searchContent;
-  const SearchResults({super.key, required this.comicsResults, required this.query, required this.searchContent});
+  const SearchResults({super.key, required this.comicsResults, required this.query});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +48,7 @@ class SearchResults extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    child: ComicSansSearchBar(searchContent: searchContent,)
+                    child: ComicSansSearchBar()
                   ),
                   SizedBox(width: 10),
                   IconButton(
@@ -138,7 +137,7 @@ class SearchResults extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    child: ComicSansSearchBar(searchContent: searchContent)
+                    child: ComicSansSearchBar()
                   ),
                   SizedBox(width: 10),
                   IconButton(

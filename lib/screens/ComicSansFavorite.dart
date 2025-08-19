@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:comicsans/components/FavouriteGrid.dart';
 import 'package:comicsans/components/ComicSansSearchBarFavourite.dart';
 import 'package:provider/provider.dart';
-import '../comic.dart';
-import '../components/ComicSansToggle.dart';
-import '../providers/comics_provider.dart';
-import '../providers/user_provider.dart';
+import 'package:comicsans/comic.dart';
+import 'package:comicsans/components/ComicSansToggle.dart';
+import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'FiltersScreen.dart';
 import 'FitlersFavouriteScreen.dart';
 import 'IsbnFavouriteSearchScreen.dart';
@@ -87,7 +87,7 @@ class ComicSansFavorite extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    child: ComicSansSearchBar(searchContent: SearchContent.favoriteComics)
+                    child: ComicSansSearchBarFavourite()
                   ),
                   SizedBox(width: 10),
                   SizedBox(
@@ -149,7 +149,7 @@ class ComicSansFavorite extends StatelessWidget {
                 ]
               ),
             ),
-            ProductsGrid(gridContent: GridContent.favoriteComics),
+            FavouriteGrid(),
           ],
         )
       ),

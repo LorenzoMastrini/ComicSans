@@ -15,9 +15,7 @@ import 'package:provider/provider.dart';
 
 
 class ComicSansSearchBar extends StatelessWidget {
-  final SearchContent searchContent;
-
-  const ComicSansSearchBar({super.key, required this.searchContent});
+  const ComicSansSearchBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +36,7 @@ class ComicSansSearchBar extends StatelessWidget {
         onTap:(){
           showSearch(
             context: context,
-            delegate: MySearchDelegate(searchContent: searchContent)
+            delegate: MySearchDelegate()
           );
         },
       ),
@@ -47,10 +45,6 @@ class ComicSansSearchBar extends StatelessWidget {
 }
 
 class MySearchDelegate extends SearchDelegate {
-  final SearchContent searchContent;
-
-  MySearchDelegate({required this.searchContent});
-
   @override
   String get searchFieldLabel => 'Ricerca...';
 
@@ -86,7 +80,7 @@ class MySearchDelegate extends SearchDelegate {
     UserProvider userProvider = context.watch<UserProvider>();
     List<Comic> purchasableComics = userProvider.getPurchasableComics();
     List<Comic> matchQuery = [];
-    for (var c in comicsList) {
+    for (var c in purchasableComics) {
       if (c.title.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(c);
       }
@@ -97,7 +91,6 @@ class MySearchDelegate extends SearchDelegate {
         builder: (context) => SearchResults(
           comicsResults: purchasableComics.where((comic) => matchQuery.contains(comic)).toList(),
           query: query,
-          searchContent: searchContent,
         ),
       ));
     });
@@ -107,17 +100,17 @@ class MySearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     UserProvider userProviderWatch = context.watch<UserProvider>();
-    final List<Comic> comicsList; // Grid elements varies based on the page in which it's displayed
+    final List<Comic> comicsList = userProviderWatch.getPurchasableComics(); // Grid elements varies based on the page in which it's displayed
 
     // Based on the type of content to search (purchasable or favorite comics)
-    switch (searchContent) {
+    /*switch (searchContent) {
       case SearchContent.purchasableComics:
         comicsList = userProviderWatch.getPurchasableComics();
         break;
       case SearchContent.favoriteComics:
         comicsList = userProviderWatch.getFavoriteComics();
         break;
-    }
+    }*/
 
     List<Comic> matchQuery = [];
     for(var c in comicsList){
@@ -154,7 +147,7 @@ class MySearchDelegate extends SearchDelegate {
                 onPressed: () {
                   close(context, query);
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => SearchResults(comicsResults: [comics], query: query, searchContent: searchContent)
+                    builder: (context) => SearchResults(comicsResults: [comics], query: query)
                   ));
                 },
                 style: TextButton.styleFrom(

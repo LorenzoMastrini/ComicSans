@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/screens/SearchResults.dart';
 import 'package:provider/provider.dart';
-
 import '../screens/FiltersScreen.dart';
 import '../screens/IsbnSearchScreen.dart';
 
 
 
-class MySearchBarFavourite extends StatelessWidget {
-  const MySearchBarFavourite({super.key});
+class ComicSansSearchBarFavourite extends StatelessWidget {
+  const ComicSansSearchBarFavourite({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +134,7 @@ class MySearchDelegate extends SearchDelegate {
                 },
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero, // <-- rettangolare
+                    borderRadius: BorderRadius.zero,
                   ),
                 ),
                 child: ListTile(

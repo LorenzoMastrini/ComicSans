@@ -11,23 +11,22 @@ import 'package:provider/provider.dart';
 enum GridContent { purchasableComics, favoriteComics }
 
 class ProductsGrid extends StatelessWidget {
-  final GridContent gridContent;
-
-  const ProductsGrid({super.key, required this.gridContent});
+  //final GridContent gridContent;
+  const ProductsGrid({super.key, /*required this.gridContent*/});
 
   @override
   Widget build(BuildContext context) {
     final userProviderWatch = context.watch<UserProvider>();
     final List<Comic> comicsList; // Grid elements varies based on the page in which it's displayed
 
-    switch (gridContent) {
+    /*switch (gridContent) {
       case GridContent.purchasableComics:
         comicsList = userProviderWatch.getPurchasableComics();
         break;
       case GridContent.favoriteComics:
         comicsList = userProviderWatch.getFavoriteComics();
         break;
-    }
+    }*/
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
@@ -42,13 +41,13 @@ class ProductsGrid extends StatelessWidget {
           return GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => ProductDetail(comic: comicsList[index])
+                    builder: (context) => ProductDetail(comic: userProviderWatch.getPurchasableComics()[index])
                 ));
               },
-              child: ComicCard(comic: comicsList[index])
+              child: ComicCard(comic: userProviderWatch.getPurchasableComics()[index])
           );
         },
-        itemCount: comicsList.length,
+        itemCount: userProviderWatch.getPurchasableComics().length,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
