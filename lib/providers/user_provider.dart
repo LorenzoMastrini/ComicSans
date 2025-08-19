@@ -21,6 +21,10 @@ class UserProvider extends ChangeNotifier {
 
   // favorite comics for the current user
   List<Comic> getFavoriteComics() {
+    if (_loggedInUser == null) {
+      return []; // If no user is logged in, don't return anything
+    }
+
     return _loggedInUser!.favouriteComics;
   }
 
@@ -59,6 +63,10 @@ class UserProvider extends ChangeNotifier {
   }
 
   List<Comic> getPurchasableComics() {
+    if (_loggedInUser == null) {
+      return []; // If no user is logged in, don't return anything
+    }
+
     return SampleData.allComics.where((comic) => comic.seller.id != _loggedInUser!.id).toList();
   }
 
@@ -93,7 +101,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  void updatePuchases(Comic newPurchase) {
+  void updatePurchases(Comic newPurchase) {
     _loggedInUser!.purchases.add(newPurchase);
     notifyListeners();
   }
@@ -115,6 +123,10 @@ class UserProvider extends ChangeNotifier {
   }
 
   int getNumberOfReviews(){
+    if (_loggedInUser == null) {
+      return 0; // If no user is logged in, don't return anything
+    }
+
     return _loggedInUser!.reviews.length;
   }
 

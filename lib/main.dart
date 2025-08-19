@@ -1,3 +1,4 @@
+import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/RouteGenerator.dart';
 import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/providers/messages_provider.dart';
@@ -16,6 +17,8 @@ void main() {
   runApp(const ComicSansApp());
 }
 
+
+
 class ComicSansApp extends StatefulWidget {
   const ComicSansApp({super.key});
 
@@ -24,7 +27,7 @@ class ComicSansApp extends StatefulWidget {
 }
 
 class _ComicSansAppState extends State<ComicSansApp> {
-  //final ThemeData mainTheme = ComicSansTheme.light();
+  final ThemeData mainTheme = ComicSansTheme.light();
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +40,15 @@ class _ComicSansAppState extends State<ComicSansApp> {
       ],
       child: SafeArea( // Avoids the UI elements of the OS
         child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: const SystemUiOverlayStyle(
-            statusBarColor: Colors.white,
+          value: SystemUiOverlayStyle(
+            statusBarColor: mainTheme.colorScheme.primary,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
           ),
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: "ComicSans",
-            //theme: mainTheme,
+            theme: mainTheme,
             initialRoute: '/login',
             onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
           ),

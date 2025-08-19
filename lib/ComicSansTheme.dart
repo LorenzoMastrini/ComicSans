@@ -53,7 +53,7 @@ class ComicSansTheme {
     return ThemeData(
       useMaterial3: true,
       //colorSchemeSeed: Colors.orange,
-      // colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+      //colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
       colorScheme: const ColorScheme.light().copyWith(
         primary: Colors.orange,
       ),

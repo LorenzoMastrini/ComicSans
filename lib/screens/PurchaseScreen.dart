@@ -294,7 +294,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                         );
                       }
                       if(canPurchase) {
-                        userProviderRead.updatePuchases(widget.comic);
+                        userProviderRead.updatePurchases(widget.comic);
                         widget.comic.seller.sellings.add(widget.comic);
                         widget.comic.seller.comicsSale.remove(widget.comic);
                         SampleData.allComics.remove(widget.comic);

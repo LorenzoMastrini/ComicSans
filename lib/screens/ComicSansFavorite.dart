@@ -149,7 +149,7 @@ class ComicSansFavorite extends StatelessWidget {
                 ]
               ),
             ),
-            FavouriteGrid(),
+            ProductsGrid(gridContent: GridContent.favoriteComics,),
           ],
         )
       ),
