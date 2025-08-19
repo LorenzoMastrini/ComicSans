@@ -7,6 +7,7 @@ class Comic {
   String title;
   String description;
   double price;
+  double? offerPrice;
   Conditions conditions;
   String? coverPath;
   List<String> otherImagesPath;
@@ -31,6 +32,7 @@ class Comic {
     required this.title,
     required this.description,
     required this.price,
+    this.offerPrice,
     required this.conditions,
     this.otherImagesPath = const [],
     this.coverPath,

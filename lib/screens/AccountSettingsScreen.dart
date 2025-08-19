@@ -1,5 +1,10 @@
+import 'package:comicsans/Chat.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
+import 'package:comicsans/providers/messages_provider.dart';
+import 'package:comicsans/providers/sell_informations_provider.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'ChangeShippingAddressScreen.dart';
 import 'CreditCardAccountSettingsScreen.dart';
 import 'ProfileDataScreen.dart';
@@ -104,7 +109,16 @@ class AccountSettingsScreen extends StatelessWidget{
                 ),
               ),
               child: TextButton(
-                onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false),
+                onPressed: () {
+                  final UserProvider userProviderRead = context.read<UserProvider>();
+                  final SellInfoProvider sellInformationsProviderRead = context.read<SellInfoProvider>();
+                  final MessagesProvider messagesProviderRead = context.read<MessagesProvider>();
+                  // Clear all providers data
+                  userProviderRead.resetInformations();
+                  sellInformationsProviderRead.resetInformations();
+                  messagesProviderRead.resetInformations();
+                  Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),

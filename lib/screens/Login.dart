@@ -56,6 +56,7 @@ class _LoginState extends State<Login> {
 
     if(matchedUser != null) {
       userProvider.loggedInUser = matchedUser;
+      context.read<MessagesProvider>().currentUser = matchedUser; // Set user also for messages provider
       Navigator.pushReplacementNamed(context, '/'); // Go to the main screen
     }
     else {
@@ -123,7 +124,8 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       onPressed: () {
-                        userProvider.loggedInUser = SampleData.user1; // To speed up tests
+                        userProvider.loggedInUser = SampleData.user1; // TODO: da rimuovere (per velocizzare il testing)
+                        context.read<MessagesProvider>().currentUser = SampleData.user1;
                         Navigator.pushNamed(context, '/');
                       },
                       child: Row(
