@@ -169,7 +169,7 @@ class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
                                           title: 'Da',
                                           keyboardType: TextInputType.number,
                                           controller: _fromPriceController,
-                                          onChanged: (value) => providerRead.fromPrice = double.tryParse(value) ?? 0
+                                          onChanged: (value) => providerRead.fromPrice = double.tryParse(value)
                                       ),
                                     ),
                                     SizedBox(width: 20),
@@ -179,7 +179,7 @@ class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
                                           title: 'A',
                                           controller: _toPriceController,
                                           keyboardType: TextInputType.number,
-                                          onChanged: (value) => providerRead.toPrice = double.tryParse(value) ?? 0
+                                          onChanged: (value) => providerRead.toPrice = double.tryParse(value)
                                       ),
                                     ),
                                   ]
@@ -268,7 +268,7 @@ class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
                                           title: 'Da',
                                           controller: _fromPublicationYearController,
                                           keyboardType: TextInputType.number,
-                                          onChanged: (value) => providerRead.fromPublicationYear = int.tryParse(value) ?? 0
+                                          onChanged: (value) => providerRead.fromPublicationYear = int.tryParse(value)
                                       ),
                                     ),
                                     SizedBox(width: 20),
@@ -278,7 +278,7 @@ class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
                                           title: 'A',
                                           controller: _toPublicationYearController,
                                           keyboardType: TextInputType.number,
-                                          onChanged: (value) => providerRead.toPublicationYear = int.tryParse(value) ?? 0
+                                          onChanged: (value) => providerRead.toPublicationYear = int.tryParse(value)
                                       ),
                                     ),
                                   ]
@@ -386,7 +386,7 @@ class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
                                           title: 'Da',
                                           keyboardType: TextInputType.number,
                                           controller: _fromEditionYearController,
-                                          onChanged: (value) => providerRead.fromEditionYear = int.tryParse(value) ?? 0
+                                          onChanged: (value) => providerRead.fromEditionYear = int.tryParse(value)
                                       ),
                                     ),
                                     SizedBox(width: 20),
@@ -396,7 +396,7 @@ class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
                                           title: 'A',
                                           controller: _toEditionYearController,
                                           keyboardType: TextInputType.number,
-                                          onChanged: (value) => providerRead.toEditionYear = int.tryParse(value) ?? 0
+                                          onChanged: (value) => providerRead.toEditionYear = int.tryParse(value)
                                       ),
                                     ),
                                   ]

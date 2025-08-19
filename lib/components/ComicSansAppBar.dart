@@ -126,7 +126,8 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
         TextButton(
           child: Text("Reset", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18, decoration: TextDecoration.underline)),
           onPressed: onResetPressed ?? () {
-            Provider.of<ComicsProvider>(context, listen: false).resetInformations();
+            //Provider.of<ComicsProvider>(context, listen: false).resetInformations();
+            context.read<ComicsProvider>().resetInformations();
           },
         )
       );

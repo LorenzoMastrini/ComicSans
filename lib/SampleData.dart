@@ -132,7 +132,7 @@ class SampleData{
     conditions: Conditions.buone,
     otherImagesPath: ['assets/comic_cover/spiderman-cover.jpg', 'assets/comic_cover/spiderman-cover.jpg'],
     coverPath: 'assets/comic_cover/spiderman-cover.jpg',
-    authors: ["Chip Zdarsky, Carmine Di Giandomenico"],
+    authors: ["Chip Zdarsky", "Carmine Di Giandomenico"],
     genre: [Genre.supereroi],
     publicationYear: 2010,
     language: "Italiano",

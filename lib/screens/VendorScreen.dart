@@ -12,8 +12,8 @@ import 'package:provider/provider.dart';
 
 class VendorScreen extends StatefulWidget{
   final User seller;
-
-  const VendorScreen({super.key, required this.seller});
+  final int initialTab;
+  const VendorScreen({super.key, required this.seller, this.initialTab = 0});
 
   @override
   State<VendorScreen> createState() => _VendorScreenState();
@@ -42,10 +42,11 @@ class _VendorScreenState extends State<VendorScreen> {
 
     return DefaultTabController(
       length: 3,
+      initialIndex: widget.initialTab,
       child: Scaffold(
         appBar: const PreferredSize(
             preferredSize: Size.fromHeight(40),
-            child: ComicSansAppBar(showBackButton: true)
+            child: ComicSansAppBar(showBackButton: true, actionType: AppBarActionType.overflowMenu)
         ),
         body: Column(
           children: <Widget>[

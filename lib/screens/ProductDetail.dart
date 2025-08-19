@@ -187,6 +187,12 @@ class _ProductDetailState extends State<ProductDetail> {
                                     decoration: TextDecoration.underline
                                   )
                                 ),
+                                onTap: () {
+                                  Navigator.push(
+                                      context, MaterialPageRoute(
+                                      builder: (context) => VendorScreen(seller: widget.comic.seller, initialTab: 1)
+                                  ));
+                                },
                               ),
                             ]
                           )
