@@ -5,26 +5,29 @@ import 'package:flutter/material.dart';
 class ComicSansButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
-  final bool enabled;
+  bool enabled;
+  final double height;
 
-  const ComicSansButton({
+  ComicSansButton({
     super.key,
     required this.text,
     required this.onPressed,
     this.enabled = true,
+    this.height = 60,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        minimumSize: const Size.fromHeight(60),
+        minimumSize: Size.fromHeight(height),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(7),
         ),
       ),
-      onPressed: onPressed,
+      onPressed: enabled ? onPressed : null,
       child: Text(text),
+
     );
   }
 }

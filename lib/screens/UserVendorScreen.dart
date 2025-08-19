@@ -93,10 +93,6 @@ class UserVendorScreen extends StatelessWidget{
                               builder: (context){
                                 return ProductDetailsModifyScreen(
                                   comic: userProviderWatch.getLibrary()[index],
-                                  onDelete:() {
-                                    Comic comicToDelete = userProviderWatch.getLibrary()[index];
-                                    userProviderRead.removeComicFromLibrary(comicToDelete);
-                                  }
                                 );
                               })
                             );

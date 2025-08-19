@@ -1,6 +1,9 @@
+import 'package:comicsans/Chat.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
+import 'package:comicsans/providers/messages_provider.dart';
 import 'package:comicsans/providers/user_provider.dart';
+import 'package:comicsans/screens/ChatScreen.dart';
 import 'package:comicsans/screens/ImagesDisplay.dart';
 import 'package:comicsans/screens/PurchaseScreen.dart';
 import 'package:comicsans/screens/VendorScreen.dart';
@@ -74,6 +77,9 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   Widget buildMainContent(BuildContext context) {
+    final userProviderWatch = context.read<UserProvider>();
+    final messagesProviderRead = context.read<MessagesProvider>();
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 0),
       child: SingleChildScrollView(
@@ -149,12 +155,9 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                       );
 
-                      if (confirm == true) {
-                        toggleFavourite();
-                      }
-                    }
-                    else {
-                      toggleFavourite(); // aggiunta diretta senza conferma
+                      confirm == true
+                        ? toggleFavourite()
+                        : toggleFavourite(); // aggiunta diretta senza conferma
                     }
                   },
                 )
@@ -210,7 +213,19 @@ class _ProductDetailState extends State<ProductDetail> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => ChatScreen(
+                          chat: Chat(
+                            [],
+                            userProviderWatch.loggedInUser!,
+                            widget.comic.seller,
+                            widget.comic,
+                            false
+                          )
+                        )
+                      ));
+                    },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(7),
@@ -324,7 +339,7 @@ class _ProductDetailState extends State<ProductDetail> {
           CustomScrollView(
             controller: _scrollController,
             slivers: [
-              // Carosello immagine
+              // Images carousel
               SliverToBoxAdapter(
                 child: GestureDetector(
                   onTap: () {
@@ -374,7 +389,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)
-                                      .withOpacity(current == entry.key ? 0.9 : 0.4),
+                                    .withOpacity(current == entry.key ? 0.9 : 0.4),
                                 ),
                               ),
                             );

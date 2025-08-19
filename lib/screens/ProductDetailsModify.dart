@@ -15,8 +15,7 @@ import 'package:comicsans/components/ComicSansButton.dart';
 
 class ProductDetailsModifyScreen extends StatefulWidget {
   final Comic comic;
-  final VoidCallback onDelete;
-  const ProductDetailsModifyScreen({super.key, required this.comic, required this.onDelete});
+  const ProductDetailsModifyScreen({super.key, required this.comic});
   @override
   State<ProductDetailsModifyScreen> createState() => _ProductDetailsModifyScreenState();
 }
@@ -113,14 +112,8 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                             onPressed: () {
                               userProviderRead.removeComicFromLibrary(widget.comic);
                               comicsProviderRead.removeComic(widget.comic);
-                              Navigator.of(context).pop(true);
-                              widget.onDelete();
-                              /*Navigator.pushReplacement(context, MaterialPageRoute(
-                                builder: (context){
-                                  return UserVendorScreen(user: widget.user);
-                                })
-                              );*/
-                              Navigator.pop(context, true);
+                              Navigator.pop(context, true); // Close the dialog
+                              Navigator.pop(context, true); // Close the product page (product doesn't exist anymore)
                             },
                           ),
                         ],
@@ -239,11 +232,8 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                     GestureDetector(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return ImagesDisplay(comicImages: widget.comic.otherImagesPath);
-                          }
-                        )
-                        );
+                          builder: (context) => ImagesDisplay(comicImages: widget.comic.otherImagesPath)
+                        ));
                       },
                       child: CarouselSlider(
                         carouselController: controller,
@@ -255,7 +245,8 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                             setState(() {
                               current = index;
                             });
-                          }),
+                          }
+                        ),
                         items: widget.comic.otherImagesPath.map((item) => SizedBox(
                           width: double.infinity,
                           height: double.infinity,
@@ -314,18 +305,6 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
             ),
           ),
 
-          // AppBar fissa sopra tutto
-          Positioned(
-            top: MediaQuery.of(context).padding.top,
-            left: 0,
-            right: 0,
-            child: ComicSansAppBar(
-              showBackButton: true,
-              backgroundColor: Color.lerp(Colors.transparent, Colors.black, opacity)!,
-              iconColor: Colors.white,
-            ),
-          ),
-
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 80),
@@ -340,12 +319,7 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
         child: ComicSansButton (
           text: 'Modifica',
           onPressed: () {
-            /*Navigator.push(context, MaterialPageRoute(
-                builder: (context){
-                  return PurchaseScreen(comic: widget.comic, user: widget.user);
-                }
-              )
-            );*/
+            // TODO: modifica prodotto
           },// Go to the main screen
         ),
       )
