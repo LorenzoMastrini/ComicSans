@@ -6,11 +6,13 @@ enum MessageType {normal, offer, acceptOffer}
 
 class Chat {
   List<Message> messages;
-  User interlocutor;
+  User buyer;
+  User seller;
   Comic product;
   bool newMessages = false;
+  double? currentOfferPrice;
 
-  Chat(this.messages, this.interlocutor, this.product, this.newMessages);
+  Chat(this.messages, this.buyer, this.seller, this.product, this.newMessages);
 }
 
 
@@ -20,13 +22,11 @@ class Message {
   final DateTime date;
   final User sender;
   final MessageType type;
-  final double? offerPrice;
 
   Message({
     required this.sender,
     this.text,
     required this.date,
     this.type = MessageType.normal,
-    this.offerPrice
   });
 }

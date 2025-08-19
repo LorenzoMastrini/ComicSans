@@ -1,11 +1,13 @@
 import 'package:comicsans/Chat.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:comicsans/components/MessageComponent.dart';
+import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/providers/messages_provider.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/OfferScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 
 
 // Must be StatefulWidget to use the custom app bar
@@ -17,6 +19,8 @@ class ChatScreen extends StatefulWidget {
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
+
+
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
@@ -56,6 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final MessagesProvider messagesProviderWatch = context.watch<MessagesProvider>();
+    final UserProvider userProviderWatch = context.watch<UserProvider>();
 
     return Scaffold(
       appBar: _buildAppBar(),
@@ -72,15 +77,18 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 110),
-            child: ComicSansButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => OfferScreen(chat: widget.chat)
-                ));
-              },
-              text: "Fai un'offerta",
-              height: 40,
-            ),
+            // Show the offer button only if the current user is the buyer
+            child: widget.chat.buyer == userProviderWatch.loggedInUser
+              ? ComicSansButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(
+                   builder: (context) => OfferScreen(chat: widget.chat)
+                  ));
+                },
+                text: "Fai un'offerta",
+                height: 40,
+              )
+              : null,
           ),
           _buildMessageInput()
         ]
@@ -139,7 +147,7 @@ class _ChatScreenState extends State<ChatScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.chat.interlocutor.username,
+                usernameToDisplay(context, widget.chat),
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 16,

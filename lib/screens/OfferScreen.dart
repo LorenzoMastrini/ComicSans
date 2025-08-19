@@ -1,6 +1,7 @@
 import 'package:comicsans/Chat.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:comicsans/components/ComicSansTextInput.dart';
+import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/providers/messages_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,20 +17,26 @@ class OfferScreen extends StatefulWidget {
   State<OfferScreen> createState() => _OfferScreenState();
 }
 
+
+
 class _OfferScreenState extends State<OfferScreen> {
   late TextEditingController _priceController;
 
   @override
   void initState() {
     super.initState();
-    double currentPrice = widget.chat.product.price;
-    // Initializations of TextEditingController
-    _priceController = TextEditingController(text: '');
+    _priceController = TextEditingController(text: ''); // Initialization
+  }
+
+  @override
+  void dispose() {
+    _priceController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final MessagesProvider provider = context.read<MessagesProvider>();
+    final MessagesProvider messageProvider = context.read<MessagesProvider>();
 
     return Scaffold(
       appBar: _buildAppBar(),
@@ -38,7 +45,6 @@ class _OfferScreenState extends State<OfferScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
@@ -64,11 +70,11 @@ class _OfferScreenState extends State<OfferScreen> {
                   ),
                 ]
               ),
-              Spacer(),
               ComicSansButton(
                 onPressed: () {
+                  final price = double.tryParse(_priceController.text) ?? 0;
                   // update the offerPrice of the product
-                  provider.offer(widget.chat, double.tryParse(_priceController.text) ?? 0);
+                  messageProvider.offer(widget.chat, price, false);
                   Navigator.pop(context);
                 },
                 text: "Fai un'offerta",
@@ -82,6 +88,9 @@ class _OfferScreenState extends State<OfferScreen> {
 
   // Custom app bar (same as ChatScreen)
   AppBar _buildAppBar() {
+    final product = widget.chat.product;
+    final username = usernameToDisplay(context, widget.chat);
+
     return AppBar(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,18 +100,13 @@ class _OfferScreenState extends State<OfferScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.chat.interlocutor.username,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal
-                )
+                username,
+                style: const TextStyle(fontSize: 16)
               ),
-              Divider(height: 4,),
+              Divider(height: 4),
               Text(
-                widget.chat.product.title,
-                style: TextStyle(
-                  color: Colors.black,
+                product.title,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500
                 )
@@ -110,9 +114,8 @@ class _OfferScreenState extends State<OfferScreen> {
             ]
           ),
           Text(
-            '${widget.chat.product.price.toString()}€',
-            style: TextStyle(
-              color: Colors.black,
+            '${product.price}€',
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500
             )

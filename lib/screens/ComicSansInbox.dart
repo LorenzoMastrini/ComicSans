@@ -1,5 +1,6 @@
 import 'package:comicsans/Chat.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
+import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/providers/messages_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,9 +17,10 @@ class ComicSansInbox extends StatelessWidget {
     return Column(
       children: [
         ComicSansAppBar(title: 'Messaggi',),
+        // List of chats of the current user
         ListView.builder(
           itemBuilder: (context, index) =>
-              _buildChatComponent(context: context, chat: messagesProviderWatch.chats[index], itemIndex: index),
+            _buildChatComponent(context: context, chat: messagesProviderWatch.chats[index], itemIndex: index),
           itemCount: messagesProviderWatch.chats.length,
           shrinkWrap: true,
         ),
@@ -27,7 +29,7 @@ class ComicSansInbox extends StatelessWidget {
   }
 
   Widget _buildChatComponent({required BuildContext context, required Chat chat, required int itemIndex}) {
-    bool isFirstItem = itemIndex == 0 ? true : false;
+    bool isFirstItem = itemIndex == 0 ? true : false; // Borders of the first element are different
 
     return GestureDetector(
       child: Container(
@@ -45,7 +47,7 @@ class ComicSansInbox extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(chat.interlocutor.username,
+                  Text(usernameToDisplay(context, chat),
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,

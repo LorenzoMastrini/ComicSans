@@ -124,7 +124,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       onPressed: () {
-                        userProvider.loggedInUser = SampleData.user1; // To speed up tests (TO BE REMOVED)
+                        userProvider.loggedInUser = SampleData.user1; // TODO: da rimuovere (per velocizzare il testing)
                         context.read<MessagesProvider>().currentUser = SampleData.user1;
                         Navigator.pushNamed(context, '/');
                       },

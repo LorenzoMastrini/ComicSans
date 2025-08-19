@@ -36,7 +36,6 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
   Widget build(BuildContext context) {
     final UserProvider userProviderRead = context.read<UserProvider>();
     final UserProvider userProviderWatch = context.watch<UserProvider>();
-    final ComicsProvider comicsProviderRead = context.read<ComicsProvider>();
 
     return Scaffold(
       appBar: ComicSansAppBar(
@@ -60,7 +59,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(7),
                           child: Image.asset(
-                            '/assets/comic_cover/spiderman-cover.jpg',
+                            widget.comic.coverPath!,
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -70,10 +69,10 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(widget.comic.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-                        Text("Prezzo: ${widget.comic.price}€", style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+                        Text("Prezzo: ${widget.comic.offerPrice ?? widget.comic.price}€", style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
                         Text("Spedizione: ", style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
                         SizedBox(height: 150),
-                        Text("Totale: ${widget.comic.price}€", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                        Text("Totale: ${widget.comic.offerPrice ?? widget.comic.price}€", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
                       ],
                     )
                   ],

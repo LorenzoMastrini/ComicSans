@@ -1,3 +1,8 @@
+import 'package:comicsans/Chat.dart';
+import 'package:comicsans/providers/messages_provider.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
 enum Conditions { daEdicola, ottime, buone, moltoUsato }
 
 String conditionsToString(Conditions? condition) {
@@ -150,3 +155,9 @@ enum Gender { maschio, femmina, altro }
 
 // To distinguish the two kinds of search bars (the one in the homepage and the one in the favorite page)
 enum SearchContent { purchasableComics, favoriteComics }
+
+String usernameToDisplay(BuildContext context, Chat chat) {
+  return chat.seller.username == context.read<MessagesProvider>().currentUser!.username
+      ? chat.buyer.username
+      : chat.seller.username;
+}
