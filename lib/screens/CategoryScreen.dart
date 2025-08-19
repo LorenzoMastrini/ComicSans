@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:comicsans/category.dart';
 import 'package:provider/provider.dart';
-
 import '../Components/ComicSansAppBar.dart';
 import '../comic.dart';
 import '../components/ComicCard.dart';
