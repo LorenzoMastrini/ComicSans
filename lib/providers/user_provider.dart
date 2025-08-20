@@ -1,7 +1,8 @@
-import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/comic.dart';
+import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -12,6 +13,7 @@ class UserProvider extends ChangeNotifier {
       _loggedInUser = user;
       notifyListeners();
   }
+
   bool _justPurchased = false;
   bool get justPurchased => _justPurchased;
   void setJustPurchased (bool value) {
@@ -62,12 +64,14 @@ class UserProvider extends ChangeNotifier {
     _loggedInUser!.followedUsers.remove(user);
   }
 
-  List<Comic> getPurchasableComics() {
+  List<Comic> getPurchasableComics(BuildContext context) {
+    final comicsProvider = context.watch<ComicsProvider>();
+
     if (_loggedInUser == null) {
       return []; // If no user is logged in, don't return anything
     }
 
-    return SampleData.allComics.where((comic) => comic.seller.id != _loggedInUser!.id).toList();
+    return comicsProvider.allComics.where((comic) => comic.seller.id != _loggedInUser!.id).toList();
   }
 
   // Library handling

@@ -78,7 +78,7 @@ class MySearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     UserProvider userProvider = context.watch<UserProvider>();
-    List<Comic> purchasableComics = userProvider.getPurchasableComics();
+    List<Comic> purchasableComics = userProvider.getPurchasableComics(context);
     List<Comic> matchQuery = [];
     for (var c in purchasableComics) {
       if (c.title.toLowerCase().contains(query.toLowerCase())) {
@@ -100,7 +100,7 @@ class MySearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     UserProvider userProviderWatch = context.watch<UserProvider>();
-    final List<Comic> comicsList = userProviderWatch.getPurchasableComics(); // Grid elements varies based on the page in which it's displayed
+    final List<Comic> comicsList = userProviderWatch.getPurchasableComics(context); // Grid elements varies based on the page in which it's displayed
 
     // Based on the type of content to search (purchasable or favorite comics)
     /*switch (searchContent) {

@@ -1,7 +1,7 @@
+import 'dart:io';
 import 'package:comicsans/Chat.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
-import 'package:comicsans/providers/messages_provider.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ChatScreen.dart';
 import 'package:comicsans/screens/ImagesDisplay.dart';
@@ -28,7 +28,7 @@ class ProductDetail extends StatefulWidget {
 
 
 class _ProductDetailState extends State<ProductDetail> {
-  late bool isFavourite;
+  bool isFavourite = false;
   int current = 0;
   late ScrollController _scrollController;
   Color iconColor = Colors.white;
@@ -78,7 +78,6 @@ class _ProductDetailState extends State<ProductDetail> {
 
   Widget buildMainContent(BuildContext context) {
     final userProviderWatch = context.read<UserProvider>();
-    final messagesProviderRead = context.read<MessagesProvider>();
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 0),
@@ -332,6 +331,8 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> allImages = [widget.comic.coverPath] + widget.comic.otherImagesPath; // Cover image + other images
+
     return Scaffold(
       body: Stack(
         children: [
@@ -344,7 +345,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => ImagesDisplay(comicImages: widget.comic.otherImagesPath),
+                      builder: (context) => ImagesDisplay(comicImages: allImages),
                     ));
                   },
                   child: Stack(
@@ -355,22 +356,30 @@ class _ProductDetailState extends State<ProductDetail> {
                           height: 550,
                           viewportFraction: 1.0,
                           enlargeCenterPage: false,
+                          enableInfiniteScroll: allImages.length > 1,
+                          scrollPhysics: allImages.length > 1
+                            ? const PageScrollPhysics()
+                            : const NeverScrollableScrollPhysics(),
                           onPageChanged: (index, reason) {
                             setState(() {
                               current = index;
                             });
                           },
                         ),
-                        items: widget.comic.otherImagesPath.map((item) => SizedBox(
+                        items: allImages.map((item) => SizedBox(
                           width: double.infinity,
                           height: double.infinity,
-                          child: Image.asset(
-                            item,
-                            fit: BoxFit.contain,
-                            width: double.infinity,
-                            height: double.infinity,
-                            alignment: Alignment.center,
-                          ),
+                          child: item.startsWith('assets/')
+                            ? Image.asset(
+                              item,
+                              fit: BoxFit.fill
+                            )
+                            : item.isEmpty || !File(item).existsSync()
+                              ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
+                              : Image.file(
+                                File(item),
+                                fit: BoxFit.fill,
+                              ),
                         )).toList(),
                       ),
                       Positioned(
@@ -379,7 +388,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         right: 0,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: widget.comic.otherImagesPath.asMap().entries.map((entry) {
+                          children: allImages.asMap().entries.map((entry) {
                             return GestureDetector(
                               onTap: () => controller.animateToPage(entry.key),
                               child: Container(

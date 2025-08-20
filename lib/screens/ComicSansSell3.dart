@@ -329,7 +329,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                       final UserProvider userProvider = context.read<UserProvider>();
 
                       // create Comic object with the informations from provider
-                      Comic newComic = providerRead.createComic();
+                      Comic newComic = providerRead.createComic(context);
                       comicsProvider.addComic(newComic); // Add the comic to the global list
                       userProvider.addComicToLibrary(newComic); // Add comic to the user's library
                       providerRead.resetInformations(); // Reset the provider (clear fields)

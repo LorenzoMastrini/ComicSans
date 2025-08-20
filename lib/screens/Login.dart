@@ -27,9 +27,10 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final comicsProvider = Provider.of<ComicsProvider>(context, listen: false);
-      final messagesProvider = Provider.of<MessagesProvider>(context, listen: false);
+      final comicsProvider = context.read<ComicsProvider>();
+      final messagesProvider = context.read<MessagesProvider>();
       comicsProvider.initComicsList(SampleData.allComics); // Initialize provider with sample data
       messagesProvider.initChatsList(SampleData.allChats);
     });
@@ -188,8 +189,7 @@ class _LoginState extends State<Login> {
                             style: TextStyle(fontSize: 14, color: Colors.grey),
                           ),
                           TextButton(
-                            onPressed: () =>
-                                Navigator.pushNamed(context, '/registration'),
+                            onPressed: () => Navigator.pushNamed(context, '/registration'),
                             child: const Text(
                               'Registrati',
                               style: TextStyle(

@@ -1,7 +1,10 @@
 import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
+import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -46,12 +49,13 @@ class SellInfoProvider extends ChangeNotifier {
   }
 
   // Other photos
-  final List<String> _otherImagesPaths = [];
-  List<String?> get otherImagesPaths => List.unmodifiable(_otherImagesPaths);
+  List<String> _otherImagesPaths = [];
+  List<String> get otherImagesPaths => List.unmodifiable(_otherImagesPaths);
 
   void addPhoto(String newImagePath) {
     if (_otherImagesPaths.length >= 9) return;
     _otherImagesPaths.add(newImagePath);
+    print(_otherImagesPaths);
     notifyListeners();
   }
 
@@ -228,16 +232,16 @@ class SellInfoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Comic createComic () {
+  Comic createComic(BuildContext context) {
     return Comic (
-      id: 5, // Sample data arrive at 4
-      seller: SampleData.user2,
+      id: context.read<ComicsProvider>().allComics.length,
+      seller: context.read<UserProvider>().loggedInUser!,
       title: _title!,
       description: _description!,
       price: _price!,
       conditions: _conditions!,
       coverPath: _coverPath!,
-      otherImagesPath: _otherImagesPaths,
+      otherImagesPath: List<String>.from(_otherImagesPaths),
       authors: authors,
       genre: genre,
       publicationYear: _publicationYear,

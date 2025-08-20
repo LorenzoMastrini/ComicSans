@@ -22,7 +22,7 @@ class ProductsGrid extends StatelessWidget {
 
     switch (gridContent) {
       case GridContent.purchasableComics:
-        comicsList = userProviderWatch.getPurchasableComics();
+        comicsList = userProviderWatch.getPurchasableComics(context);
         break;
       case GridContent.favoriteComics:
         comicsList = userProviderWatch.getFavoriteComics();

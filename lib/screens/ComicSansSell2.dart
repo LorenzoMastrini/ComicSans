@@ -17,9 +17,9 @@ class ComicSansSell2 extends StatefulWidget {
 
 
 class _ComicSansSell2State extends State<ComicSansSell2> {
-
   // Grid of (maximum) 9 photos
-  Widget photoGrid(SellInfoProvider provider) {
+  Widget photoGrid(BuildContext context) {
+    final provider = context.watch<SellInfoProvider>();
     final otherImagesPaths = provider.otherImagesPaths;
     bool canAddImages = otherImagesPaths.length < 9;
     int totalImageCount = otherImagesPaths.length + (canAddImages ? 1 : 0);
@@ -68,7 +68,7 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
 
   @override
   Widget build(BuildContext context) {
-    final sellInfoProvider = Provider.of<SellInfoProvider>(context);
+    final sellInfoProviderRead = context.read<SellInfoProvider>();
     const double btnBottomPadding = 15; // Bottom padding for the button
     const double btnHeight = 60;
     const double bottomSpaceForButton = btnHeight + btnBottomPadding * 5; // Space for the ListView to avoid content under the button
@@ -95,8 +95,8 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                         Text(
                           'Foto di copertina',
                           style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
@@ -112,9 +112,9 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(50, 10, 50, 0),
                       child: ImageUploadSlot(
-                        initialImagePath: sellInfoProvider.coverPath,
+                        initialImagePath: sellInfoProviderRead.coverPath,
                         onImageSelected: (String? selectedImagePath) {
-                          sellInfoProvider.updateCover(selectedImagePath);
+                          sellInfoProviderRead.updateCover(selectedImagePath);
                         }
                       ),
                     ),
@@ -129,8 +129,7 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                     ),
 
                     const SizedBox(height: 30),
-                    photoGrid(sellInfoProvider),
-
+                    photoGrid(context),
                     const SizedBox(height: bottomSpaceForButton), // Prevent the content to be covered by the ElevatedButton
                   ]
                 ),
@@ -148,6 +147,13 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                       ),
                     ),
                     onPressed: () {
+                      if (sellInfoProviderRead.coverPath == null || sellInfoProviderRead.coverPath!.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Devi caricare una foto di copertina per continuare.')),
+                        );
+                        return; // Blocca la navigazione
+                      }
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => const ComicSansSell3())

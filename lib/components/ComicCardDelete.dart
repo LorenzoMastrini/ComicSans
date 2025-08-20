@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -30,10 +32,17 @@ class _ComicCardDeleteState extends State<ComicCardDelete> {
             height: MediaQuery.of(context).size.height,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(7),
-              child: Image.asset(
-                widget.comic.coverPath ?? "assets/no_image.png",
-                fit: BoxFit.fill,
-              ),
+              child: widget.comic.coverPath!.startsWith('assets/')
+                ? Image.asset(
+                  widget.comic.coverPath!,
+                  fit: BoxFit.fill
+                )
+                : widget.comic.coverPath!.isEmpty || !File(widget.comic.coverPath!).existsSync()
+                  ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
+                  : Image.file(
+                    File(widget.comic.coverPath!),
+                    fit: BoxFit.fill,
+                  ),
             ),
           ),
           Positioned(
