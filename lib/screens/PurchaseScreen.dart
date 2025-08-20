@@ -5,6 +5,7 @@ import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ChangeCreditCardScreen.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/screens/ChangeShippingAddressScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/comic.dart';
 import 'package:provider/provider.dart';
@@ -137,7 +138,11 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap:(){},
+                        onTap:(){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => ChangeShippingAddressScreen()
+                          ));
+                        },
                         child: Text("Cambia", style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, decoration: TextDecoration.underline))
                       ),
                     ]

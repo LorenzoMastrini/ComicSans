@@ -320,7 +320,7 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
           text: 'Modifica',
           onPressed: () {
             // TODO: modifica prodotto
-          },// Go to the main screen
+          },
         ),
       )
     );
