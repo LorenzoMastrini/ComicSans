@@ -1,3 +1,4 @@
+import 'package:comicsans/comic.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ImageUploadSlot.dart';
 import 'package:comicsans/providers/sell_informations_provider.dart';
@@ -8,7 +9,9 @@ import 'package:provider/provider.dart';
 
 
 class ComicSansSell2 extends StatefulWidget {
-  const ComicSansSell2({super.key});
+  Comic? comicToModify;
+
+  ComicSansSell2({super.key, this.comicToModify});
 
   @override
   State<ComicSansSell2> createState() => _ComicSansSell2State();
@@ -17,6 +20,21 @@ class ComicSansSell2 extends StatefulWidget {
 
 
 class _ComicSansSell2State extends State<ComicSansSell2> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<SellInfoProvider>();
+
+      if (widget.comicToModify != null) {
+        final comic = widget.comicToModify!;
+
+        provider.updateCover(comic.coverPath);
+        provider.setOtherImages(comic.otherImagesPath);
+      }
+    });
+  }
+
   // Grid of (maximum) 9 photos
   Widget photoGrid(BuildContext context) {
     final provider = context.watch<SellInfoProvider>();
@@ -156,7 +174,7 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const ComicSansSell3())
+                        MaterialPageRoute(builder: (_) => ComicSansSell3(comicToModify: widget.comicToModify))
                       );
                     },
                     child: const Text('Continua')

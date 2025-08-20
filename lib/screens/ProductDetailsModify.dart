@@ -4,6 +4,7 @@ import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/providers/user_provider.dart';
+import 'package:comicsans/screens/ComicSansSell1.dart';
 import 'package:comicsans/screens/ImagesDisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
@@ -330,7 +331,15 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
         child: ComicSansButton (
           text: 'Modifica',
           onPressed: () {
-            // TODO: modifica prodotto
+            // Use same approach as selling an item
+            showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              useSafeArea: true,
+              builder: (BuildContext modalContext) {
+                return ComicSansSell1(comicToModify: widget.comic,);
+              },
+            );
           },// Go to the main screen
         ),
       )

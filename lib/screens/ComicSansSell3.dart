@@ -17,7 +17,9 @@ import 'package:provider/provider.dart';
 
 
 class ComicSansSell3 extends StatefulWidget {
-  const ComicSansSell3({super.key});
+  Comic? comicToModify;
+
+  ComicSansSell3({super.key, this.comicToModify});
 
   @override
   State<ComicSansSell3> createState() => _ComicSansSell3State();

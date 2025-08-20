@@ -1,3 +1,4 @@
+import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansTextInput.dart';
@@ -10,11 +11,15 @@ import 'package:provider/provider.dart';
 
 
 class ComicSansSell1 extends StatefulWidget {
-  const ComicSansSell1({super.key});
+  Comic? comicToModify;
+
+  ComicSansSell1({super.key, this.comicToModify});
 
   @override
   State<ComicSansSell1> createState() => _ComicSansSell1State();
 }
+
+
 
 class _ComicSansSell1State extends State<ComicSansSell1> {
   final _formKey = GlobalKey<FormState>(); // For form validation
@@ -26,13 +31,17 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
   @override
   void initState() {
     super.initState();
-    final provider = context.read<SellInfoProvider>();
 
-    // Initializations of TextEditingController controllers
-    _titleController = TextEditingController(text: provider.title ?? '');
-    _descriptionController = TextEditingController(text: provider.description ?? '');
-    _priceController = TextEditingController(text: provider.price?.toString() ?? '');
-    _conditionsController = TextEditingController(text: provider.conditions?.toString() ?? '');
+    _titleController = TextEditingController(text: widget.comicToModify?.title ?? '');
+    _descriptionController = TextEditingController(text: widget.comicToModify?.description ?? '');
+    _priceController = TextEditingController(text: widget.comicToModify?.price.toString() ?? '');
+    _conditionsController = TextEditingController(text: widget.comicToModify != null ? conditionsToString(widget.comicToModify?.conditions) : '');
+
+    final provider = context.read<SellInfoProvider>();
+    provider.title = widget.comicToModify?.title;
+    provider.description = widget.comicToModify?.description;
+    provider.price = widget.comicToModify?.price;
+    provider.conditions = widget.comicToModify?.conditions;
   }
 
   @override
@@ -43,7 +52,6 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
     _conditionsController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +179,7 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                     if (_formKey.currentState!.validate()) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ComicSansSell2()),
+                        MaterialPageRoute(builder: (context) => ComicSansSell2(comicToModify: widget.comicToModify)),
                       );
                     }
                   },

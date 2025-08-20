@@ -1,4 +1,4 @@
-import 'dart:io'; // Import "File" class
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -122,11 +122,16 @@ class _ImageUploadSlotState extends State<ImageUploadSlot> {
             if (_uploadedImagePath != null)
               ClipRRect( // To apply borderRadius to the image also
                 borderRadius: widget.borderRadius, // Leggermente meno del bordo del container
-                child: Image.file(
-                  File(_uploadedImagePath!), // Image is loaded (!= null)
-                  width: widget.width,
-                  height: widget.height,
-                  fit: BoxFit.cover, // Cover the area maintaining the aspect ratio
+                child: _uploadedImagePath!.startsWith('assets/')
+                    ? Image.asset(
+                    _uploadedImagePath!,
+                    fit: BoxFit.fill
+                )
+                    : _uploadedImagePath!.isEmpty || !File(_uploadedImagePath!).existsSync()
+                    ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
+                    : Image.file(
+                  File(_uploadedImagePath!),
+                  fit: BoxFit.fill,
                 ),
               ),
 

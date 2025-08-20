@@ -49,15 +49,15 @@ class _ComicCardState extends State<ComicCard> {
             height: MediaQuery.of(context).size.height,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(7),
-              child: widget.comic.coverPath!.startsWith('assets/')
+              child: widget.comic.coverPath.startsWith('assets/')
                 ? Image.asset(
-                  widget.comic.coverPath!,
+                  widget.comic.coverPath,
                   fit: BoxFit.fill
                 )
-                : widget.comic.coverPath!.isEmpty || !File(widget.comic.coverPath!).existsSync()
+                : widget.comic.coverPath.isEmpty || !File(widget.comic.coverPath).existsSync()
                 ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
                 : Image.file(
-                  File(widget.comic.coverPath!),
+                  File(widget.comic.coverPath),
                   fit: BoxFit.fill,
                 ),
             ),

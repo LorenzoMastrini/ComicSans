@@ -51,6 +51,10 @@ class SellInfoProvider extends ChangeNotifier {
   // Other photos
   List<String> _otherImagesPaths = [];
   List<String> get otherImagesPaths => List.unmodifiable(_otherImagesPaths);
+  void setOtherImages(List<String> existingImagesPaths) {
+    _otherImagesPaths = List.from(existingImagesPaths);
+    notifyListeners();
+  }
 
   void addPhoto(String newImagePath) {
     if (_otherImagesPaths.length >= 9) return;
