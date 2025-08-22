@@ -5,18 +5,31 @@ import 'package:comicsans/components/ComicSansSearchBarFavourite.dart';
 import 'package:provider/provider.dart';
 import 'package:comicsans/components/ComicSansToggle.dart';
 import 'package:comicsans/providers/comics_provider.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'FiltersFavouriteScreen.dart';
 import 'IsbnFavouriteSearchScreen.dart';
 
 
 
-class ComicSansFavorite extends StatelessWidget {
+class ComicSansFavorite extends StatefulWidget {
   const ComicSansFavorite({super.key});
+
+  @override
+  State<ComicSansFavorite> createState() => _ComicSansFavoriteState();
+}
+
+class _ComicSansFavoriteState extends State<ComicSansFavorite> {
+  String query = "";
 
   @override
   Widget build(BuildContext context) {
     final providerWatch = context.watch<ComicsProvider>();
     final providerRead = context.read<ComicsProvider>();
+    final userProviderWatch = context.watch<UserProvider>();
+
+    final List<Comic> results = query.isEmpty
+        ? userProviderWatch.getFavoriteComics()
+        : userProviderWatch.getFavoriteComics().where((comic) => comic.title.toLowerCase().contains(query.toLowerCase())).toList();
 
     return Scaffold(
       drawer: Drawer(
@@ -75,7 +88,13 @@ class ComicSansFavorite extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    child: ComicSansSearchBarFavourite()
+                    child: ComicSansSearchBarFavourite(
+                      onQueryChanged: (value) {
+                        setState(() {
+                          query = value;
+                        });
+                      },
+                    )
                   ),
                   SizedBox(width: 10),
                   SizedBox(
@@ -87,7 +106,9 @@ class ComicSansFavorite extends StatelessWidget {
                       tooltip: 'Filtri',
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => FiltersFavouriteScreen(query: "")
+                            builder: (context){
+                              return FiltersFavouriteScreen(query: query);
+                            }
                         ));
                       },
                     ),
@@ -147,7 +168,9 @@ class ComicSansFavorite extends StatelessWidget {
                 ]
               ),
             ),
-            ProductsGrid(gridContent: GridContent.favoriteComics,),
+            results.isEmpty
+              ? Text("Nessun fumetto trovato", style: TextStyle(fontSize: 14))
+              : FavouriteGrid(comics: results),
           ],
         )
       ),

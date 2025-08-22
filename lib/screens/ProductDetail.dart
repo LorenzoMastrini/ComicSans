@@ -155,7 +155,10 @@ class _ProductDetailState extends State<ProductDetail> {
                     } else {
                       toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
                     }
-                  },
+                    else {
+                      toggleFavourite();
+                    }
+                  }
                 )
               ]
             ),
@@ -438,7 +441,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     ? (_scrollController.offset / 200).clamp(0.0, 1.0)
                     : 0.0),
                 ) ?? Colors.transparent,
-                iconColor: Colors.white,
+              iconColor: Colors.white,
               actionType: AppBarActionType.overflowMenu,
             ),
           ),

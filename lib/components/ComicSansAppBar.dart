@@ -75,6 +75,7 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
     else if (actionType == AppBarActionType.overflowMenu) {
       actionsList.add(
         PopupMenuButton(
+          icon: Icon(Icons.more_vert, color: iconColor),
           itemBuilder: (context) {
             return [
               PopupMenuItem(

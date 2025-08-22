@@ -20,17 +20,16 @@ class VendorScreen extends StatefulWidget{
 }
 
 
-
 class _VendorScreenState extends State<VendorScreen> {
   late bool isFollowed;
 
-  void _toggleFollow() {
-    final userProviderRead = context.watch<UserProvider>();
+  void toggleFollow() {
+    final userProviderRead = context.read<UserProvider>();
 
     setState(() {
       isFollowed
-        ? userProviderRead.removeFollowing(widget.seller)
-        : userProviderRead.addFollowing(widget.seller);
+          ? userProviderRead.removeFollowing(widget.seller)
+          : userProviderRead.addFollowing(widget.seller);
       isFollowed = !isFollowed;
     });
   }
@@ -71,7 +70,7 @@ class _VendorScreenState extends State<VendorScreen> {
                         height: 25,
                         child: ElevatedButton(
                           onPressed: () {
-                            _toggleFollow();
+                            toggleFollow();
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
