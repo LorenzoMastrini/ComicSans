@@ -34,9 +34,7 @@ class _IsbnFavouriteSearchScreenState extends State<IsbnFavouriteSearchScreen> {
     final providerRead = context.read<ComicsProvider>();
 
     return Scaffold(
-        appBar: ComicSansAppBar(
-          showBackButton: true,
-        ),
+        appBar: ComicSansAppBar(showBackButton: true),
         body: Form(
           child: Padding(
               padding: const EdgeInsets.fromLTRB(18, 0, 18, 5),

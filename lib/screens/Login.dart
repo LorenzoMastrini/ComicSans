@@ -57,7 +57,6 @@ class _LoginState extends State<Login> {
 
     if(matchedUser != null) {
       userProvider.loggedInUser = matchedUser;
-      context.read<MessagesProvider>().currentUser = matchedUser; // Set user also for messages provider
       Navigator.pushReplacementNamed(context, '/'); // Go to the main screen
     }
     else {
@@ -83,6 +82,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: ComicSansAppBar(
         title: 'Benvenuto!',
+        style: TextStyle(fontWeight: FontWeight.bold,),
         showBackButton: false,
       ),
       body: SingleChildScrollView(
@@ -107,9 +107,14 @@ class _LoginState extends State<Login> {
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: TextButton.icon(
-                        icon: const Icon(Icons.lock_open, size: 16), // Optional
-                        label: const Text('Password dimenticata?'),
+                      child: TextButton(
+                        child: const Text(
+                          'Password dimenticata?',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF669bbc),
+                          ),
+                        ),
                         onPressed: () =>
                             Navigator.pushNamed(context, '/forgot_password'),
                       ),
@@ -126,7 +131,6 @@ class _LoginState extends State<Login> {
                       ),
                       onPressed: () {
                         userProvider.loggedInUser = SampleData.user1; // TODO: da rimuovere (per velocizzare il testing)
-                        context.read<MessagesProvider>().currentUser = SampleData.user1;
                         Navigator.pushNamed(context, '/');
                       },
                       child: Row(
@@ -186,16 +190,18 @@ class _LoginState extends State<Login> {
                         children: [
                           const Text(
                             'Non hai un account? ',
-                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF669bbc),
+                            ),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pushNamed(context, '/registration'),
                             child: const Text(
                               'Registrati',
                               style: TextStyle(
-                                decoration: TextDecoration.underline,
                                 fontSize: 14,
-                                color: Colors.grey,
+                                color: Color(0xFF669bbc),
                               ),
                             ),
                           ),

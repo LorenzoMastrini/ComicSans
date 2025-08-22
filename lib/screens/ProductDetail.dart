@@ -28,7 +28,6 @@ class ProductDetail extends StatefulWidget {
 
 
 class _ProductDetailState extends State<ProductDetail> {
-  bool isFavourite = false;
   int current = 0;
   late ScrollController _scrollController;
   Color iconColor = Colors.white;
@@ -39,11 +38,6 @@ class _ProductDetailState extends State<ProductDetail> {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_handleScroll);
-    // Safe access to provider without triggering rebuilds
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      setState(() {isFavourite = userProvider.checkFavorite(widget.comic);});
-    });
   }
 
   @override
@@ -56,8 +50,8 @@ class _ProductDetailState extends State<ProductDetail> {
   void _handleScroll() {
     double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
     double newOpacity = (offset / 200).clamp(0.0, 1.0);
-
     Color newColor = newOpacity > 0.5 ? Colors.black : Colors.white;
+
     if (newColor != iconColor && mounted) {
       setState(() {
         iconColor = newColor;
@@ -65,19 +59,17 @@ class _ProductDetailState extends State<ProductDetail> {
     }
   }
 
-  void toggleFavourite(){
-    final userProviderRead = context.read<UserProvider>();
-
-    setState(() {
-      isFavourite
-        ? userProviderRead.removeFavorite(widget.comic)
-        : userProviderRead.addFavorite(widget.comic);
-      isFavourite = !isFavourite;
-    });
+  void toggleFavourite(bool isFavorite, UserProvider provider){
+    if(isFavorite) {
+      provider.removeFavorite(widget.comic);
+    } else {
+      provider.addFavorite(widget.comic);
+    }
   }
 
   Widget buildMainContent(BuildContext context) {
-    final userProviderWatch = context.read<UserProvider>();
+    final userProvider = context.watch<UserProvider>();
+    final isFavorite = userProvider.isFavorite(widget.comic);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 0),
@@ -134,9 +126,11 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
                 IconButton(
                   iconSize: 40,
-                  icon: isFavourite ? Icon(Icons.bookmark, color: Colors.black) : Icon(Icons.bookmark_border, color: Colors.black),
+                  icon: isFavorite
+                    ? Icon(Icons.bookmark, color: Colors.black)
+                    : Icon(Icons.bookmark_border, color: Colors.black),
                   onPressed: () async {
-                    if (isFavourite) {
+                    if(isFavorite) {
                       bool? confirm = await showDialog<bool>(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -154,14 +148,17 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                       );
 
-                      confirm == true
-                        ? toggleFavourite()
-                        : toggleFavourite(); // aggiunta diretta senza conferma
+                      if (confirm == true) {
+                        toggleFavourite(isFavorite, userProvider);
+                      }
+                    } else {
+                      toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
                     }
                   },
                 )
-              ]),
-            Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),
+              ]
+            ),
+            const Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),
             Row(
               children: <Widget>[
                 Expanded(
@@ -217,7 +214,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         builder: (context) => ChatScreen(
                           chat: Chat(
                             [],
-                            userProviderWatch.loggedInUser!,
+                            userProvider.loggedInUser!,
                             widget.comic.seller,
                             widget.comic,
                             false
@@ -459,7 +456,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text('Acquista', style: TextStyle(color: Colors.black)),
+            child: const Text('Acquista'),
           ),
         ),
       );

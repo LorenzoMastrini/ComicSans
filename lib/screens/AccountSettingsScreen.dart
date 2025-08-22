@@ -112,11 +112,9 @@ class AccountSettingsScreen extends StatelessWidget{
                 onPressed: () {
                   final UserProvider userProviderRead = context.read<UserProvider>();
                   final SellInfoProvider sellInformationsProviderRead = context.read<SellInfoProvider>();
-                  final MessagesProvider messagesProviderRead = context.read<MessagesProvider>();
                   // Clear all providers data
                   userProviderRead.resetInformations();
                   sellInformationsProviderRead.resetInformations();
-                  messagesProviderRead.resetInformations();
                   Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
                 },
                 style: TextButton.styleFrom(

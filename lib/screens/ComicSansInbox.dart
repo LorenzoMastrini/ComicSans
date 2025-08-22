@@ -20,8 +20,8 @@ class ComicSansInbox extends StatelessWidget {
         // List of chats of the current user
         ListView.builder(
           itemBuilder: (context, index) =>
-            _buildChatComponent(context: context, chat: messagesProviderWatch.chats[index], itemIndex: index),
-          itemCount: messagesProviderWatch.chats.length,
+            _buildChatComponent(context: context, chat: messagesProviderWatch.getUserChats(context)[index], itemIndex: index),
+          itemCount: messagesProviderWatch.getUserChats(context).length,
           shrinkWrap: true,
         ),
       ],

@@ -44,7 +44,7 @@ class UserProvider extends ChangeNotifier {
     return _loggedInUser!.favouriteComics.length;
   }
 
-  bool checkFavorite(Comic comic){
+  bool isFavorite(Comic comic){
     return _loggedInUser!.favouriteComics.contains(comic) ? true : false;
   }
 

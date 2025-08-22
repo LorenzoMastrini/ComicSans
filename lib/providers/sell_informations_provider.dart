@@ -262,4 +262,30 @@ class SellInfoProvider extends ChangeNotifier {
       isbn: _isbn,
     );
   }
+
+  void updateComic(BuildContext context, Comic comic) {
+      comic.title = _title!;
+      comic.description = _description!;
+      comic.conditions = _conditions!;
+      comic.coverPath = _coverPath!;
+      comic.title = _title!;
+      comic.otherImagesPath = List<String>.from(_otherImagesPaths);
+      comic.authors = _authors;
+      comic.genre = genre;
+      comic.publicationYear = _publicationYear;
+      comic.editionYear = _editionYear;
+      comic.language = _language;
+      comic.italianPublisher = _italianPublisher;
+      comic.originalPublisher = _originalPublisher;
+      comic.series = _series;
+      comic.country = _country;
+      comic.variant = _variant;
+      comic.graded = _graded;
+      comic.signed = _signed;
+      comic.bookbinding = _bookbinding;
+      comic.isbn = _isbn;
+
+      context.read<ComicsProvider>().replaceComic(comic);
+      notifyListeners();
+  }
 }

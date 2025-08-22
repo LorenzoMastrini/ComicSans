@@ -32,8 +32,11 @@ class _CategorySlotState extends State<CategorySlot> {
         ),
         const SizedBox(height: 10),
         Text(
-            widget.category.name,
-            style: const TextStyle(fontWeight: FontWeight.w500)
+          widget.category.name,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+            fontWeight: FontWeight.w500
+          )
         ),
       ],
     );

@@ -14,8 +14,6 @@ class ComicsProvider extends ChangeNotifier {
   List<Comic> get allComics => List.unmodifiable(_allComics);
 
   bool _initDone = false;
-  List<Comic> get initDone => (_allComics);
-
   void initComicsList(List<Comic> comics) {
     if(!_initDone) {
       _allComics.addAll(comics);
@@ -390,6 +388,11 @@ class ComicsProvider extends ChangeNotifier {
     _signed = null;
     _binding = [];
     _conditions = [];
+    notifyListeners();
+  }
+
+  void replaceComic(Comic comic) {
+    _allComics[_allComics.indexOf(comic)] = comic;
     notifyListeners();
   }
 }

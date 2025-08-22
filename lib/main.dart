@@ -43,7 +43,7 @@ class _ComicSansAppState extends State<ComicSansApp> {
       child: SafeArea( // Avoids the UI elements of the OS
         child: AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle(
-            statusBarColor: mainTheme.colorScheme.primary,
+            statusBarColor: Color(0xFFc11720),
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
           ),

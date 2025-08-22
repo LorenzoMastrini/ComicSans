@@ -6,61 +6,63 @@ import 'package:google_fonts/google_fonts.dart';
 class ComicSansTheme {
   // tema chiaro
   static TextTheme lightTextTheme = TextTheme(
-    headlineSmall: GoogleFonts.lato(
-        fontSize: 25,
-        fontWeight: FontWeight.w400,
-        color: Colors.black
+      headlineSmall: GoogleFonts.poppins(
+      fontSize: 25,
+      fontWeight: FontWeight.w400,
+      color: Colors.black
     ),
-    titleLarge: GoogleFonts.lato(
-        fontSize: 22,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 0.15,
-        color: Colors.black
+    titleLarge: GoogleFonts.poppins(
+      fontSize: 22,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.15,
+      color: Color(0xFF0C3148)
     ),
-    titleMedium: GoogleFonts.lato(
-        fontSize: 18,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0.15,
-        color: Colors.black
+    titleMedium: GoogleFonts.poppins(
+      fontSize: 18,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.15,
+      color: Color(0xFF0C3148)
     ),
-    titleSmall: GoogleFonts.lato(
-        fontSize: 15,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 0.1,
-        color: Colors.black
+    titleSmall: GoogleFonts.poppins(
+      fontSize: 15,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.1,
+      color: Colors.black
     ),
-    bodyLarge: GoogleFonts.lato(
-        fontSize: 17,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0.5,
-        color: Colors.black
+    bodyLarge: GoogleFonts.poppins(
+      fontSize: 17,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.5,
+      color: Colors.black
     ),
-    bodyMedium: GoogleFonts.lato(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0.25,
-        color: Colors.black
+    bodyMedium: GoogleFonts.poppins(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.25,
+      color: Colors.black
     ),
-    labelLarge: GoogleFonts.lato(
-        fontSize: 15,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 1.25,
-        color: Colors.black
+    labelLarge: GoogleFonts.poppins(
+      fontSize: 15,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 1.25,
+      color: Colors.black
     ),
   );
 
   static ThemeData light() {
     return ThemeData(
+      scaffoldBackgroundColor: Color(0xFFf9f4ed),
       useMaterial3: true,
       //colorSchemeSeed: Colors.orange,
       //colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
       colorScheme: const ColorScheme.light().copyWith(
-        primary: Colors.orange,
+        primary: Color(0xFFc11720),
+        secondary: Color(0xFF0C3148),
+        tertiary: Color(0xFFf9f4ed),
       ),
       appBarTheme: AppBarTheme(
         foregroundColor: Colors.black,
         backgroundColor: Colors.transparent,
-        // Color(0x12FFFFFF),
         surfaceTintColor: Colors.transparent,
         titleTextStyle: lightTextTheme.titleMedium,
         elevation: 0,
@@ -70,12 +72,15 @@ class ComicSansTheme {
         backgroundColor: Colors.black,
       ),
       navigationBarTheme: NavigationBarThemeData(
+        labelTextStyle: MaterialStateProperty.all(
+          TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Color(0xFFc11720),
+          ),
+        ),
+        backgroundColor: Color(0xFFf9f4ed),
         indicatorColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        indicatorShape: RoundedRectangleBorder(
-            side: const BorderSide(color: Colors.orange, width: 3),
-            borderRadius: BorderRadius.circular(16)
-        ),
       ),
       /*
       tabBarTheme: const TabBarTheme(

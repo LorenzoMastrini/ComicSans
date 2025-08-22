@@ -136,7 +136,7 @@ class _MessageComponentState extends State<MessageComponent> {
                           text: 'Accetta',
                           onPressed: () {
                             _disableButtons();
-                            messageProviderRead.acceptOffer(widget.chat);
+                            messageProviderRead.acceptOffer(context, widget.chat);
                           },
                           enabled: widget.chat.currentOfferPrice != null
                         ),

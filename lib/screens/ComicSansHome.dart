@@ -1,3 +1,4 @@
+import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/components/ProductsGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/CategoriesGrid.dart';
@@ -57,11 +58,7 @@ class _ComicSansHomeState extends State<ComicSansHome> {
         alignment: Alignment.centerLeft,
         child: Text(
           title,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
     );
@@ -75,6 +72,7 @@ class _ComicSansHomeState extends State<ComicSansHome> {
         child: Column(
           children: <Widget>[
             ComicSansSearchBar(),
+            SizedBox(height: 20,),
             _buildSectionTitle("Esplora"),
             CategoriesGrid(),
             _buildSectionTitle("Consigliati per te"),

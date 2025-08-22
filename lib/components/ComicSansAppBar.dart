@@ -1,7 +1,6 @@
 import 'package:comicsans/providers/sell_informations_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../providers/comics_provider.dart';
 
 enum AppBarActionType {
@@ -13,6 +12,7 @@ enum AppBarActionType {
 
 class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final TextStyle? style;
   final bool showBackButton; // Visibility of the back arrow
   final bool showCloseButton; // Visibility of the close button
   final AppBarActionType actionType; // Tipo di azione principale
@@ -25,6 +25,7 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ComicSansAppBar({
     super.key,
     this.title = '',
+    this.style,
     this.showBackButton = false,
     this.showCloseButton = false,
     this.actionType = AppBarActionType.none,
@@ -79,13 +80,11 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
               PopupMenuItem(
                 child: Text("Segnala"),
                 onTap: () {
-                  print("Opzione 1 selezionata");
                 },
               ),
               PopupMenuItem(
                 child: Text("Condividi"),
                 onTap: () {
-                  print("Opzione 2 selezionata");
                 },
               )
             ];
@@ -134,12 +133,15 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       scrolledUnderElevation: 0,
-      backgroundColor: backgroundColor ?? Colors.transparent,
+      backgroundColor: backgroundColor,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Flexible(
-            child: Text(title)
+            child: Text(
+              title,
+              style: style ?? Theme.of(context).textTheme.titleMedium,
+            )
           )
         ],
       ), // title not given

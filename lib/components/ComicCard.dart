@@ -19,26 +19,18 @@ class ComicCard extends StatefulWidget{
 
 
 class _ComicCardState extends State<ComicCard> {
-  late bool isFavourite;
-
-  void toggleFavourite(){
-    final UserProvider userProviderRead = context.read<UserProvider>();
-
-    setState(() {
-      if(isFavourite) {
-        userProviderRead.removeFavorite(widget.comic);
-      }
-      else {
-        userProviderRead.addFavorite(widget.comic);
-      }
-      isFavourite = !isFavourite;
-    });
+  void toggleFavourite(bool isFavorite, UserProvider provider){
+    if(isFavorite) {
+      provider.removeFavorite(widget.comic);
+    } else {
+      provider.addFavorite(widget.comic);
+    }
   }
 
   @override
   Widget build(BuildContext context){
-    final UserProvider userProviderWatch = context.watch<UserProvider>();
-    isFavourite = userProviderWatch.checkFavorite(widget.comic);
+    final userProvider = context.watch<UserProvider>();
+    final isFavorite = userProvider.isFavorite(widget.comic);
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
@@ -55,11 +47,8 @@ class _ComicCardState extends State<ComicCard> {
                   fit: BoxFit.fill
                 )
                 : widget.comic.coverPath.isEmpty || !File(widget.comic.coverPath).existsSync()
-                ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
-                : Image.file(
-                  File(widget.comic.coverPath),
-                  fit: BoxFit.fill,
-                ),
+                  ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
+                  : Image.file(File(widget.comic.coverPath), fit: BoxFit.fill),
             ),
           ),
           Positioned(
@@ -100,36 +89,38 @@ class _ComicCardState extends State<ComicCard> {
                       ]
                     ),
                   ),
-                  widget.showFavoriteButton? IconButton(
-                    icon: isFavourite ? Icon(Icons.bookmark, color: Colors.white) : Icon(Icons.bookmark_border, color: Colors.white),
-                    onPressed: () async {
-                      if (isFavourite) {
-                        bool? confirm = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: Text("Sei sicuro di voler rimuovere questo fumetto dai preferiti?"),
-                            actions: [
-                              TextButton(
-                                child: Text("Annulla"),
-                                onPressed: () => Navigator.of(context).pop(false),
-                              ),
-                              TextButton(
-                                child: Text("Conferma"),
-                                onPressed: () => Navigator.of(context).pop(true),
-                              ),
-                            ],
-                          ),
-                        );
-                        if (confirm == true) {
-                          toggleFavourite();
+                  widget.showFavoriteButton
+                    ? IconButton(
+                        icon: isFavorite
+                          ? Icon(Icons.bookmark, color: Colors.white)
+                          : Icon(Icons.bookmark_border, color: Colors.white),
+                      onPressed: () async {
+                        if(isFavorite) {
+                          bool? confirm = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              content: Text("Sei sicuro di voler rimuovere questo fumetto dai preferiti?"),
+                              actions: [
+                                TextButton(
+                                  child: Text("Annulla"),
+                                  onPressed: () => Navigator.of(context).pop(false),
+                                ),
+                                TextButton(
+                                  child: Text("Conferma"),
+                                  onPressed: () => Navigator.of(context).pop(true),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (confirm == true) {
+                            toggleFavourite(isFavorite, userProvider);
+                          }
+                        } else {
+                          toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
                         }
-                      }
-                      else {
-                        toggleFavourite(); // Adding is direct, without confirmation
-                      }
-                    },
-                  )
-                  : Container()
+                      },
+                    )
+                    : Container()
                 ]
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:comicsans/Chat.dart';
 import 'package:comicsans/providers/messages_provider.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -157,7 +158,7 @@ enum Gender { maschio, femmina, altro }
 enum SearchContent { purchasableComics, favoriteComics }
 
 String usernameToDisplay(BuildContext context, Chat chat) {
-  return chat.seller.username == context.read<MessagesProvider>().currentUser!.username
+  return chat.seller.username == context.watch<UserProvider>().loggedInUser!.username
       ? chat.buyer.username
       : chat.seller.username;
 }

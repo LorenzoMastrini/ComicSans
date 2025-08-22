@@ -91,7 +91,11 @@ class _ComicSansTextInputState extends State<ComicSansTextInput> {
           children: [
             TextSpan(
               text: widget.title,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.bold
+              ),
             ),
             if (widget.inputRequired)
               const TextSpan(
@@ -117,6 +121,10 @@ class _ComicSansTextInputState extends State<ComicSansTextInput> {
           obscureText: _obscureText,
           controller: _controller,
           focusNode: _focusNode,
+          style: TextStyle(
+            fontSize: 18,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
           keyboardType: widget.keyboardType,
           decoration: InputDecoration(
             hintText: widget.hintText,

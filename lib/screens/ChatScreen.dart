@@ -49,7 +49,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (messageText.isNotEmpty) {
       final MessagesProvider messagesProviderRead = context.read<MessagesProvider>();
-      messagesProviderRead.sendMessage(widget.chat, messageText);
+      messagesProviderRead.sendMessage(context, widget.chat, messageText);
 
       // Clear the text field after sending the message
       _controller.clear();

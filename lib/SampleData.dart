@@ -99,6 +99,7 @@ class SampleData{
     signed: false,
     editionYear: 2004,
     isbn: 3456789012,
+    bookbinding: Binding.spillato,
   );
   comic2 = Comic(
     id: 2,

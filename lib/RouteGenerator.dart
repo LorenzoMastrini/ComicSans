@@ -3,6 +3,8 @@ import 'package:comicsans/MainScreen.dart';
 import 'package:comicsans/screens/ChatScreen.dart';
 import 'package:comicsans/screens/Login.dart';
 import 'package:comicsans/screens/Registration.dart';
+import 'package:comicsans/screens/VendorScreen.dart';
+import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
 
 
@@ -26,6 +28,12 @@ class RouteGenerator {
         }
       case '/':
         return MaterialPageRoute(builder: (_) => MainScreen());
+      case '/vendor_screen':
+        if(args is User) {
+          return MaterialPageRoute(builder: (_) => VendorScreen(seller: args));
+        } else {
+          return _errorRoute();
+        }
       default:
         return _errorRoute();
     }
