@@ -80,7 +80,7 @@ class MessagesProvider extends ChangeNotifier {
   }
 
   void acceptOffer(BuildContext context, Chat chat) {
-    final userProvider = context.watch<UserProvider>();
+    final userProvider = context.read<UserProvider>();
 
     final newMessage = Message(
         sender: userProvider.loggedInUser!,

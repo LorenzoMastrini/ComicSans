@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/global_constants.dart';
@@ -58,10 +60,11 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                         height: 250,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(7),
-                          child: Image.asset(
-                            widget.comic.coverPath!,
-                            fit: BoxFit.fill,
-                          ),
+                          child: widget.comic.coverPath.startsWith('assets/')
+                            ? Image.asset(widget.comic.coverPath, fit: BoxFit.fill)
+                            : widget.comic.coverPath.isEmpty || !File(widget.comic.coverPath).existsSync()
+                              ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
+                              : Image.file(File(widget.comic.coverPath), fit: BoxFit.fill,),
                         ),
                       ),
                     ),
@@ -294,11 +297,12 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                         );
                       }
                       if(canPurchase) {
+                        final comicsProvider = context.read<ComicsProvider>();
+
                         userProviderRead.updatePurchases(widget.comic);
                         widget.comic.seller.sellings.add(widget.comic);
                         widget.comic.seller.comicsSale.remove(widget.comic);
-                        SampleData.allComics.remove(widget.comic);
-
+                        comicsProvider.removeComic(widget.comic);
                         userProviderRead.setJustPurchased(true);
                         Navigator.pushReplacementNamed(context, '/');
                       }

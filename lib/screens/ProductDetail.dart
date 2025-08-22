@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:comicsans/Chat.dart';
+import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/providers/user_provider.dart';
@@ -440,22 +441,14 @@ class _ProductDetailState extends State<ProductDetail> {
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: SizedBox(
-        height: 50,
         width: MediaQuery.of(context).size.width - 30,
-        child: ElevatedButton(
+        child: ComicSansButton(
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(
               builder: (context) => PurchaseScreen(comic: widget.comic)
             ));
           },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          child: const Text('Acquista'),
+          text: 'Acquista',
         ),
       ),
     );
