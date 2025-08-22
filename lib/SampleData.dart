@@ -177,7 +177,7 @@ class SampleData{
   }
 
   static List<Comic> allComics = [SampleData.comic1, SampleData.comic2, SampleData.comic3, SampleData.comic4];
-  static List<User> allUsers = [user1, user2,];
+  static List<User> allUsers = [user1, user2];
 
 
   // Simulated chat 1

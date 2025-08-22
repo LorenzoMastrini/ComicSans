@@ -21,24 +21,30 @@ class ComicSansSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 345,
-      child: SearchBar(
-        //controller: controller;
-        padding: WidgetStatePropertyAll<EdgeInsets>(
-          EdgeInsets.symmetric(horizontal: 10)
-        ),
-        leading: const Icon(Icons.search),
-        hintText: 'Ricerca...',
-        shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(7),
+      child: Focus(
+        canRequestFocus: false,
+        skipTraversal: true,
+        child: ExcludeFocus(
+          child: SearchBar(
+            //controller: controller;
+            padding: WidgetStatePropertyAll<EdgeInsets>(
+              EdgeInsets.symmetric(horizontal: 10)
+            ),
+            leading: const Icon(Icons.search),
+            hintText: 'Ricerca...',
+            shape: WidgetStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7),
+              ),
+            ),
+            onTap:(){
+              showSearch(
+                context: context,
+                delegate: MySearchDelegate()
+              );
+            },
           ),
         ),
-        onTap:(){
-          showSearch(
-            context: context,
-            delegate: MySearchDelegate()
-          );
-        },
       ),
     );
   }
@@ -85,8 +91,11 @@ class MySearchDelegate extends SearchDelegate {
         matchQuery.add(c);
       }
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      FocusManager.instance.primaryFocus?.unfocus;
       close(context, query);
+      await Future<void>.delayed(const Duration(milliseconds: 1));
+      if(!context.mounted) return;
       Navigator.push(context, MaterialPageRoute(
         builder: (context) => SearchResults(
           comicsResults: purchasableComics.where((comic) => matchQuery.contains(comic)).toList(),
@@ -94,7 +103,7 @@ class MySearchDelegate extends SearchDelegate {
         ),
       ));
     });
-    return Container();
+    return const SizedBox.shrink();
   }
 
   @override
@@ -144,8 +153,11 @@ class MySearchDelegate extends SearchDelegate {
             itemBuilder: (context, index){
               Comic comics = matchQuery[index];
               return TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   close(context, query);
+                  await Future<void>.delayed(const Duration(milliseconds: 1));
+                  if (!context.mounted) return;
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) => SearchResults(comicsResults: [comics], query: query)
                   ));

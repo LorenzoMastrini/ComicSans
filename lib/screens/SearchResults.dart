@@ -6,6 +6,7 @@ import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/comic.dart';
 import 'package:provider/provider.dart';
 
+import '../Components/ComicSansAppBar.dart';
 import '../components/ComicSansBottomBar.dart';
 import '../components/ComicSansCheckbox.dart';
 import '../components/ComicSansRadioButtons.dart';
@@ -71,8 +72,7 @@ class SearchResults extends StatelessWidget {
       );
     }
     return Scaffold(
-      /*bottomNavigationBar: ComicSansBottomBar(
-      ),*/
+      appBar: ComicSansAppBar(showBackButton: true, title: "Risultati"),
       drawer: Drawer(
         child: Padding(
           padding: const EdgeInsets.all(10),

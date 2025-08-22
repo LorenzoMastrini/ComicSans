@@ -73,7 +73,7 @@ class _ChangeShippingAddressScreenState extends State<ChangeShippingAddressScree
           cap: int.parse(_capController.text),
       );
 
-      userProviderRead.loggedInUser!.address = newAddress;
+      userProviderRead.updateAddress(newAddress);
       Navigator.pop(context, true);
     }
 

@@ -28,7 +28,7 @@ class ProductDetail extends StatefulWidget {
 
 
 class _ProductDetailState extends State<ProductDetail> {
-  late bool isFavourite;
+  bool isFavourite = false;
   int current = 0;
   late ScrollController _scrollController;
   Color iconColor = Colors.white;
@@ -154,12 +154,14 @@ class _ProductDetailState extends State<ProductDetail> {
                           ],
                         ),
                       );
-
-                      confirm == true
-                        ? toggleFavourite()
-                        : toggleFavourite(); // aggiunta diretta senza conferma
+                      if (confirm == true) {
+                        toggleFavourite();
+                      }
                     }
-                  },
+                    else {
+                      toggleFavourite();
+                    }
+                  }
                 )
               ]),
             Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),
@@ -431,7 +433,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     ? (_scrollController.offset / 200).clamp(0.0, 1.0)
                     : 0.0),
                 ) ?? Colors.transparent,
-                iconColor: Colors.white,
+              iconColor: Colors.white,
               actionType: AppBarActionType.overflowMenu,
             ),
           ),

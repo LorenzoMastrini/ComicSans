@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:provider/provider.dart';
-
 import '../comic.dart';
 import '../providers/comics_provider.dart';
 
 
 
 class FavouriteGrid extends StatelessWidget{
-  const FavouriteGrid({super.key});
+  final List<Comic>? comics;
+  const FavouriteGrid({super.key, this.comics});
 
   @override
   Widget build(BuildContext context) {
     final UserProvider userProviderWatch = context.watch<UserProvider>();
     final providerWatch = context.watch<ComicsProvider>();
 
-    List<Comic> sortedComic = List.from(userProviderWatch.getFavoriteComics());
+    List<Comic> sortedComic = comics ?? List.from(userProviderWatch.getFavoriteComics());
 
     if (providerWatch.sortType == SortType.alphabetical) {
       sortedComic.sort((a, b) => a.title.compareTo(b.title));
@@ -49,7 +49,7 @@ class FavouriteGrid extends StatelessWidget{
             },
             child: ComicCard(comic: sortedComic[index]));
         },
-        itemCount: userProviderWatch.getNumberFavoriteComics(),
+        itemCount: sortedComic.length,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,

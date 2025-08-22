@@ -118,6 +118,15 @@ class UserProvider extends ChangeNotifier {
     return _loggedInUser!.reviews.length;
   }
 
+  void updateAddress(Address newAddress){
+    _loggedInUser!.address = newAddress;
+    notifyListeners();
+  }
+  void updateCard(CreditCard newCard){
+    _loggedInUser!.card = newCard;
+    notifyListeners();
+  }
+
   void resetInformations() {
     _loggedInUser = null;
     _justPurchased = false;

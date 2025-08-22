@@ -69,7 +69,7 @@ class _ChangeCreditCardScreenState extends State<ChangeCreditCardScreen> {
           cvv: int.parse(_cvvController.text),
         );
 
-        userProviderRead.loggedInUser!.card = newCard;
+        userProviderRead.updateCard(newCard);
         Navigator.pop(context, true);
       }
     }
