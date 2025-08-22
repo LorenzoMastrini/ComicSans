@@ -5,26 +5,25 @@ import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/components/ComicSansCheckbox.dart';
 import 'package:comicsans/components/ComicSansDropdown.dart';
 import 'package:comicsans/components/ComicSansTextInput.dart';
-import 'package:comicsans/components/ComicSansRadioButtons.dart';
 import 'package:comicsans/components/ComicSansToggle.dart';
-import 'package:comicsans/providers/sell_informations_provider.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:comicsans/providers/comics_provider.dart';
-import '../comic.dart';
-import '../providers/comics_provider.dart';
-import '../providers/user_provider.dart';
+import 'package:comicsans/comic.dart';
+import 'package:comicsans/providers/user_provider.dart';
+
+
 
 class FiltersFavouriteScreen extends StatefulWidget{
   final String query;
-  FiltersFavouriteScreen({super.key, required this.query});
+  const FiltersFavouriteScreen({super.key, required this.query});
 
   @override
   State<FiltersFavouriteScreen> createState() => _FiltersFavouriteScreenState();
 }
+
+
 
 class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
   final List<TextEditingController> _authorControllers = [];

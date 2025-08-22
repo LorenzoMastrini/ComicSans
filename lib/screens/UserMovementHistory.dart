@@ -30,7 +30,7 @@ class UserMovementHistory extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: ComicSansAppBar(showBackButton: true, title: "Vendite"),
+      appBar: ComicSansAppBar(showBackButton: true, title: movementType == MovementType.purchases ? "Acquisti" : "Vendite"),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
         child: GridView.builder(

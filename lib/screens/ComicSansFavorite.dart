@@ -1,24 +1,12 @@
 import 'package:comicsans/components/ComicSansAppBar.dart';
-import 'package:comicsans/components/ComicSansSearchBar.dart';
 import 'package:comicsans/components/ProductsGrid.dart';
-import 'package:comicsans/global_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/components/ComicSansAppBar.dart';
-import 'package:comicsans/components/ComicSansSearchBar.dart';
-import 'package:comicsans/components/ProductsGrid.dart';
-import 'package:comicsans/global_constants.dart';
-import 'package:flutter/material.dart';
-import 'package:comicsans/components/FavouriteGrid.dart';
 import 'package:comicsans/components/ComicSansSearchBarFavourite.dart';
 import 'package:provider/provider.dart';
-import 'package:comicsans/comic.dart';
 import 'package:comicsans/components/ComicSansToggle.dart';
 import 'package:comicsans/providers/comics_provider.dart';
-import 'package:comicsans/providers/user_provider.dart';
-import 'FiltersScreen.dart';
-import 'FitlersFavouriteScreen.dart';
+import 'FiltersFavouriteScreen.dart';
 import 'IsbnFavouriteSearchScreen.dart';
-import 'IsbnSearchScreen.dart';
 
 
 
@@ -32,46 +20,46 @@ class ComicSansFavorite extends StatelessWidget {
 
     return Scaffold(
       drawer: Drawer(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ComicSansToggle(
-                    title: 'Prezzo',
-                    value: providerWatch.sortType == SortType.price,
-                    onChanged: (value) {
-                      providerRead.sortType = value ? SortType.price : SortType.none;
-                    }
-                ),
-                ComicSansToggle(
-                    title: 'Ordine alfabetico',
-                    value: providerWatch.sortType == SortType.alphabetical,
-                    onChanged: (value) {
-                      providerRead.sortType = value ? SortType.alphabetical : SortType.none;
-                    }
-                ),
-                const Divider(),
-                RadioListTile<SortDirection>(
-                  title: const Text("Crescente"),
-                  value: SortDirection.ascending,
-                  groupValue: providerWatch.sortDirection,
-                  onChanged: (value) {
-                    providerRead.sortDirection = value!;
-                  },
-                ),
-                RadioListTile<SortDirection>(
-                  title: const Text("Decrescente"),
-                  value: SortDirection.descending,
-                  groupValue: providerWatch.sortDirection,
-                  onChanged: (value) {
-                    providerRead.sortDirection = value!;
-                  },
-                ),
-              ],
-            ),
-          )
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ComicSansToggle(
+                title: 'Prezzo',
+                value: providerWatch.sortType == SortType.price,
+                onChanged: (value) {
+                  providerRead.sortType = value ? SortType.price : SortType.none;
+                }
+              ),
+              ComicSansToggle(
+                title: 'Ordine alfabetico',
+                value: providerWatch.sortType == SortType.alphabetical,
+                onChanged: (value) {
+                  providerRead.sortType = value ? SortType.alphabetical : SortType.none;
+                }
+              ),
+              const Divider(),
+              RadioListTile<SortDirection>(
+                title: const Text("Crescente"),
+                value: SortDirection.ascending,
+                groupValue: providerWatch.sortDirection,
+                onChanged: (value) {
+                  providerRead.sortDirection = value!;
+                },
+              ),
+              RadioListTile<SortDirection>(
+                title: const Text("Decrescente"),
+                value: SortDirection.descending,
+                groupValue: providerWatch.sortDirection,
+                onChanged: (value) {
+                  providerRead.sortDirection = value!;
+                },
+              ),
+            ],
+          ),
+        )
       ),
       appBar: ComicSansAppBar(
         showBackButton: false,
@@ -99,9 +87,7 @@ class ComicSansFavorite extends StatelessWidget {
                       tooltip: 'Filtri',
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(
-                            builder: (context){
-                              return FiltersFavouriteScreen(query: "");
-                            }
+                          builder: (context) => FiltersFavouriteScreen(query: "")
                         ));
                       },
                     ),
@@ -120,19 +106,31 @@ class ComicSansFavorite extends StatelessWidget {
                     children: <Widget>[
                       Builder(
                         builder: (context) => FilterChip(
-                            label: Text("Ordina per"),
-                            selected: false,
-                            onSelected: (bool value) {
-                              Scaffold.of(context).openDrawer();
-                            },
-                            avatar: Icon(Icons.swap_vert, size: 18),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                          label: Text(
+                            "Ordina per",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF0C3148)
                             )
+                          ),
+                          selected: false,
+                          onSelected: (bool value) {
+                            Scaffold.of(context).openDrawer();
+                          },
+                          avatar: Icon(Icons.swap_vert, size: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          )
                         ),
                       ),
                       FilterChip(
-                        label: Text("Ricerca per ISBN"),
+                        label: Text(
+                          "Ricerca per ISBN",
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF0C3148)
+                          )
+                        ),
                         selected: false,
                         onSelected: (bool value) {
                           Navigator.push(context, MaterialPageRoute(
