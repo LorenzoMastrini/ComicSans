@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../user.dart';
+
 
 
 class ReviewWidget extends StatefulWidget {
-  const ReviewWidget({super.key});
+  final User user;
+  const ReviewWidget({super.key, required this.user});
 
   @override
   State<ReviewWidget> createState() => ReviewWidgetState();
@@ -34,8 +37,8 @@ class ReviewWidgetState extends State<ReviewWidget> {
 
     return Row(
       children: [
-        ...printStar(userProviderWatch.loggedInUser != null
-            ? userProviderWatch.loggedInUser!.rating
+        ...printStar(widget.user != null
+            ? widget.user!.rating
             : 0)
       ]
     );

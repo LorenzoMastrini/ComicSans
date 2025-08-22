@@ -41,7 +41,7 @@ class UserVendorScreen extends StatelessWidget{
                           color: Colors.black,
                           fontSize: 24,
                           fontWeight: FontWeight.w500)),
-                      ReviewWidget(),
+                      ReviewWidget(user: userProviderWatch.loggedInUser!),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: RichText(

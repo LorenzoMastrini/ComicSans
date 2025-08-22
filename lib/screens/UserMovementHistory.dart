@@ -41,14 +41,13 @@ class UserMovementHistory extends StatelessWidget {
             childAspectRatio: .65,
           ),
           itemBuilder: (context, index){
-            return GestureDetector(
+            /*return GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => ProductDetail(comic: comicsList[index])
                 ));
-              },
-              child: ComicCard(comic: comicsList[index], showFavoriteButton: false)
-            );
+              },*/
+              return ComicCard(comic: comicsList[index], showFavoriteButton: false);
           },
           itemCount: comicsList.length,
           shrinkWrap: false,

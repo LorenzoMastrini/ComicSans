@@ -43,7 +43,7 @@ class _FollowedUserComponentState extends State<FollowedUserComponent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(widget.followedUser.username, style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
-              ReviewWidget(),
+              ReviewWidget(user: widget.followedUser),
             ],
           ),
           Spacer(),

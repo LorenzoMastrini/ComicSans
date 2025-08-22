@@ -48,7 +48,7 @@ class ComicSansProfile extends StatelessWidget {
                           : "",
                         style: TextStyle(color: Colors.black, fontSize: 24)
                       ),
-                      ReviewWidget(),
+                      ReviewWidget(user: userProviderWatch.loggedInUser!),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: RichText(

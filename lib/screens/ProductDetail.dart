@@ -152,12 +152,11 @@ class _ProductDetailState extends State<ProductDetail> {
                       if (confirm == true) {
                         toggleFavourite(isFavorite, userProvider);
                       }
-                    } else {
-                      toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
                     }
                     else {
-                      toggleFavourite();
+                      toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
                     }
+
                   }
                 )
               ]
@@ -177,7 +176,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             children: <Widget>[
                               Text(widget.comic.seller.username,
                                 style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
-                              ReviewWidget(),
+                              ReviewWidget(user: widget.comic.seller),
                               GestureDetector(
                                 child: Text("Recensioni",
                                   style: TextStyle(

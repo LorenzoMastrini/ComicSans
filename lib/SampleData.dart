@@ -173,7 +173,7 @@ class SampleData{
 
     user1.comicsSale = [comic1, comic2];
     user2.comicsSale = [comic3, comic4];
-    user1.reviews = [Review(stars: 5, description: "Descrizione della recensione", user: user2)];
+    user1.reviews = [Review(stars: 3, description: "Descrizione della recensione", user: user2)];
     user2.reviews = [Review(stars: 5, description: "Descrizione della recensione", user: user1)];
   }
 

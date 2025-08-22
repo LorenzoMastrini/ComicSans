@@ -63,7 +63,7 @@ class _VendorScreenState extends State<VendorScreen> {
                           color: Colors.black,
                           fontSize: 24,
                           fontWeight: FontWeight.w500)),
-                      ReviewWidget(),
+                      ReviewWidget(user: widget.seller),
                       SizedBox(height: 8),
                       SizedBox(
                         width: 120,

@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:comicsans/components/ComicSansToggle.dart';
 import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/providers/user_provider.dart';
+import 'package:comicsans/comic.dart';
+import 'package:comicsans/components/FavouriteGrid.dart';
 import 'FiltersFavouriteScreen.dart';
 import 'IsbnFavouriteSearchScreen.dart';
 

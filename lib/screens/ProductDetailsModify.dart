@@ -289,7 +289,7 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                 ),
               ),
 
-              // Contenuto sotto
+
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 80),
@@ -299,7 +299,7 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
             ],
           ),
 
-          // AppBar fissa sopra tutto
+
           Positioned(
             top: MediaQuery.of(context).padding.top,
             left: 0,
@@ -314,7 +314,6 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                     : 0.0),
               ) ?? Colors.transparent,
               iconColor: Colors.white,
-              actionType: AppBarActionType.overflowMenu,
             ),
           ),
         ],
