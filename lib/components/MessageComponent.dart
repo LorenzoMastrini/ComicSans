@@ -1,5 +1,6 @@
 import 'package:comicsans/Chat.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
+import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/providers/messages_provider.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/OfferScreen.dart';
@@ -87,7 +88,7 @@ class _MessageComponentState extends State<MessageComponent> {
   Widget _buildOfferMessage(BuildContext context) {
     final userProviderWatch = context.watch<UserProvider>();
     final bool isSentByCurrentUser = widget.message.sender == userProviderWatch.loggedInUser;
-    final messageProviderRead = context.watch<MessagesProvider>();
+    final messageProviderRead = context.read<MessagesProvider>();
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
@@ -136,7 +137,7 @@ class _MessageComponentState extends State<MessageComponent> {
                           text: 'Accetta',
                           onPressed: () {
                             _disableButtons();
-                            messageProviderRead.acceptOffer(widget.chat);
+                            messageProviderRead.acceptOffer(context, widget.chat);
                           },
                           enabled: widget.chat.currentOfferPrice != null
                         ),
@@ -153,8 +154,8 @@ class _MessageComponentState extends State<MessageComponent> {
 
   Widget _buildAcceptOfferMessage(BuildContext context, Message message) {
     final userProviderWatch = context.watch<UserProvider>();
+    final comicsProvider = context.watch<ComicsProvider>();
     final bool isSentByCurrentUser = message.sender == userProviderWatch.loggedInUser;
-    final messageProviderRead = context.watch<MessagesProvider>();
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
@@ -185,38 +186,8 @@ class _MessageComponentState extends State<MessageComponent> {
                     children: [
                       Expanded(
                         child: ComicSansButton(
-                          text: 'Rifiuta',
                           height: 40,
-                          onPressed: () async { // Use default callback or the given one
-                            await showDialog<bool>(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                content: Text("Sei sicuro di interrompere il processo e tornare al prezzo originale?"),
-                                actions: [
-                                  TextButton(
-                                    child: Text("Annulla"),
-                                    onPressed: () => Navigator.of(context).pop(false),
-                                  ),
-                                  TextButton(
-                                    child: Text("Conferma"),
-                                    onPressed: () {
-                                      _disableButtons();
-                                      messageProviderRead.declineOffer(widget.chat);
-                                      Navigator.of(context).pop(false);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          enabled: widget.chat.currentOfferPrice != null
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: ComicSansButton(
-                          height: 40,
-                          text: 'Accetta',
+                          text: 'Acquista',
                           onPressed: () {
                             _disableButtons();
                             widget.chat.product.offerPrice = widget.chat.currentOfferPrice; // Set the final offer price
@@ -224,7 +195,7 @@ class _MessageComponentState extends State<MessageComponent> {
                                 builder: (context) => PurchaseScreen(comic: widget.chat.product)
                             ));
                           },
-                          enabled: widget.chat.currentOfferPrice != null
+                          enabled: widget.chat.currentOfferPrice != null && comicsProvider.allComics.contains(widget.chat.product)
                         ),
                       )
                     ],

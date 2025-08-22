@@ -42,7 +42,12 @@ class ComicSansProfile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:<Widget>[
-                      Text(userProviderWatch.loggedInUser!.username, style: TextStyle(color: Colors.black, fontSize: 24)),
+                      Text(
+                        userProviderWatch.loggedInUser != null
+                          ? userProviderWatch.loggedInUser!.username
+                          : "",
+                        style: TextStyle(color: Colors.black, fontSize: 24)
+                      ),
                       ReviewWidget(),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),

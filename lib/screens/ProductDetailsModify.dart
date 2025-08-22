@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/providers/user_provider.dart';
+import 'package:comicsans/screens/ComicSansSell1.dart';
 import 'package:comicsans/screens/ImagesDisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
@@ -206,7 +209,8 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
 
   @override
   Widget build(BuildContext context) {
-    double opacity = (_scrollController.hasClients ? _scrollController.offset / 200 : 0.0).clamp(0.0, 1.0);
+    //double opacity = (_scrollController.hasClients ? _scrollController.offset / 200 : 0.0).clamp(0.0, 1.0);
+    List<String> allImages = [widget.comic.coverPath] + widget.comic.otherImagesPath; // Cover image + other images
 
     return Scaffold(
       body: CustomScrollView(
@@ -232,7 +236,7 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                     GestureDetector(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => ImagesDisplay(comicImages: widget.comic.otherImagesPath)
+                          builder: (context) => ImagesDisplay(comicImages: allImages)
                         ));
                       },
                       child: CarouselSlider(
@@ -241,22 +245,30 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                           height: 550,
                           viewportFraction: 1.0,
                           enlargeCenterPage: false,
+                          enableInfiniteScroll: allImages.length > 1,
+                          scrollPhysics: allImages.length > 1
+                              ? const PageScrollPhysics()
+                              : const NeverScrollableScrollPhysics(),
                           onPageChanged: (index, reason) {
                             setState(() {
                               current = index;
                             });
                           }
                         ),
-                        items: widget.comic.otherImagesPath.map((item) => SizedBox(
+                        items: allImages.map((item) => SizedBox(
                           width: double.infinity,
                           height: double.infinity,
-                          child: Image.asset(
-                            item,
-                            fit: BoxFit.contain,
-                            width: double.infinity,
-                            height: double.infinity,
-                            alignment: Alignment.center
-                          ),
+                          child: item.startsWith('assets/')
+                            ? Image.asset(
+                              item,
+                              fit: BoxFit.fill
+                            )
+                            : item.isEmpty || !File(item).existsSync()
+                              ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
+                              : Image.file(
+                                File(item),
+                                fit: BoxFit.fill,
+                              ),
                         )).toList(),
                       ),
                     ),
@@ -266,7 +278,7 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                       right: 0,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: widget.comic.otherImagesPath.asMap().entries.map((entry) {
+                        children: allImages.asMap().entries.map((entry) {
                           return GestureDetector(
                             onTap: () => controller.animateToPage(entry.key),
                             child: Container(
@@ -319,8 +331,16 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
         child: ComicSansButton (
           text: 'Modifica',
           onPressed: () {
-            // TODO: modifica prodotto
-          },
+            // Use same approach as selling an item
+            showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              useSafeArea: true,
+              builder: (BuildContext modalContext) {
+                return ComicSansSell1(comicToModify: widget.comic,);
+              },
+            );
+          },// Go to the main screen
         ),
       )
     );

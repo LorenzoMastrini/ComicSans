@@ -27,9 +27,10 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final comicsProvider = Provider.of<ComicsProvider>(context, listen: false);
-      final messagesProvider = Provider.of<MessagesProvider>(context, listen: false);
+      final comicsProvider = context.read<ComicsProvider>();
+      final messagesProvider = context.read<MessagesProvider>();
       comicsProvider.initComicsList(SampleData.allComics); // Initialize provider with sample data
       messagesProvider.initChatsList(SampleData.allChats);
     });
@@ -56,7 +57,6 @@ class _LoginState extends State<Login> {
 
     if(matchedUser != null) {
       userProvider.loggedInUser = matchedUser;
-      context.read<MessagesProvider>().currentUser = matchedUser; // Set user also for messages provider
       Navigator.pushReplacementNamed(context, '/'); // Go to the main screen
     }
     else {
@@ -82,138 +82,121 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: ComicSansAppBar(
         title: 'Benvenuto!',
+        style: TextStyle(fontWeight: FontWeight.bold,),
         showBackButton: false,
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    ComicSansTextInput(
-                      title: 'Indirizzo email',
-                      keyboardType: TextInputType.emailAddress,
-                      controller: _emailController,
-                    ),
-                    const SizedBox(height: 20),
-                    ComicSansTextInput(
-                      title: 'Password',
-                      passwordField: true,
-                      controller: _passwordController,
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton.icon(
-                        icon: const Icon(Icons.lock_open, size: 16), // Optional
-                        label: const Text('Password dimenticata?'),
-                        onPressed: () =>
-                            Navigator.pushNamed(context, '/forgot_password'),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Pulsante Google
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(60),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                      ),
-                      onPressed: () {
-                        userProvider.loggedInUser = SampleData.user1; // TODO: da rimuovere (per velocizzare il testing)
-                        context.read<MessagesProvider>().currentUser = SampleData.user1;
-                        Navigator.pushNamed(context, '/');
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/google_logo.png',
-                            height: 24,
-                          ),
-                          const SizedBox(width: 12),
-                          const Text(
-                            'Accedi con Google',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-
-                    // Pulsante Facebook
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(60),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                      ),
-                      onPressed: () => Navigator.pushNamed(context, '/'),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/facebook_logo.png',
-                            height: 24,
-                          ),
-                          const SizedBox(width: 12),
-                          const Text(
-                            'Accedi con Facebook',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                  ],
-                ),
-
-                // Footer
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Column(
                         children: [
-                          const Text(
-                            'Non hai un account? ',
-                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                          ComicSansTextInput(
+                            title: 'Indirizzo email',
+                            keyboardType: TextInputType.emailAddress,
+                            controller: _emailController,
                           ),
-                          TextButton(
-                            onPressed: () =>
-                                Navigator.pushNamed(context, '/registration'),
-                            child: const Text(
-                              'Registrati',
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                fontSize: 14,
-                                color: Colors.grey,
+                          const SizedBox(height: 20),
+                          ComicSansTextInput(
+                            title: 'Password',
+                            passwordField: true,
+                            controller: _passwordController,
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextButton(
+                              child: const Text(
+                                'Password dimenticata?',
+                                style: TextStyle(fontSize: 14, color: Color(0xFF669bbc)),
                               ),
+                              onPressed: () => Navigator.pushNamed(context, '/forgot_password'),
                             ),
                           ),
+
+                          const SizedBox(height: 20),
+                          // Sign In with Google
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size.fromHeight(60),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7),
+                              ),
+                            ),
+                            onPressed: () {
+                              userProvider.loggedInUser = SampleData.user1;
+                              Navigator.pushReplacementNamed(context, '/');
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/google_logo.png', height: 24),
+                                const SizedBox(width: 12),
+                                const Text('Accedi con Google', style: TextStyle(color: Colors.black)),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size.fromHeight(60),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7),
+                              ),
+                            ),
+                            onPressed: () => Navigator.pushNamed(context, '/'),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/facebook_logo.png', height: 24),
+                                const SizedBox(width: 12),
+                                const Text('Accedi con Facebook', style: TextStyle(color: Colors.black)),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 30),
                         ],
                       ),
-
-                      // Login button
-                      ComicSansButton(
-                        text: 'Accedi',
-                        onPressed: () => login(userProvider), // Check user in "DB" and login
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Non hai un account? ',
+                                  style: TextStyle(fontSize: 14, color: Color(0xFF669bbc)),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pushNamed(context, '/registration'),
+                                  child: const Text(
+                                    'Registrati',
+                                    style: TextStyle(fontSize: 14, color: Color(0xFF669bbc)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ComicSansButton(
+                              text: 'Accedi',
+                              onPressed: () => login(userProvider),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        }
       ),
     );
   }

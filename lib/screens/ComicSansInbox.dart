@@ -20,8 +20,8 @@ class ComicSansInbox extends StatelessWidget {
         // List of chats of the current user
         ListView.builder(
           itemBuilder: (context, index) =>
-            _buildChatComponent(context: context, chat: messagesProviderWatch.chats[index], itemIndex: index),
-          itemCount: messagesProviderWatch.chats.length,
+            _buildChatComponent(context: context, chat: messagesProviderWatch.getUserChats(context)[index], itemIndex: index),
+          itemCount: messagesProviderWatch.getUserChats(context).length,
           shrinkWrap: true,
         ),
       ],
@@ -43,13 +43,13 @@ class ComicSansInbox extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 7),
           child: Row(
             children: <Widget>[
-              Icon(Icons.account_circle, color: Colors.black, size: 70),
+              Icon(Icons.account_circle, color: Theme.of(context).colorScheme.secondary, size: 70),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(usernameToDisplay(context, chat),
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.secondary,
                       fontSize: 18,
                       fontWeight: FontWeight.bold
                     ),
@@ -57,16 +57,14 @@ class ComicSansInbox extends StatelessWidget {
                   const SizedBox(height: 5),
                   Text(chat.product.title,
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.secondary,
                       fontSize: 18,
-                      fontWeight: FontWeight.normal
                     ),
                   ),
                 ]
               ),
               Spacer(),
       
-              const SizedBox(width: 70),
               Padding(
                 padding: EdgeInsets.only(right: 10),
                 child: Column(
@@ -75,7 +73,7 @@ class ComicSansInbox extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(top: 5),
                       child: chat.newMessages
-                        ? Icon(Icons.circle, color: Colors.blue, size: 10)
+                        ? Icon(Icons.circle, color: Color(0xFF669bbc), size: 10)
                         : null,
                     ),
                     Padding(

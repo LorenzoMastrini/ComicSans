@@ -17,11 +17,15 @@ import 'package:provider/provider.dart';
 
 
 class ComicSansSell3 extends StatefulWidget {
-  const ComicSansSell3({super.key});
+  Comic? comicToModify;
+
+  ComicSansSell3({super.key, this.comicToModify});
 
   @override
   State<ComicSansSell3> createState() => _ComicSansSell3State();
 }
+
+
 
 class _ComicSansSell3State extends State<ComicSansSell3> {
   final List<TextEditingController> _authorControllers = [];
@@ -43,21 +47,35 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
     if(provider.authors.isEmpty) {
       provider.addAuthor('');
     }
-    _authorControllers.addAll(
-        provider.authors.map((text) => TextEditingController(text: text)));
+    _authorControllers.addAll(provider.authors.map((text) => TextEditingController(text: text)));
 
     // Initializations of TextEditingController controllers
-    _publicationYearController = TextEditingController(text: provider.publicationYear?.toString() ?? '');
-    _languageController = TextEditingController(text: provider.language ?? '');
-    _italianPublisherController = TextEditingController(text: provider.italianPublisher ?? '');
-    _originalPublisherController = TextEditingController(text: provider.originalPublisher ?? '');
-    _collanaController = TextEditingController(text: provider.series ?? '');
-    _countryController = TextEditingController(text: provider.country ?? '');
-    _editionYearController = TextEditingController(text: provider.editionYear?.toString() ?? '');
-    _isbnController = TextEditingController(text: provider.isbn?.toString() ?? '');
-    _bookbindingController = TextEditingController(text: provider.bookbinding?.toString() ?? '');
+    _publicationYearController = TextEditingController(text: widget.comicToModify?.publicationYear?.toString() ?? '');
+    _languageController = TextEditingController(text: widget.comicToModify?.language ?? '');
+    _italianPublisherController = TextEditingController(text: widget.comicToModify?.italianPublisher ?? '');
+    _originalPublisherController = TextEditingController(text: widget.comicToModify?.originalPublisher ?? '');
+    _collanaController = TextEditingController(text: widget.comicToModify?.series ?? '');
+    _countryController = TextEditingController(text: widget.comicToModify?.country ?? '');
+    _editionYearController = TextEditingController(text: widget.comicToModify?.editionYear?.toString() ?? '');
+    _isbnController = TextEditingController(text: widget.comicToModify?.isbn?.toString() ?? '');
+    _bookbindingController = TextEditingController(text: widget.comicToModify != null ? bindingToString(widget.comicToModify?.bookbinding) : '');
 
     _syncAuthors(provider);
+
+    provider.publicationYear = widget.comicToModify?.publicationYear;
+    provider.language = widget.comicToModify?.language;
+    provider.italianPublisher = widget.comicToModify?.italianPublisher;
+    provider.originalPublisher = widget.comicToModify?.originalPublisher;
+    provider.series = widget.comicToModify?.series;
+    provider.country = widget.comicToModify?.country;
+    provider.editionYear = widget.comicToModify?.editionYear;
+    provider.isbn = widget.comicToModify?.isbn;
+    provider.bookbinding = widget.comicToModify?.bookbinding;
+    provider.variant = widget.comicToModify?.variant;
+    provider.graded = widget.comicToModify?.graded;
+    provider.signed = widget.comicToModify?.signed;
+    provider.genre = widget.comicToModify?.genre ?? [];
+    provider.authors = widget.comicToModify?.authors ?? [];
   }
 
   @override
@@ -328,15 +346,32 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                       final ComicsProvider comicsProvider = context.read<ComicsProvider>();
                       final UserProvider userProvider = context.read<UserProvider>();
 
-                      // create Comic object with the informations from provider
-                      Comic newComic = providerRead.createComic();
-                      comicsProvider.addComic(newComic); // Add the comic to the global list
-                      userProvider.addComicToLibrary(newComic); // Add comic to the user's library
-                      providerRead.resetInformations(); // Reset the provider (clear fields)
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/', // return to the main screen
-                        (route) => false, // remove from the stack all the visited routes
-                      );
+                      if(widget.comicToModify == null) {
+                        // create Comic object with the informations from provider
+                        Comic newComic = providerRead.createComic(context);
+                        comicsProvider.addComic(newComic); // Add the comic to the global list
+                        userProvider.addComicToLibrary(newComic); // Add comic to the user's library
+                        providerRead.resetInformations(); // Reset the provider (clear fields)
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/', // return to the main screen
+                              (route) => false, // remove from the stack all the visited routes
+                        );
+                      } else {
+                        providerRead.updateComic(context, widget.comicToModify!);
+                        providerRead.resetInformations(); // Reset the provider (clear fields)
+
+                        int count = 0; // Counter of removed pages
+                        // Go back until reaching the vendor screen
+                        Navigator.of(context).popUntil((route) {
+                          count++;
+                          return count > 4; // When count > 4, stop popping pages
+                        });
+
+                        Navigator.of(context).pushReplacementNamed(
+                          '/vendor_screen',
+                          arguments: widget.comicToModify!.seller,
+                        );
+                      }
                     },
                   ),
                 )

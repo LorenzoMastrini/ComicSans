@@ -74,7 +74,7 @@ class _OfferScreenState extends State<OfferScreen> {
                 onPressed: () {
                   final price = double.tryParse(_priceController.text) ?? 0;
                   // update the offerPrice of the product
-                  messageProvider.offer(widget.chat, price, false);
+                  messageProvider.offer(context, widget.chat, price, false);
                   Navigator.pop(context);
                 },
                 text: "Fai un'offerta",

@@ -45,25 +45,12 @@ class _MainScreenState extends State<MainScreen> {
 
     @override
     Widget build(BuildContext context) {
-      // Mappa l'indice della NavigationBar (_navigationBarIndex)
-      // all'indice corretto per l'IndexedStack (_actualPageIndex)
-      // Questo è necessario perché l'item "Sell" (indice 2) non ha una pagina
-      // corrispondente in _pageContents.
       int actualPageIndex;
       if (_navigationBarIndex < 2) { // Home (0), Favorite (1)
         actualPageIndex = _navigationBarIndex;
       } else if (_navigationBarIndex > 2) { // Inbox (NavBar 3 -> Stack 2), Profile (NavBar 4 -> Stack 3)
         actualPageIndex = _navigationBarIndex - 1;
       } else { // _navigationBarIndex è 2 (Sell)
-        // Il modal si è aperto (o si sta aprendo).
-        // Dobbiamo decidere quale pagina dell'IndexedStack rimane visibile sotto.
-        // Idealmente, l'ultima pagina attiva.
-        // Poiché _onBottomNavItemTapped NON fa setState per navBarIndex == 2,
-        // _navigationBarIndex mantiene il suo valore precedente,
-        // e quindi actualPageIndex sarà calcolato correttamente da quel valore.
-        // Questa clausola 'else' qui è più una sicurezza o per uno stato iniziale.
-        // Se _navigationBarIndex fosse *inizializzato* a 2 (non dovrebbe),
-        // dovremmo mostrare una pagina di default.
         actualPageIndex = 0; // Default alla prima pagina (Home)
       }
 

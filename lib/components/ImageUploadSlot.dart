@@ -1,4 +1,4 @@
-import 'dart:io'; // Import "File" class
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -50,14 +50,42 @@ class _ImageUploadSlotState extends State<ImageUploadSlot> {
 
   // Select an image from the device gallery or from camera
   Future<void> _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-
-    if (image != null) {
-      setState(() {
-        _uploadedImagePath = image.path;
-      });
-      widget.onImageSelected(_uploadedImagePath);
-    }
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 160,
+          child: Column(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Scatta una foto'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+                  if (image != null) {
+                    setState(() => _uploadedImagePath = image.path);
+                    widget.onImageSelected(_uploadedImagePath);
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Scegli dalla galleria'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                  if (image != null) {
+                    setState(() => _uploadedImagePath = image.path);
+                    widget.onImageSelected(_uploadedImagePath);
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   // Function to remove the selected image
@@ -94,11 +122,16 @@ class _ImageUploadSlotState extends State<ImageUploadSlot> {
             if (_uploadedImagePath != null)
               ClipRRect( // To apply borderRadius to the image also
                 borderRadius: widget.borderRadius, // Leggermente meno del bordo del container
-                child: Image.file(
-                  File(_uploadedImagePath!), // Image is loaded (!= null)
-                  width: widget.width,
-                  height: widget.height,
-                  fit: BoxFit.cover, // Cover the area maintaining the aspect ratio
+                child: _uploadedImagePath!.startsWith('assets/')
+                    ? Image.asset(
+                    _uploadedImagePath!,
+                    fit: BoxFit.fill
+                )
+                    : _uploadedImagePath!.isEmpty || !File(_uploadedImagePath!).existsSync()
+                    ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
+                    : Image.file(
+                  File(_uploadedImagePath!),
+                  fit: BoxFit.fill,
                 ),
               ),
 

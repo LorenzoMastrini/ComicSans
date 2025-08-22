@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
 import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/providers/user_provider.dart';
-
-import '../Components/ComicSansAppBar.dart';
-import '../Components/ComicSansButton.dart';
-import '../comic.dart';
-import '../components/ComicSansTextInput.dart';
+import 'package:comicsans/components/ComicSansAppBar.dart';
+import 'package:comicsans/components/ComicSansButton.dart';
+import 'package:comicsans/comic.dart';
+import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'SearchResults.dart';
 
 class IsbnFavouriteSearchScreen extends StatefulWidget{
@@ -23,6 +21,8 @@ class _IsbnFavouriteSearchScreenState extends State<IsbnFavouriteSearchScreen> {
     super.initState();
     _isbnController = TextEditingController(text: '');
   }
+
+  @override
   void dispose(){
     _isbnController.dispose();
     super.dispose();
@@ -34,9 +34,7 @@ class _IsbnFavouriteSearchScreenState extends State<IsbnFavouriteSearchScreen> {
     final providerRead = context.read<ComicsProvider>();
 
     return Scaffold(
-        appBar: ComicSansAppBar(
-          showBackButton: true,
-        ),
+        appBar: ComicSansAppBar(showBackButton: true),
         body: Form(
           child: Padding(
               padding: const EdgeInsets.fromLTRB(18, 0, 18, 5),

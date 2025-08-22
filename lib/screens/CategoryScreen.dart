@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:comicsans/category.dart';
 import 'package:provider/provider.dart';
-import '../Components/ComicSansAppBar.dart';
-import '../comic.dart';
-import '../components/ComicCard.dart';
-import '../providers/user_provider.dart';
+import 'package:comicsans/components/ComicSansAppBar.dart';
+import 'package:comicsans/comic.dart';
+import 'package:comicsans/components/ComicCard.dart';
+import 'package:comicsans/providers/user_provider.dart';
 import 'ProductDetail.dart';
+
+
 
 class CategoryScreen extends StatefulWidget{
   final String categoryName;
@@ -15,11 +16,13 @@ class CategoryScreen extends StatefulWidget{
   State<CategoryScreen> createState() => _CategoryScreenState();
 }
 
+
+
 class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     final userProviderWatch = context.watch<UserProvider>();
-    final List<Comic> comicsList = userProviderWatch.getPurchasableComics();
+    final List<Comic> comicsList = userProviderWatch.getPurchasableComics(context);
     final Map<String, String> categoryToCountry = {
       'Italiano': 'Italia',
       'Americano': 'USA',

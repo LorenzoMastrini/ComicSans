@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:provider/provider.dart';
-
-import '../comic.dart';
-import '../providers/comics_provider.dart';
+import 'package:comicsans/comic.dart';
+import 'package:comicsans/providers/comics_provider.dart';
 
 
 
@@ -15,17 +14,17 @@ class FavouriteGrid extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final UserProvider userProviderWatch = context.watch<UserProvider>();
-    final providerWatch = context.watch<ComicsProvider>();
+    final comicsProviderWatch = context.watch<ComicsProvider>();
 
     List<Comic> sortedComic = List.from(userProviderWatch.getFavoriteComics());
 
-    if (providerWatch.sortType == SortType.alphabetical) {
+    if (comicsProviderWatch.sortType == SortType.alphabetical) {
       sortedComic.sort((a, b) => a.title.compareTo(b.title));
-    } else if (providerWatch.sortType == SortType.price) {
+    } else if (comicsProviderWatch.sortType == SortType.price) {
       sortedComic.sort((a, b) => a.price.compareTo(b.price));
     }
 
-    if (providerWatch.sortDirection == SortDirection.descending) {
+    if (comicsProviderWatch.sortDirection == SortDirection.descending) {
       sortedComic = sortedComic.reversed.toList();
     }
 

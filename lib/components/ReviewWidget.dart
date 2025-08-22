@@ -34,7 +34,9 @@ class ReviewWidgetState extends State<ReviewWidget> {
 
     return Row(
       children: [
-        ...printStar(userProviderWatch.loggedInUser!.rating)
+        ...printStar(userProviderWatch.loggedInUser != null
+            ? userProviderWatch.loggedInUser!.rating
+            : 0)
       ]
     );
   }

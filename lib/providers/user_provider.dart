@@ -1,7 +1,8 @@
-import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/comic.dart';
+import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -12,6 +13,7 @@ class UserProvider extends ChangeNotifier {
       _loggedInUser = user;
       notifyListeners();
   }
+
   bool _justPurchased = false;
   bool get justPurchased => _justPurchased;
   void setJustPurchased (bool value) {
@@ -21,6 +23,10 @@ class UserProvider extends ChangeNotifier {
 
   // favorite comics for the current user
   List<Comic> getFavoriteComics() {
+    if (_loggedInUser == null) {
+      return []; // If no user is logged in, don't return anything
+    }
+
     return _loggedInUser!.favouriteComics;
   }
 
@@ -38,7 +44,7 @@ class UserProvider extends ChangeNotifier {
     return _loggedInUser!.favouriteComics.length;
   }
 
-  bool checkFavorite(Comic comic){
+  bool isFavorite(Comic comic){
     return _loggedInUser!.favouriteComics.contains(comic) ? true : false;
   }
 
@@ -58,8 +64,14 @@ class UserProvider extends ChangeNotifier {
     _loggedInUser!.followedUsers.remove(user);
   }
 
-  List<Comic> getPurchasableComics() {
-    return SampleData.allComics.where((comic) => comic.seller.id != _loggedInUser!.id).toList();
+  List<Comic> getPurchasableComics(BuildContext context) {
+    final comicsProvider = context.watch<ComicsProvider>();
+
+    if (_loggedInUser == null) {
+      return []; // If no user is logged in, don't return anything
+    }
+
+    return comicsProvider.allComics.where((comic) => comic.seller.id != _loggedInUser!.id).toList();
   }
 
   // Library handling
@@ -93,7 +105,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  void updatePuchases(Comic newPurchase) {
+  void updatePurchases(Comic newPurchase) {
     _loggedInUser!.purchases.add(newPurchase);
     notifyListeners();
   }
@@ -115,6 +127,10 @@ class UserProvider extends ChangeNotifier {
   }
 
   int getNumberOfReviews(){
+    if (_loggedInUser == null) {
+      return 0; // If no user is logged in, don't return anything
+    }
+
     return _loggedInUser!.reviews.length;
   }
 

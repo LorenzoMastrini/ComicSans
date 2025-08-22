@@ -1,7 +1,8 @@
+import 'dart:io';
 import 'package:comicsans/Chat.dart';
+import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
-import 'package:comicsans/providers/messages_provider.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ChatScreen.dart';
 import 'package:comicsans/screens/ImagesDisplay.dart';
@@ -28,7 +29,6 @@ class ProductDetail extends StatefulWidget {
 
 
 class _ProductDetailState extends State<ProductDetail> {
-  late bool isFavourite;
   int current = 0;
   late ScrollController _scrollController;
   Color iconColor = Colors.white;
@@ -39,11 +39,6 @@ class _ProductDetailState extends State<ProductDetail> {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_handleScroll);
-    // Safe access to provider without triggering rebuilds
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      setState(() {isFavourite = userProvider.checkFavorite(widget.comic);});
-    });
   }
 
   @override
@@ -56,8 +51,8 @@ class _ProductDetailState extends State<ProductDetail> {
   void _handleScroll() {
     double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
     double newOpacity = (offset / 200).clamp(0.0, 1.0);
-
     Color newColor = newOpacity > 0.5 ? Colors.black : Colors.white;
+
     if (newColor != iconColor && mounted) {
       setState(() {
         iconColor = newColor;
@@ -65,20 +60,17 @@ class _ProductDetailState extends State<ProductDetail> {
     }
   }
 
-  void toggleFavourite(){
-    final userProviderRead = context.read<UserProvider>();
-
-    setState(() {
-      isFavourite
-        ? userProviderRead.removeFavorite(widget.comic)
-        : userProviderRead.addFavorite(widget.comic);
-      isFavourite = !isFavourite;
-    });
+  void toggleFavourite(bool isFavorite, UserProvider provider){
+    if(isFavorite) {
+      provider.removeFavorite(widget.comic);
+    } else {
+      provider.addFavorite(widget.comic);
+    }
   }
 
   Widget buildMainContent(BuildContext context) {
-    final userProviderWatch = context.read<UserProvider>();
-    final messagesProviderRead = context.read<MessagesProvider>();
+    final userProvider = context.watch<UserProvider>();
+    final isFavorite = userProvider.isFavorite(widget.comic);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 0),
@@ -135,9 +127,11 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
                 IconButton(
                   iconSize: 40,
-                  icon: isFavourite ? Icon(Icons.bookmark, color: Colors.black) : Icon(Icons.bookmark_border, color: Colors.black),
+                  icon: isFavorite
+                    ? Icon(Icons.bookmark, color: Colors.black)
+                    : Icon(Icons.bookmark_border, color: Colors.black),
                   onPressed: () async {
-                    if (isFavourite) {
+                    if(isFavorite) {
                       bool? confirm = await showDialog<bool>(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -155,14 +149,17 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                       );
 
-                      confirm == true
-                        ? toggleFavourite()
-                        : toggleFavourite(); // aggiunta diretta senza conferma
+                      if (confirm == true) {
+                        toggleFavourite(isFavorite, userProvider);
+                      }
+                    } else {
+                      toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
                     }
                   },
                 )
-              ]),
-            Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),
+              ]
+            ),
+            const Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),
             Row(
               children: <Widget>[
                 Expanded(
@@ -224,7 +221,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         builder: (context) => ChatScreen(
                           chat: Chat(
                             [],
-                            userProviderWatch.loggedInUser!,
+                            userProvider.loggedInUser!,
                             widget.comic.seller,
                             widget.comic,
                             false
@@ -338,6 +335,8 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> allImages = [widget.comic.coverPath] + widget.comic.otherImagesPath; // Cover image + other images
+
     return Scaffold(
       body: Stack(
         children: [
@@ -350,7 +349,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => ImagesDisplay(comicImages: widget.comic.otherImagesPath),
+                      builder: (context) => ImagesDisplay(comicImages: allImages),
                     ));
                   },
                   child: Stack(
@@ -361,22 +360,30 @@ class _ProductDetailState extends State<ProductDetail> {
                           height: 550,
                           viewportFraction: 1.0,
                           enlargeCenterPage: false,
+                          enableInfiniteScroll: allImages.length > 1,
+                          scrollPhysics: allImages.length > 1
+                            ? const PageScrollPhysics()
+                            : const NeverScrollableScrollPhysics(),
                           onPageChanged: (index, reason) {
                             setState(() {
                               current = index;
                             });
                           },
                         ),
-                        items: widget.comic.otherImagesPath.map((item) => SizedBox(
+                        items: allImages.map((item) => SizedBox(
                           width: double.infinity,
                           height: double.infinity,
-                          child: Image.asset(
-                            item,
-                            fit: BoxFit.contain,
-                            width: double.infinity,
-                            height: double.infinity,
-                            alignment: Alignment.center,
-                          ),
+                          child: item.startsWith('assets/')
+                            ? Image.asset(
+                              item,
+                              fit: BoxFit.fill
+                            )
+                            : item.isEmpty || !File(item).existsSync()
+                              ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
+                              : Image.file(
+                                File(item),
+                                fit: BoxFit.fill,
+                              ),
                         )).toList(),
                       ),
                       Positioned(
@@ -385,7 +392,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         right: 0,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: widget.comic.otherImagesPath.asMap().entries.map((entry) {
+                          children: allImages.asMap().entries.map((entry) {
                             return GestureDetector(
                               onTap: () => controller.animateToPage(entry.key),
                               child: Container(
@@ -439,26 +446,17 @@ class _ProductDetailState extends State<ProductDetail> {
       ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton:
-        SizedBox(
-          height: 50,
-          width: MediaQuery.of(context).size.width - 30,
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) => PurchaseScreen(comic: widget.comic)
-              ));
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              shadowColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            child: const Text('Acquista', style: TextStyle(color: Colors.black)),
-          ),
+      floatingActionButton: SizedBox(
+        width: MediaQuery.of(context).size.width - 30,
+        child: ComicSansButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) => PurchaseScreen(comic: widget.comic)
+            ));
+          },
+          text: 'Acquista',
         ),
-      );
+      ),
+    );
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:comicsans/category.dart';
+import 'package:comicsans/screens/CategoryScreen.dart';
 
-import '../screens/CategoryScreen.dart';
+
 
 class CategorySlot extends StatefulWidget{
   final Category category;
@@ -10,6 +11,8 @@ class CategorySlot extends StatefulWidget{
   @override
   State<CategorySlot> createState() => _CategorySlotState();
 }
+
+
 
 class _CategorySlotState extends State<CategorySlot> {
   @override
@@ -32,8 +35,12 @@ class _CategorySlotState extends State<CategorySlot> {
         ),
         const SizedBox(height: 10),
         Text(
-            widget.category.name,
-            style: const TextStyle(fontWeight: FontWeight.w500)
+          widget.category.name,
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).colorScheme.secondary,
+            fontWeight: FontWeight.w500
+          )
         ),
       ],
     );

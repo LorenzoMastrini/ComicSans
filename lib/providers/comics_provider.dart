@@ -2,19 +2,23 @@ import 'package:comicsans/comic.dart';
 import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/global_constants.dart';
-import 'package:comicsans/SampleData.dart';
-import 'package:comicsans/providers//user_provider.dart';
 
 enum SortType { none, alphabetical, price }
 enum SortDirection {ascending, descending}
+
+
 
 class ComicsProvider extends ChangeNotifier {
   // List of all comics available (from all users)
   final List<Comic> _allComics = [];
   List<Comic> get allComics => List.unmodifiable(_allComics);
 
+  bool _initDone = false;
   void initComicsList(List<Comic> comics) {
-    _allComics.addAll(comics);
+    if(!_initDone) {
+      _allComics.addAll(comics);
+      _initDone = true;
+    }
     notifyListeners();
   }
 
@@ -384,6 +388,11 @@ class ComicsProvider extends ChangeNotifier {
     _signed = null;
     _binding = [];
     _conditions = [];
+    notifyListeners();
+  }
+
+  void replaceComic(Comic comic) {
+    _allComics[_allComics.indexOf(comic)] = comic;
     notifyListeners();
   }
 }
