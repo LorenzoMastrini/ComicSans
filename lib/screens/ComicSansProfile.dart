@@ -6,12 +6,50 @@ import 'package:comicsans/components/ReviewWidget.dart';
 import 'package:comicsans/screens/AccountSettingsScreen.dart';
 import 'package:comicsans/screens/AssistanceScreen.dart';
 import 'package:comicsans/screens/FollowedUsersScreen.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 
-
-class ComicSansProfile extends StatelessWidget {
+class ComicSansProfile extends StatefulWidget {
   const ComicSansProfile({super.key});
+  
+  @override
+  State<ComicSansProfile> createState() => ComicSansProfileState();
+}
+
+class ComicSansProfileState extends State<ComicSansProfile> {
+  final GlobalKey profile = GlobalKey();
+  bool _showcaseStarted = false;
+
+  void onTabVisible() {
+    if (!_showcaseStarted) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final userProvider = context.read<UserProvider>();
+        if (!userProvider.hasSeenProfileShowcasePerUser(userProvider.loggedInUser!.id)) {
+          ShowCaseWidget.of(context)?.startShowCase([profile]);
+          userProvider.setHasSeenProfileShowcasePerUser(userProvider.loggedInUser!.id, true);
+          _showcaseStarted = true;
+          print("Showcase avviato");
+        }
+      });
+    }
+  }
+
+  /*void startShowcaseIfNeeded() {
+    print("startShowcase");
+    final userProvider = context.read<UserProvider>();
+    if (!_showcaseStarted && !userProvider.hasSeenProfileShowcasePerUser(userProvider.loggedInUser!.id)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ShowCaseWidget.of(context)?.startShowCase([profile]);
+          userProvider.setHasSeenProfileShowcasePerUser(userProvider.loggedInUser!.id, true);
+          _showcaseStarted = true;
+        }
+      });
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -35,39 +73,45 @@ class ComicSansProfile extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:<Widget>[
-                      Text(
-                        userProviderWatch.loggedInUser != null
-                          ? userProviderWatch.loggedInUser!.username
-                          : "",
-                        style: TextStyle(color: Colors.black, fontSize: 24)
-                      ),
-                      ReviewWidget(user: userProviderWatch.loggedInUser!),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(text: userProviderWatch.getLibraryLength().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
-                              TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
-                              TextSpan(text: userProviderWatch.getNumberOfReviews().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
-                              TextSpan(text: " recensioni", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
-                            ]
-                          )
+            child: Showcase(
+              key: profile,
+              description: "Premi qui per vedere e modificare i tuoi fumetti in vendita",
+              overlayOpacity: 0,
+              disableMovingAnimation: true,
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children:<Widget>[
+                        Text(
+                          userProviderWatch.loggedInUser != null
+                            ? userProviderWatch.loggedInUser!.username
+                            : "",
+                          style: TextStyle(color: Colors.black, fontSize: 24)
                         ),
-                      )
-                    ]
+                        ReviewWidget(user: userProviderWatch.loggedInUser!),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(text: userProviderWatch.getLibraryLength().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
+                                TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
+                                TextSpan(text: userProviderWatch.getNumberOfReviews().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
+                                TextSpan(text: " recensioni", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
+                              ]
+                            )
+                          ),
+                        )
+                      ]
+                    ),
                   ),
-                ),
-                Spacer(),
-                Icon(Icons.arrow_forward_ios, color: Colors.black),
-              ]
+                  Spacer(),
+                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                ]
+              ),
             ),
           ),
         ),

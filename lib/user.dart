@@ -18,7 +18,7 @@ extension GenderExtension on Gender {
 }
 
 class User{
-  int? id;
+  int id;
   String username;
   String? name;
   String? lastName;
@@ -39,7 +39,7 @@ class User{
   bool connectedAccount;
 
   User({
-    this.id,
+    required this.id,
     required this.username,
     this.name,
     this.lastName,

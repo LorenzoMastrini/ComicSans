@@ -11,61 +11,83 @@ import 'package:comicsans/screens/SearchResults.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/comic.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 
 
-class ComicSansSearchBar extends StatelessWidget {
+class ComicSansSearchBar extends StatefulWidget {
   const ComicSansSearchBar({super.key});
 
   @override
+  State<ComicSansSearchBar> createState() => _ComicSansSearchBarState();
+}
+
+class _ComicSansSearchBarState extends State<ComicSansSearchBar> {
+  final GlobalKey filters = GlobalKey();
+
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 345,
-      child: Focus(
-        canRequestFocus: false,
-        skipTraversal: true,
-        child: ExcludeFocus(
-          child: SearchBar(
-            //controller: controller;
-            padding: WidgetStatePropertyAll<EdgeInsets>(
-              EdgeInsets.symmetric(horizontal: 10)
-            ),
-            leading: const Icon(Icons.search),
-            hintText: 'Ricerca...',
-            shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(7),
+    /*return ShowCaseWidget(
+      builder: (context) =>*/ return SizedBox(
+        width: 345,
+        child: Focus(
+          canRequestFocus: false,
+          skipTraversal: true,
+          child: ExcludeFocus(
+            child: SearchBar(
+              //controller: controller;
+              padding: WidgetStatePropertyAll<EdgeInsets>(
+                EdgeInsets.symmetric(horizontal: 10)
               ),
+              leading: const Icon(Icons.search),
+              hintText: 'Ricerca...',
+              shape: WidgetStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(7),
+                ),
+              ),
+              onTap:(){
+                showSearch(
+                  context: context,
+                  delegate: MySearchDelegate(filters: filters)
+                );
+                /*WidgetsBinding.instance.addPostFrameCallback((_) {
+                  ShowCaseWidget.of(context).startShowCase([filters]);
+                });*/
+              },
             ),
-            onTap:(){
-              showSearch(
-                context: context,
-                delegate: MySearchDelegate()
-              );
-            },
           ),
         ),
-      ),
+      //),
     );
   }
 }
 
 class MySearchDelegate extends SearchDelegate {
+  final GlobalKey filters;
+  MySearchDelegate({required this.filters});
+
   @override
   String get searchFieldLabel => 'Ricerca...';
 
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      IconButton(
-        icon: Icon(Icons.filter_list),
-        tooltip: 'Filtri',
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) => FiltersScreen(query: query),
-          ));
-        },
-      ),
+      /*Showcase(
+        key: filters,
+        description: "Premi qui per applicare filtri alla ricerca",
+        overlayOpacity: 0,
+        disableMovingAnimation: true,
+        child:*/ IconButton(
+          icon: Icon(Icons.filter_list),
+          tooltip: 'Filtri',
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) => FiltersScreen(query: query),
+            ));
+          },
+        ),
+      //),
     ];
   }
 
@@ -129,52 +151,52 @@ class MySearchDelegate extends SearchDelegate {
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children:<Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          child: FilterChip(
-            label: Text("Ricerca per ISBN"),
-            selected: false,
-            onSelected: (bool value) {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) => IsbnSearchScreen(),
-              ));
-            },
-            avatar: Icon(Icons.search, size: 18),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            )
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:<Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            child: FilterChip(
+              label: Text("Ricerca per ISBN"),
+              selected: false,
+              onSelected: (bool value) {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => IsbnSearchScreen(),
+                ));
+              },
+              avatar: Icon(Icons.search, size: 18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              )
+            ),
           ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: matchQuery.length,
-            itemBuilder: (context, index){
-              Comic comics = matchQuery[index];
-              return TextButton(
-                onPressed: () async {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  close(context, query);
-                  await Future<void>.delayed(const Duration(milliseconds: 1));
-                  if (!context.mounted) return;
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => SearchResults(comicsResults: [comics], query: query)
-                  ));
-                },
-                style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero, // Rectangular
+          Expanded(
+            child: ListView.builder(
+              itemCount: matchQuery.length,
+              itemBuilder: (context, index){
+                Comic comics = matchQuery[index];
+                return TextButton(
+                  onPressed: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    close(context, query);
+                    await Future<void>.delayed(const Duration(milliseconds: 1));
+                    if (!context.mounted) return;
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => SearchResults(comicsResults: [comics], query: query)
+                    ));
+                  },
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero, // Rectangular
+                    ),
                   ),
-                ),
-                child: ListTile(
-                  title: Text(comics.title),
-                ),
-              );
-            }
-          ),
-        )
-      ],
-    );
+                  child: ListTile(
+                    title: Text(comics.title),
+                  ),
+                );
+              }
+            ),
+          )
+        ],
+      );
   }
 }

@@ -21,6 +21,42 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  final Map<int, bool> _seenFavouriteShowcasePerUser = {};
+  bool hasSeenFavouriteShowcasePerUser(int userId) {
+    return _seenFavouriteShowcasePerUser[userId] ?? false;
+  }
+  void setHasSeenFavouriteShowcasePerUser (int userId, bool value) {
+    _seenFavouriteShowcasePerUser[userId] = value;
+    notifyListeners();
+  }
+
+  final Map<int, bool> _seenAddComicShowcasePerUser = {};
+  bool hasSeenAddComicShowcasePerUser(int userId) {
+    return _seenAddComicShowcasePerUser[userId] ?? false;
+  }
+  void setHasSeenAddComicShowcasePerUser (int userId, bool value) {
+    _seenAddComicShowcasePerUser[userId] = value;
+    notifyListeners();
+  }
+
+  final Map<int, bool> _seenOfferShowcasePerUser = {};
+  bool hasSeenOfferShowcasePerUser(int userId) {
+    return _seenOfferShowcasePerUser[userId] ?? false;
+  }
+  void setHasSeenOfferShowcasePerUser (int userId, bool value) {
+    _seenOfferShowcasePerUser[userId] = value;
+    notifyListeners();
+  }
+
+  final Map<int, bool> _seenProfileShowcasePerUser = {};
+  bool hasSeenProfileShowcasePerUser(int userId) {
+    return _seenProfileShowcasePerUser[userId] ?? false;
+  }
+  void setHasSeenProfileShowcasePerUser (int userId, bool value) {
+    _seenProfileShowcasePerUser[userId] = value;
+    notifyListeners();
+  }
+
   // favorite comics for the current user
   List<Comic> getFavoriteComics() {
     if (_loggedInUser == null) {

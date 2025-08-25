@@ -15,6 +15,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:comicsans/components/PanelWidget.dart';
 import 'package:comicsans/components/ReviewWidget.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 
 
@@ -33,12 +34,31 @@ class _ProductDetailState extends State<ProductDetail> {
   late ScrollController _scrollController;
   Color iconColor = Colors.white;
   final CarouselSliderController controller = CarouselSliderController();
+  final GlobalKey favourite = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_handleScroll);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final userProvider = context.read<UserProvider>();
+
+      if(!userProvider.hasSeenFavouriteShowcasePerUser(userProvider.loggedInUser!.id)) {
+        final ctx = favourite.currentContext;
+        if (ctx != null) {
+          await Scrollable.ensureVisible(
+            ctx,
+            duration: const Duration(milliseconds: 500),
+            alignment: 0.2
+          );
+
+          ShowCaseWidget.of(ctx).startShowCase([favourite]);
+          userProvider.setHasSeenFavouriteShowcasePerUser(userProvider.loggedInUser!.id, true);
+        }
+      }
+    });
   }
 
   @override
@@ -125,39 +145,45 @@ class _ProductDetailState extends State<ProductDetail> {
                     ),
                   ]),
                 ),
-                IconButton(
-                  iconSize: 40,
-                  icon: isFavorite
-                    ? Icon(Icons.bookmark, color: Colors.black)
-                    : Icon(Icons.bookmark_border, color: Colors.black),
-                  onPressed: () async {
-                    if(isFavorite) {
-                      bool? confirm = await showDialog<bool>(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          content: Text("Sei sicuro di voler rimuovere questo fumetto dai preferiti?"),
-                          actions: [
-                            TextButton(
-                              child: Text("Annulla"),
-                              onPressed: () => Navigator.of(context).pop(false),
-                            ),
-                            TextButton(
-                              child: Text("Conferma"),
-                              onPressed: () => Navigator.of(context).pop(true),
-                            ),
-                          ],
-                        ),
-                      );
+                Showcase(
+                  key: favourite,
+                  description: "Premi qui per aggiungere un fumetto tra i preferiti",
+                  overlayOpacity: 0,
+                  disableMovingAnimation: true,
+                  child: IconButton(
+                    iconSize: 40,
+                    icon: isFavorite
+                      ? Icon(Icons.bookmark, color: Colors.black)
+                      : Icon(Icons.bookmark_border, color: Colors.black),
+                    onPressed: () async {
+                      if(isFavorite) {
+                        bool? confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Text("Sei sicuro di voler rimuovere questo fumetto dai preferiti?"),
+                            actions: [
+                              TextButton(
+                                child: Text("Annulla"),
+                                onPressed: () => Navigator.of(context).pop(false),
+                              ),
+                              TextButton(
+                                child: Text("Conferma"),
+                                onPressed: () => Navigator.of(context).pop(true),
+                              ),
+                            ],
+                          ),
+                        );
 
-                      if (confirm == true) {
-                        toggleFavourite(isFavorite, userProvider);
+                        if (confirm == true) {
+                          toggleFavourite(isFavorite, userProvider);
+                        }
                       }
-                    }
-                    else {
-                      toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
-                    }
+                      else {
+                        toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
+                      }
 
-                  }
+                    }
+                  ),
                 )
               ]
             ),
@@ -220,14 +246,16 @@ class _ProductDetailState extends State<ProductDetail> {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => ChatScreen(
-                          chat: Chat(
-                            [],
-                            userProvider.loggedInUser!,
-                            widget.comic.seller,
-                            widget.comic,
-                            false
-                          )
+                        builder: (context) => ShowCaseWidget(
+                          builder: (context) => ChatScreen(
+                            chat: Chat(
+                              [],
+                              userProvider.loggedInUser!,
+                              widget.comic.seller,
+                              widget.comic,
+                              false
+                            )
+                          ),
                         )
                       ));
                     },

@@ -7,6 +7,7 @@ import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/OfferScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 
 
@@ -25,6 +26,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  final GlobalKey offer = GlobalKey();
 
   @override
   initState() {
@@ -34,6 +36,13 @@ class _ChatScreenState extends State<ChatScreen> {
       final MessagesProvider messagesProvider = Provider.of<MessagesProvider>(context, listen: false);
       // Mark chat as read as soon the user enters the chat page
       messagesProvider.markChatAsRead(widget.chat);
+
+      final userProvider = context.read<UserProvider>();
+
+      if(!userProvider.hasSeenOfferShowcasePerUser(userProvider.loggedInUser!.id)) {
+        ShowCaseWidget.of(context)?.startShowCase([offer]);
+        userProvider.setHasSeenOfferShowcasePerUser(userProvider.loggedInUser!.id, true);
+      }
     });
   }
 
@@ -79,15 +88,21 @@ class _ChatScreenState extends State<ChatScreen> {
             padding: EdgeInsets.symmetric(horizontal: 110),
             // Show the offer button only if the current user is the buyer
             child: widget.chat.buyer == userProviderWatch.loggedInUser
-              ? ComicSansButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                   builder: (context) => OfferScreen(chat: widget.chat)
-                  ));
-                },
-                text: "Fai un'offerta",
-                height: 40,
-              )
+              ? Showcase(
+                  key: offer,
+                  description: "Premi qui per fare un'offerta al venditore",
+                  overlayOpacity: 0,
+                  disableMovingAnimation: true,
+                  child: ComicSansButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(
+                       builder: (context) => OfferScreen(chat: widget.chat)
+                      ));
+                    },
+                    text: "Fai un'offerta",
+                    height: 40,
+                  ),
+                )
               : null,
           ),
           _buildMessageInput()
