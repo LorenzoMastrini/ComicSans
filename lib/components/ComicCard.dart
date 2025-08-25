@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +56,7 @@ class _ComicCardState extends State<ComicCard> {
             right: 0,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.8),
+                color: Theme.of(context).colorScheme.secondary.withOpacity(0.9),
                 borderRadius: BorderRadius.all(Radius.circular(7.0)),
               ),
               child: Row(

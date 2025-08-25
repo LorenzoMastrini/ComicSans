@@ -151,12 +151,12 @@ class SampleData{
       id: 4,
       seller: user2,
       title: "Batman 5",
-      description: "Batman 5",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       price: 3,
       conditions: Conditions.daEdicola,
       otherImagesPath: ['assets/comic_cover/spiderman-cover.jpg', 'assets/comic_cover/spiderman-cover.jpg'],
       coverPath: 'assets/comic_cover/spiderman-cover.jpg',
-      authors: ["Brian Michael Bendis","Mark Bagley"],
+      authors: ["Brian Michael Bendis", "Mark Bagley"],
       genre: [Genre.supereroi],
       publicationYear: 2004,
       language: "Italiano",
@@ -180,6 +180,36 @@ class SampleData{
   static List<Comic> allComics = [SampleData.comic1, SampleData.comic2, SampleData.comic3, SampleData.comic4];
   static List<User> allUsers = [user1, user2];
 
+  static List<String> allAuthors = [
+    "Chip Zdarsky",
+    "Carmine Di Giandomenico",
+    "Werther Dell'Edera",
+    "Simone di Meo",
+    "Sio",
+    "Zerocalcare",
+    "Brian Michael Bendis",
+    "Mark Bagley",
+    "Alan Moore",
+    "Frank Miller",
+    "Osamu Tezuka",
+    "Hergé",
+    "Jacques Tardi",
+    "Grant Morrison",
+    "Matsumoto Leiji",
+    "Garth Ennis",
+    "Jim Lee",
+    "Neil Gaiman",
+    "Moebius",
+    "Marjane Satrapi",
+    "Katsuhiro Otomo",
+    "Mark Millar",
+    "Stan Lee",
+    "Milo Manara",
+    "Raina Telgemeier",
+    "Brian K. Vaughan",
+    "Yoh Yoshinari",
+    "Carlos Giménez",
+  ];
 
   // Simulated chat 1
   static Message c1_msg1 = Message(

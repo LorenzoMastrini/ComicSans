@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:comicsans/Chat.dart';
+import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
@@ -31,7 +32,7 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends State<ProductDetail> {
   int current = 0;
   late ScrollController _scrollController;
-  Color iconColor = Colors.white;
+  Color iconColor = Color(0xFFf9f4ed);
   final CarouselSliderController controller = CarouselSliderController();
 
   @override
@@ -51,11 +52,11 @@ class _ProductDetailState extends State<ProductDetail> {
   void _handleScroll() {
     double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
     double newOpacity = (offset / 200).clamp(0.0, 1.0);
-    Color newColor = newOpacity > 0.5 ? Colors.black : Colors.white;
+    Color newColor = newOpacity > 0.5 ? Color(0xFF0C3148) : Color(0xFFf9f4ed);
 
     if (newColor != iconColor && mounted) {
       setState(() {
-        iconColor = newColor;
+        iconColor = Color(0xFFf9f4ed);
       });
     }
   }
@@ -80,29 +81,30 @@ class _ProductDetailState extends State<ProductDetail> {
             Row(
               children: <Widget>[
                 Flexible(
-                  child: Column(children: <Widget>[
+                  child: Column(
+                    children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(15, 3, 0, 0),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(widget.comic.title,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 28,
-                            fontWeight: FontWeight.w500
+                            fontWeight: FontWeight.bold
                           ),
                           overflow: TextOverflow.ellipsis
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 10, 0, 3),
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 10),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "${widget.comic.price}€",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 24,
                             fontWeight: FontWeight.w500
                           )
@@ -114,12 +116,14 @@ class _ProductDetailState extends State<ProductDetail> {
                       child: Row(children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
-                          child: Icon(FontAwesomeIcons.truck, color: Colors.black, size: 18)),
+                          child: Icon(FontAwesomeIcons.truck, color: quaternary, size: 18)
+                        ),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Spedizione a partire da: 0€",
-                            style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
+                          " Spedizione a partire da: 0€",
+                          style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.w500)
+                          ),
                         ),
                       ]),
                     ),
@@ -128,8 +132,8 @@ class _ProductDetailState extends State<ProductDetail> {
                 IconButton(
                   iconSize: 40,
                   icon: isFavorite
-                    ? Icon(Icons.bookmark, color: Colors.black)
-                    : Icon(Icons.bookmark_border, color: Colors.black),
+                    ? Icon(Icons.bookmark, color : Theme.of(context).colorScheme.secondary)
+                    : Icon(Icons.bookmark_border, color: Theme.of(context).colorScheme.secondary),
                   onPressed: () async {
                     if(isFavorite) {
                       bool? confirm = await showDialog<bool>(
@@ -152,8 +156,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       if (confirm == true) {
                         toggleFavourite(isFavorite, userProvider);
                       }
-                    }
-                    else {
+                    } else {
                       toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
                     }
 
@@ -161,7 +164,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 )
               ]
             ),
-            const Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),
+            Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Theme.of(context).colorScheme.secondary),
             Row(
               children: <Widget>[
                 Expanded(
@@ -170,17 +173,17 @@ class _ProductDetailState extends State<ProductDetail> {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                         child: Row(children: <Widget>[
-                          Icon(Icons.account_circle, color: Colors.black, size: 80),
+                          Icon(Icons.account_circle, color: Theme.of(context).colorScheme.secondary, size: 80),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(widget.comic.seller.username,
-                                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
+                                style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.w500)),
                               ReviewWidget(user: widget.comic.seller),
                               GestureDetector(
                                 child: Text("Recensioni",
                                   style: TextStyle(
-                                    color: Colors.black,
+                                    color: Theme.of(context).colorScheme.secondary,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w300,
                                     decoration: TextDecoration.underline
@@ -188,7 +191,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                 ),
                                 onTap: () {
                                   Navigator.push(
-                                      context, MaterialPageRoute(
+                                    context, MaterialPageRoute(
                                       builder: (context) => VendorScreen(seller: widget.comic.seller, initialTab: 1)
                                   ));
                                 },
@@ -206,17 +209,23 @@ class _ProductDetailState extends State<ProductDetail> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Row(children: <Widget>[
-                        Icon(FontAwesomeIcons.locationDot, color: Colors.black, size: 25),
-                        Text(
-                          widget.comic.seller.address!.country,
-                          style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
-                      ]),
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsetsGeometry.symmetric(horizontal: 9),
+                            child: Icon(FontAwesomeIcons.locationDot, color: quaternary, size: 18)
+                          ),
+                          Text(
+                            widget.comic.seller.address!.country,
+                            style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.normal)
+                          ),
+                        ]
+                      ),
                     ),
                   ]),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 16),
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(
@@ -239,7 +248,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     child: Text(
                       'Chat',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.secondary,
                         fontSize: 16,
                         fontWeight: FontWeight.normal
                       )
@@ -248,7 +257,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 )
               ]
             ),
-            Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),
+            Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Theme.of(context).colorScheme.secondary),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -258,9 +267,9 @@ class _ProductDetailState extends State<ProductDetail> {
                     alignment: Alignment.centerLeft,
                     child: Text("Condizioni",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.primary,
                         fontSize: 20,
-                        fontWeight: FontWeight.w500
+                        fontWeight: FontWeight.bold
                       )
                     ),
                   ),
@@ -270,7 +279,11 @@ class _ProductDetailState extends State<ProductDetail> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(conditionsToString(widget.comic.conditions),
-                        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 15,
+                      )
+                    ),
                   ),
                 ),
                 Padding(
@@ -279,7 +292,12 @@ class _ProductDetailState extends State<ProductDetail> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Descrizione",
-                      style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
+                      )
+                    ),
                   ),
                 ),
                 Padding(
@@ -288,21 +306,27 @@ class _ProductDetailState extends State<ProductDetail> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       widget.comic.description,
-                      style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 15,
+                      )
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 20),
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
                       child:
-                      Text("Dettagli",
+                      Text(
+                        "Dettagli",
                         style: TextStyle(
-                          color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline
+                          color: quaternary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          decoration: TextDecoration.underline,
+                          decorationColor: quaternary
                         )
                       ),
                       onTap: () {
@@ -403,7 +427,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                 margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)
+                                  color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Theme.of(context).colorScheme.secondary)
                                     .withOpacity(current == entry.key ? 0.9 : 0.4),
                                 ),
                               ),
@@ -416,7 +440,6 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               ),
 
-              // Contenuto sotto
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 80),
@@ -426,21 +449,15 @@ class _ProductDetailState extends State<ProductDetail> {
             ],
           ),
 
-          // AppBar fissa sopra tutto
+          // Fixed AppBar in overlay with the images
           Positioned(
             top: MediaQuery.of(context).padding.top,
             left: 0,
             right: 0,
             child: ComicSansAppBar(
               showBackButton: true,
-              backgroundColor: Color.lerp(
-                Colors.transparent,
-                Colors.black,
-                (_scrollController.hasClients
-                    ? (_scrollController.offset / 200).clamp(0.0, 1.0)
-                    : 0.0),
-                ) ?? Colors.transparent,
-              iconColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.secondary.withAlpha(100),
+              iconColor: iconColor,
               actionType: AppBarActionType.overflowMenu,
             ),
           ),

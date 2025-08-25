@@ -6,7 +6,7 @@ import 'package:comicsans/category.dart';
 
 class CategoriesGrid extends StatelessWidget{
   final List<Category> categories = [
-    Category(name: 'Italiano', icon: AssetImage('assets/categories_icons/italian_icon.jpg')),
+    Category(name: 'Italiano', icon: AssetImage('assets/categories_icons/italian_icon.png')),
     Category(name: 'Americano', icon: AssetImage('assets/categories_icons/american_icon.jpg')),
     Category(name: 'Giapponese', icon: AssetImage('assets/categories_icons/japanese_icon.jpg')),
     Category(name: 'Francese', icon: AssetImage('assets/categories_icons/french_icon.jpg')),

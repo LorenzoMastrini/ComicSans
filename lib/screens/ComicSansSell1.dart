@@ -37,11 +37,13 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
     _priceController = TextEditingController(text: widget.comicToModify?.price.toString() ?? '');
     _conditionsController = TextEditingController(text: widget.comicToModify != null ? conditionsToString(widget.comicToModify?.conditions) : '');
 
-    final provider = context.read<SellInfoProvider>();
-    provider.title = widget.comicToModify?.title;
-    provider.description = widget.comicToModify?.description;
-    provider.price = widget.comicToModify?.price;
-    provider.conditions = widget.comicToModify?.conditions;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<SellInfoProvider>();
+      provider.title = widget.comicToModify?.title;
+      provider.description = widget.comicToModify?.description;
+      provider.price = widget.comicToModify?.price;
+      provider.conditions = widget.comicToModify?.conditions;
+    });
   }
 
   @override

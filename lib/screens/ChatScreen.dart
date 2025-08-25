@@ -106,6 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
             icon: Icon(Icons.attach_file),
             onPressed: () {
+
               // TODO: attach files to chat(?)
             },
           ),
