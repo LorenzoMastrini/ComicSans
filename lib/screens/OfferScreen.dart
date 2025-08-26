@@ -78,6 +78,8 @@ class _OfferScreenState extends State<OfferScreen> {
                   Navigator.pop(context);
                 },
                 text: "Fai un'offerta",
+                height: 50,
+                width: 200,
               )
             ]
           ),

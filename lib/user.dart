@@ -102,3 +102,16 @@ class CreditCard{
     this.cvv = 0
   });
 }
+
+User application = User(
+    id: 0,
+    username: "application",
+    comicsSale: [],
+    favouriteComics: [],
+    followedUsers: [],
+    rating: 0,
+    sellings: [],
+    purchases: [],
+    reviews: [],
+    connectedAccount: false
+);

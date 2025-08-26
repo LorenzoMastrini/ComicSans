@@ -7,6 +7,7 @@ class ComicSansButton extends StatelessWidget {
   final VoidCallback onPressed;
   bool enabled;
   final double height;
+  final double width;
 
   ComicSansButton({
     super.key,
@@ -14,13 +15,14 @@ class ComicSansButton extends StatelessWidget {
     required this.onPressed,
     this.enabled = true,
     this.height = 60,
+    this.width = 318,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        minimumSize: Size.fromHeight(height),
+        minimumSize: Size(width, height),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(7),
         ),

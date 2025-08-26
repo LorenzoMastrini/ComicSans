@@ -337,10 +337,10 @@ class _ProductDetailState extends State<ProductDetail> {
                             borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
                           ),
                           builder: (context) => DraggableScrollableSheet(
-                            initialChildSize: 1.0,
-                            minChildSize: 1.0,
-                            maxChildSize: 1.0,
-                            expand: true,
+                            initialChildSize: 0.85,
+                            minChildSize: 0.85,
+                            maxChildSize: 0.85,
+                            expand: false,
                             builder: (context, scrollController) => PanelWidget(
                               controller: scrollController,
                               comic: widget.comic,

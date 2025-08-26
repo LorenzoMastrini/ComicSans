@@ -137,7 +137,7 @@ class _MessageComponentState extends State<MessageComponent> {
                           text: 'Accetta',
                           onPressed: () {
                             _disableButtons();
-                            messageProviderRead.acceptOffer(context, widget.chat);
+                            messageProviderRead.acceptOffer(context, widget.chat, userProviderWatch.loggedInUser!);
                           },
                           enabled: widget.chat.currentOfferPrice != null
                         ),
@@ -155,7 +155,7 @@ class _MessageComponentState extends State<MessageComponent> {
   Widget _buildAcceptOfferMessage(BuildContext context, Message message) {
     final userProviderWatch = context.watch<UserProvider>();
     final comicsProvider = context.watch<ComicsProvider>();
-    final bool isSentByCurrentUser = message.sender == userProviderWatch.loggedInUser;
+    final bool receiverIsCurrentUser = message.receiver == userProviderWatch.loggedInUser;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
@@ -179,7 +179,7 @@ class _MessageComponentState extends State<MessageComponent> {
                 ),
               ),
 
-              if(!isSentByCurrentUser) // Different results for buyer and seller
+              if(receiverIsCurrentUser) // Different results for buyer and seller
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Row(

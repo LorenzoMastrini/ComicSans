@@ -145,7 +145,7 @@ class SampleData{
     graded: false,
     signed: false,
     editionYear: 2010,
-    isbn: 0,
+    isbn: null,
   );
   comic4 = Comic(
       id: 4,
@@ -214,11 +214,13 @@ class SampleData{
   // Simulated chat 1
   static Message c1_msg1 = Message(
     sender: user2,
+    receiver: user1,
     text: "Ciao. A quanto lo vendi il numero 3 di Spider-Man?",
     date: DateTime(2025, 7, 2)
   );
   static Message c1_msg2 = Message(
     sender: user1,
+      receiver: user2,
     text: "Salve. Il prezzo pubblicato è 3€ ma posso fare uno sconto",
     date: DateTime(2025, 7, 3)
   );
@@ -227,11 +229,13 @@ class SampleData{
   // Simulated chat 2
   static Message c2_msg1 = Message(
     sender: user2,
+      receiver: user1,
     text:  "Ciao. Voglio tutto a 1€",
     date: DateTime(2025, 6, 29)
   );
   static Message c2_msg2 = Message(
     sender: user1,
+      receiver: user2,
     text: "Ok va bene",
     date: DateTime(2025, 6, 30)
   );

@@ -75,18 +75,18 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             )
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 110),
+          SizedBox(
             // Show the offer button only if the current user is the buyer
             child: widget.chat.buyer == userProviderWatch.loggedInUser
               ? ComicSansButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
-                   builder: (context) => OfferScreen(chat: widget.chat)
+                    builder: (context) => OfferScreen(chat: widget.chat)
                   ));
                 },
                 text: "Fai un'offerta",
-                height: 40,
+                height: 50,
+                width: 200,
               )
               : null,
           ),
@@ -106,7 +106,6 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
             icon: Icon(Icons.attach_file),
             onPressed: () {
-
               // TODO: attach files to chat(?)
             },
           ),

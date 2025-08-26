@@ -1,5 +1,6 @@
 import 'package:comicsans/Chat.dart';
 import 'package:comicsans/providers/user_provider.dart';
+import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -51,6 +52,7 @@ class MessagesProvider extends ChangeNotifier {
 
     final newMessage = Message(
         sender: userProvider.loggedInUser!,
+        receiver: chat.buyer == userProvider.loggedInUser ? chat.seller : chat.buyer,
         text: messageText,
         date: DateTime.now()
     );
@@ -66,6 +68,8 @@ class MessagesProvider extends ChangeNotifier {
     if (!accepted) {
       final newMessage = Message(
         sender: userProvider.loggedInUser!,
+        receiver: chat.buyer == userProvider.loggedInUser ? chat.seller : chat.buyer,
+        text: "Offerta rifiutata",
         date: DateTime.now(),
         type: MessageType.offer,
       );
@@ -79,11 +83,12 @@ class MessagesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void acceptOffer(BuildContext context, Chat chat) {
+  void acceptOffer(BuildContext context, Chat chat, User buyer) {
     final userProvider = context.read<UserProvider>();
 
     final newMessage = Message(
         sender: userProvider.loggedInUser!,
+        receiver: buyer,
         date: DateTime.now(),
         type: MessageType.acceptOffer,
     );
