@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:comicsans/providers/user_provider.dart';
 
-import '../providers/user_provider.dart';
 
 
 class ComicSansBottomBar extends StatefulWidget {
+  final double iconsSize = 30;
   final int selectedIndex;
   final ValueChanged<int> onDestinationSelected; // Callback to notify the tap
 
@@ -43,32 +44,40 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(10),
-        topRight: Radius.circular(10),
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            spreadRadius: -8,
+            blurRadius: 10,
+            offset: Offset(0, -4),
+          ),
+        ],
       ),
-      child: NavigationBar(
-        selectedIndex: widget.selectedIndex,
-        onDestinationSelected: widget.onDestinationSelected,
-        destinations: <Widget>[
-          NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
+      child: BottomNavigationBar(
+        elevation: 50,
+        type: BottomNavigationBarType.fixed,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
+        currentIndex: selectedIndex,
+        onTap: onDestinationSelected,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).colorScheme.tertiary,
+            activeIcon: Icon(Icons.home, size: iconsSize),
+            icon: Icon(Icons.home_outlined, size: iconsSize, color: Theme.of(context).colorScheme.secondary,),
+            label: '',
           ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.bookmark),
-            icon: Icon(Icons.bookmark_outline),
-            label: 'Preferiti',
+          BottomNavigationBarItem(
+            activeIcon: Icon(Icons.bookmark, size: iconsSize),
+            icon: Icon(Icons.bookmark_border, size: iconsSize, color: Theme.of(context).colorScheme.secondary),
+            label: '',
           ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.add_circle, size: 40),
-            icon: 
-              SizedBox(
-                  width: 35,
-                  height: 35,
-                  child: Center(
+          BottomNavigationBarItem(
+            activeIcon: Icon(Icons.add_circle, size: 40),
+            icon: Center(
                     child: Showcase(
                       key: add,
                       description: "Premi qui per vendere un fumetto",
@@ -80,24 +89,23 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           shape: BoxShape.rectangle,
-                          border: Border.all(color: Colors.grey.shade700, width: 2)
+                          border: Border.all(color: Theme.of(context).colorScheme.secondary, width: 2)
                         ),
-                        child: Icon(Icons.add_circle_outline, size: 30)
+                        child: Icon(Icons.add_circle_outline, size: 40, color: Theme.of(context).colorScheme.secondary)
                       ),
                     ),
                   ),
-                ),
-            label: 'Vendi',
+            label: '',
           ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.inbox),
-            icon: Icon(Icons.inbox_outlined),
-            label: 'Inbox',
+          BottomNavigationBarItem(
+            activeIcon: Icon(Icons.inbox, size: iconsSize),
+            icon: Icon(Icons.inbox_outlined, size: iconsSize, color: Theme.of(context).colorScheme.secondary),
+            label: '',
           ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.person),
-            icon: Icon(Icons.person_outline),
-            label: 'Profilo',
+          BottomNavigationBarItem(
+            activeIcon: Icon(Icons.person, size: iconsSize),
+            icon: Icon(Icons.person_outline, size: iconsSize, color: Theme.of(context).colorScheme.secondary),
+            label: '',
           ),
         ],
       ),

@@ -3,13 +3,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 
 
+final Color quaternary = Color(0xFF669bbc);
+
 class ComicSansTheme {
-  // tema chiaro
   static TextTheme lightTextTheme = TextTheme(
-      headlineSmall: GoogleFonts.poppins(
-      fontSize: 25,
-      fontWeight: FontWeight.w400,
-      color: Colors.black
+    // TabBar labels
+    headlineSmall: GoogleFonts.poppins(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: Color(0xFF0C3148)
     ),
     titleLarge: GoogleFonts.poppins(
       fontSize: 22,
@@ -78,7 +80,7 @@ class ComicSansTheme {
       ),
       tabBarTheme: const TabBarThemeData(
         labelColor: Color(0xFF0C3148),
-        unselectedLabelColor: Colors.black26,
+        unselectedLabelColor: Color(0xFF0C3148),
         indicator: UnderlineTabIndicator(
           borderSide: BorderSide(width: 2.0, color: Color(0xFFc11720)),
         ),

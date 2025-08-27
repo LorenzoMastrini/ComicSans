@@ -132,8 +132,8 @@ class _ComicSansFavoriteState extends State<ComicSansFavorite> {
                           label: Text(
                             "Ordina per",
                             style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFF0C3148)
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: 12,
                             )
                           ),
                           selected: false,
@@ -150,8 +150,8 @@ class _ComicSansFavoriteState extends State<ComicSansFavorite> {
                         label: Text(
                           "Ricerca per ISBN",
                           style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFF0C3148)
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 12,
                           )
                         ),
                         selected: false,

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:comicsans/Chat.dart';
+import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
@@ -31,36 +32,17 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail> {
   int current = 0;
-  late ScrollController _scrollController;
-  Color iconColor = Colors.white;
   final CarouselSliderController controller = CarouselSliderController();
   final GlobalKey favourite = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_handleScroll);
-
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_handleScroll);
-    _scrollController.dispose();
     super.dispose();
-  }
-
-  void _handleScroll() {
-    double offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
-    double newOpacity = (offset / 200).clamp(0.0, 1.0);
-    Color newColor = newOpacity > 0.5 ? Colors.black : Colors.white;
-
-    if (newColor != iconColor && mounted) {
-      setState(() {
-        iconColor = newColor;
-      });
-    }
   }
 
   void toggleFavourite(bool isFavorite, UserProvider provider){
@@ -75,145 +57,130 @@ class _ProductDetailState extends State<ProductDetail> {
     final userProvider = context.watch<UserProvider>();
     final isFavorite = userProvider.isFavorite(widget.comic);
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 0),
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Flexible(
-                  child: Column(children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 3, 0, 0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(widget.comic.title,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w500
-                          ),
-                          overflow: TextOverflow.ellipsis
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Flexible(
+                child: Column(
+                  children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 3, 0, 0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        widget.comic.title,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold
                         ),
+                        overflow: TextOverflow.ellipsis
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 10, 0, 3),
-                      child: Align(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 0, 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "${widget.comic.price}€",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500
+                        )
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                    child: Row(children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
+                        child: Icon(FontAwesomeIcons.truck, color: quaternary, size: 18)
+                      ),
+                      Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "${widget.comic.price}€",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500
-                          )
+                        " Spedizione a partire da: 0€",
+                        style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.w500)
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                      child: Row(children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
-                          child: Icon(FontAwesomeIcons.truck, color: Colors.black, size: 18)),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Spedizione a partire da: 0€",
-                            style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
-                        ),
-                      ]),
-                    ),
-                  ]),
-                ),
-                IconButton(
-                    iconSize: 40,
-                    icon: isFavorite
-                      ? Icon(Icons.bookmark, color: Colors.black)
-                      : Icon(Icons.bookmark_border, color: Colors.black),
-                    onPressed: () async {
-                      if(isFavorite) {
-                        bool? confirm = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: Text("Sei sicuro di voler rimuovere questo fumetto dai preferiti?"),
-                            actions: [
-                              TextButton(
-                                child: Text("Annulla"),
-                                onPressed: () => Navigator.of(context).pop(false),
-                              ),
-                              TextButton(
-                                child: Text("Conferma"),
-                                onPressed: () => Navigator.of(context).pop(true),
-                              ),
-                            ],
-                          ),
-                        );
-
-                        if (confirm == true) {
-                          toggleFavourite(isFavorite, userProvider);
-                        }
-                      }
-                      else {
-                        toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
-                      }
-
-                    }
+                    ]),
                   ),
-              ]
-            ),
-            const Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                    GestureDetector(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                        child: Row(children: <Widget>[
-                          Icon(Icons.account_circle, color: Colors.black, size: 80),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(widget.comic.seller.username,
-                                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
-                              ReviewWidget(user: widget.comic.seller),
-                              GestureDetector(
-                                child: Text("Recensioni",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                    decoration: TextDecoration.underline
-                                  )
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                      context, MaterialPageRoute(
-                                      builder: (context) => VendorScreen(seller: widget.comic.seller, initialTab: 1)
-                                  ));
-                                },
-                              ),
-                            ]
-                          )
-                        ]),
+                ]),
+              ),
+              IconButton(
+                iconSize: 40,
+                icon: isFavorite
+                  ? Icon(Icons.bookmark, color: Theme.of(context).colorScheme.secondary)
+                  : Icon(Icons.bookmark_border, color: Theme.of(context).colorScheme.secondary),
+                onPressed: () async {
+                  if(isFavorite) {
+                    bool? confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: Text("Sei sicuro di voler rimuovere questo fumetto dai preferiti?"),
+                        actions: [
+                          TextButton(
+                            child: Text("Annulla"),
+                            onPressed: () => Navigator.of(context).pop(false),
+                          ),
+                          TextButton(
+                            child: Text("Conferma"),
+                            onPressed: () => Navigator.of(context).pop(true),
+                          ),
+                        ],
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context, MaterialPageRoute(
-                          builder: (context) => VendorScreen(seller: widget.comic.seller)
-                        ));
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    );
+
+                    if (confirm == true) {
+                      toggleFavourite(isFavorite, userProvider);
+                    }
+                  } else {
+                    toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
+                  }
+
+                }
+              )
+            ]
+          ),
+          Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Theme.of(context).colorScheme.secondary),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                  GestureDetector(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                       child: Row(children: <Widget>[
-                        Icon(FontAwesomeIcons.locationDot, color: Colors.black, size: 25),
-                        Text(
-                          widget.comic.seller.address!.country,
-                          style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
+                        Icon(Icons.account_circle, color: Theme.of(context).colorScheme.secondary, size: 80),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(widget.comic.seller.username,
+                              style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.w500)),
+                            ReviewWidget(user: widget.comic.seller),
+                            GestureDetector(
+                              child: Text("Recensioni",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                  decoration: TextDecoration.underline
+                                )
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context, MaterialPageRoute(
+                                    builder: (context) => VendorScreen(seller: widget.comic.seller, initialTab: 1)
+                                ));
+                              },
+                            ),
+                          ]
+                        )
                       ]),
                     ),
                   ]),
@@ -236,107 +203,155 @@ class _ProductDetailState extends State<ProductDetail> {
                         )
                       ));
                     },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                    ),
-                    child: Text(
-                      'Chat',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal
-                      )
-                    ),
                   ),
-                )
-              ]
-            ),
-            Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Condizioni",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500
-                      )
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsetsGeometry.symmetric(horizontal: 9),
+                          child: Icon(FontAwesomeIcons.locationDot, color: quaternary, size: 18)
+                        ),
+                        Text(
+                          widget.comic.seller.address!.country,
+                          style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.normal)
+                        ),
+                      ]
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(conditionsToString(widget.comic.conditions),
-                        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Descrizione",
-                      style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.comic.description,
-                      style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 20),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      child:
-                      Text("Dettagli",
-                        style: TextStyle(
-                          color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline
+                ]),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 20, 16),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => ChatScreen(
+                        chat: Chat(
+                          [],
+                          userProvider.loggedInUser!,
+                          widget.comic.seller,
+                          widget.comic,
+                          false
                         )
-                      ),
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                          ),
-                          builder: (context) => DraggableScrollableSheet(
-                            initialChildSize: 1.0,
-                            minChildSize: 1.0,
-                            maxChildSize: 1.0,
-                            expand: true,
-                            builder: (context, scrollController) => PanelWidget(
-                              controller: scrollController,
-                              comic: widget.comic,
-                            ),
-                          ),
-                        );
-                      }),
+                      )
+                    ));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                  ),
+                  child: Text(
+                    'Chat',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal
+                    )
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: 60)
-          ],
-        )
-      ),
+              )
+            ]
+          ),
+          Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Theme.of(context).colorScheme.secondary),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Condizioni",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                    )
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(conditionsToString(widget.comic.conditions),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 15,
+                    )
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Descrizione",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                    )
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.comic.description,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 15,
+                    )
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    child:
+                    Text(
+                      "Dettagli",
+                      style: TextStyle(
+                        color: quaternary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        decoration: TextDecoration.underline,
+                        decorationColor: quaternary
+                      )
+                    ),
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                        ),
+                        builder: (context) => DraggableScrollableSheet(
+                          initialChildSize: 0.85,
+                          minChildSize: 0.85,
+                          maxChildSize: 0.85,
+                          expand: false,
+                          builder: (context, scrollController) => PanelWidget(
+                            controller: scrollController,
+                            comic: widget.comic,
+                          ),
+                        ),
+                      );
+                    }),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 60)
+        ],
+      )
     );
   }
 
@@ -349,7 +364,6 @@ class _ProductDetailState extends State<ProductDetail> {
         children: [
           // Scrollable content
           CustomScrollView(
-            controller: _scrollController,
             slivers: [
               // Images carousel
               SliverToBoxAdapter(
@@ -408,8 +422,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                 margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)
-                                    .withOpacity(current == entry.key ? 0.9 : 0.4),
+                                  color: (Theme.of(context).brightness == Brightness.dark ? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.secondary)
+                                    .withAlpha(current == entry.key ? 210 : 105),
                                 ),
                               ),
                             );
@@ -421,7 +435,6 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               ),
 
-              // Contenuto sotto
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 80),
@@ -431,21 +444,15 @@ class _ProductDetailState extends State<ProductDetail> {
             ],
           ),
 
-          // AppBar fissa sopra tutto
+          // Fixed AppBar in overlay with the images
           Positioned(
             top: MediaQuery.of(context).padding.top,
             left: 0,
             right: 0,
             child: ComicSansAppBar(
               showBackButton: true,
-              backgroundColor: Color.lerp(
-                Colors.transparent,
-                Colors.black,
-                (_scrollController.hasClients
-                    ? (_scrollController.offset / 200).clamp(0.0, 1.0)
-                    : 0.0),
-                ) ?? Colors.transparent,
-              iconColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.secondary.withAlpha(100),
+              iconColor: Theme.of(context).colorScheme.tertiary,
               actionType: AppBarActionType.overflowMenu,
             ),
           ),
@@ -456,12 +463,12 @@ class _ProductDetailState extends State<ProductDetail> {
       floatingActionButton: SizedBox(
         width: MediaQuery.of(context).size.width - 30,
         child: ComicSansButton(
+          text: 'Acquista',
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(
               builder: (context) => PurchaseScreen(comic: widget.comic)
             ));
           },
-          text: 'Acquista',
         ),
       ),
     );

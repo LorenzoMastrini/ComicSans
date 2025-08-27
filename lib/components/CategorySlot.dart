@@ -30,7 +30,7 @@ class _CategorySlotState extends State<CategorySlot> {
           },
           child: CircleAvatar(
             radius: 40,
-            backgroundImage: widget.category.icon,
+            foregroundImage: widget.category.icon,
           ),
         ),
         const SizedBox(height: 10),

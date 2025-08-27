@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -7,18 +6,12 @@ import 'package:provider/provider.dart';
 
 
 
-class ComicCardDelete extends StatefulWidget{
+class ComicCardDelete extends StatelessWidget{
   final Comic comic;
   final VoidCallback onDelete;
 
   const ComicCardDelete ({super.key, required this.comic, required this.onDelete});
 
-  @override
-  State<ComicCardDelete> createState() => _ComicCardDeleteState();
-}
-
-
-class _ComicCardDeleteState extends State<ComicCardDelete> {
   @override
   Widget build(BuildContext context) {
     UserProvider userProviderRead = context.read<UserProvider>();
@@ -32,17 +25,14 @@ class _ComicCardDeleteState extends State<ComicCardDelete> {
             height: MediaQuery.of(context).size.height,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(7),
-              child: widget.comic.coverPath!.startsWith('assets/')
+              child: comic.coverPath.startsWith('assets/')
                 ? Image.asset(
-                  widget.comic.coverPath!,
+                  comic.coverPath,
                   fit: BoxFit.fill
                 )
-                : widget.comic.coverPath!.isEmpty || !File(widget.comic.coverPath!).existsSync()
-                  ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
-                  : Image.file(
-                    File(widget.comic.coverPath!),
-                    fit: BoxFit.fill,
-                  ),
+                : comic.coverPath.isEmpty || !File(comic.coverPath).existsSync()
+                  ? Image.asset('assets/no_image.png', fit: BoxFit.fitHeight)
+                  : Image.file(File(comic.coverPath), fit: BoxFit.fitHeight),
             ),
           ),
           Positioned(
@@ -51,13 +41,8 @@ class _ComicCardDeleteState extends State<ComicCardDelete> {
             right: 0,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.8),
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(7.0),
-                  topLeft: Radius.circular(7.0),
-                  bottomLeft: Radius.circular(7.0),
-                  bottomRight: Radius.circular(7.0),
-                ),
+                color: Theme.of(context).colorScheme.secondary.withAlpha(210),
+                borderRadius: BorderRadius.all(Radius.circular(7.0)),
               ),
               child: Row(
                 children: <Widget>[
@@ -69,8 +54,12 @@ class _ComicCardDeleteState extends State<ComicCardDelete> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              widget.comic.title,
-                              style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+                              comic.title,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500
+                              ),
                               overflow: TextOverflow.ellipsis
                             ),
                           ),
@@ -80,8 +69,12 @@ class _ComicCardDeleteState extends State<ComicCardDelete> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "${widget.comic.price}€",
-                              style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500)
+                              "${comic.price}€",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500
+                              )
                             ),
                           ),
                         ),
@@ -89,7 +82,7 @@ class _ComicCardDeleteState extends State<ComicCardDelete> {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.delete, color: Colors.white),
+                    icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.tertiary),
                     onPressed: () {
                       showDialog<bool> (
                         context: context,
@@ -103,7 +96,7 @@ class _ComicCardDeleteState extends State<ComicCardDelete> {
                             TextButton(
                               child: Text("Conferma"),
                               onPressed: () {
-                                userProviderRead.removeComicFromLibrary(widget.comic);
+                                userProviderRead.removeComicFromLibrary(comic);
                                 Navigator.of(context).pop();
                               },
                             ),
@@ -113,10 +106,10 @@ class _ComicCardDeleteState extends State<ComicCardDelete> {
                     },
                   )
                 ]
-                ),
               ),
             ),
-          ]
+          ),
+        ]
       )
     );
   }

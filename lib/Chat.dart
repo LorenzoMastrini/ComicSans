@@ -21,10 +21,12 @@ class Message {
   final String? text;
   final DateTime date;
   final User sender;
+  final User receiver;
   final MessageType type;
 
   Message({
     required this.sender,
+    required this.receiver,
     this.text,
     required this.date,
     this.type = MessageType.normal,

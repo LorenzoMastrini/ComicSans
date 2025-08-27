@@ -23,16 +23,16 @@ class _ComicCardState extends State<ComicCard> {
   final GlobalKey favourite = GlobalKey();
   void toggleFavourite(bool isFavorite, UserProvider provider){
     if(isFavorite) {
-      provider.removeFavorite(widget.comic);
+      provider.removeFavorite(comic);
     } else {
-      provider.addFavorite(widget.comic);
+      provider.addFavorite(comic);
     }
   }
 
   @override
   Widget build(BuildContext context){
     final userProvider = context.watch<UserProvider>();
-    final isFavorite = userProvider.isFavorite(widget.comic);
+    final isFavorite = userProvider.isFavorite(comic);
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
@@ -43,14 +43,14 @@ class _ComicCardState extends State<ComicCard> {
             height: MediaQuery.of(context).size.height,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(7),
-              child: widget.comic.coverPath.startsWith('assets/')
+              child: comic.coverPath.startsWith('assets/')
                 ? Image.asset(
-                  widget.comic.coverPath,
+                  comic.coverPath,
                   fit: BoxFit.fill
                 )
-                : widget.comic.coverPath.isEmpty || !File(widget.comic.coverPath).existsSync()
-                  ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
-                  : Image.file(File(widget.comic.coverPath), fit: BoxFit.fill),
+                : comic.coverPath.isEmpty || !File(comic.coverPath).existsSync()
+                  ? Image.asset('assets/no_image.png', fit: BoxFit.fitHeight)
+                  : Image.file(File(comic.coverPath), fit: BoxFit.fitHeight),
             ),
           ),
           Positioned(
@@ -59,7 +59,7 @@ class _ComicCardState extends State<ComicCard> {
             right: 0,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.8),
+                color: Theme.of(context).colorScheme.secondary.withAlpha(210),
                 borderRadius: BorderRadius.all(Radius.circular(7.0)),
               ),
               child: Row(
@@ -72,7 +72,7 @@ class _ComicCardState extends State<ComicCard> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              widget.comic.title,
+                              comic.title,
                               style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
                               overflow: TextOverflow.ellipsis
                             ),
@@ -83,7 +83,7 @@ class _ComicCardState extends State<ComicCard> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "${widget.comic.price}€",
+                              "${comic.price}€",
                               style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500)
                             ),
                           ),
@@ -122,8 +122,8 @@ class _ComicCardState extends State<ComicCard> {
                           },
                           child: IconButton(
                               icon: isFavorite
-                                ? Icon(Icons.bookmark, color: Colors.white)
-                                : Icon(Icons.bookmark_border, color: Colors.white),
+                                ? Icon(Icons.bookmark, color: Theme.of(context).colorScheme.tertiary)
+                                : Icon(Icons.bookmark_border, color: Theme.of(context).colorScheme.tertiary),
                             onPressed: () async {
                               if(isFavorite) {
                                 bool? confirm = await showDialog<bool>(

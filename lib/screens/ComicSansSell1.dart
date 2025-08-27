@@ -1,3 +1,4 @@
+import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
@@ -37,11 +38,13 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
     _priceController = TextEditingController(text: widget.comicToModify?.price.toString() ?? '');
     _conditionsController = TextEditingController(text: widget.comicToModify != null ? conditionsToString(widget.comicToModify?.conditions) : '');
 
-    final provider = context.read<SellInfoProvider>();
-    provider.title = widget.comicToModify?.title;
-    provider.description = widget.comicToModify?.description;
-    provider.price = widget.comicToModify?.price;
-    provider.conditions = widget.comicToModify?.conditions;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<SellInfoProvider>();
+      provider.title = widget.comicToModify?.title;
+      provider.description = widget.comicToModify?.description;
+      provider.price = widget.comicToModify?.price;
+      provider.conditions = widget.comicToModify?.conditions;
+    });
   }
 
   @override
@@ -61,7 +64,7 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
     final provider = context.read<SellInfoProvider>();
 
     return Scaffold(
-      appBar: const ComicSansAppBar(
+      appBar: ComicSansAppBar(
           title: "1/3: Informazioni base",
           showBackButton: false,
           showCloseButton: true,
@@ -79,16 +82,16 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                   RichText(
                     text: TextSpan(
                       style: DefaultTextStyle.of(context).style,
-                      children: const <TextSpan>[
+                      children: <TextSpan>[
                         TextSpan(
                           text: '*',
                           style: TextStyle(
-                            color: Colors.red,
+                            color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
-                          text: 'Informazione obbligatoria'
+                          text: ' Informazione obbligatoria'
                         ),
                       ]
                     ),
@@ -98,8 +101,7 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                   // Titolo
                   ComicSansTextInput(
                     title: 'Titolo',
-                    hintText: 'Titolo',
-                    labelText: 'Inserisci il titolo del fumetto',
+                    hintText: 'Inserisci il titolo del fumetto',
                     inputRequired: true,
                     controller: _titleController,
                     onFieldSubmitted: (value) => provider.title = value,
@@ -109,9 +111,10 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                   // Description
                   ComicSansTextInput(
                     title: 'Descrizione',
-                    hintText: 'Descrizione',
-                    labelText: 'Inserisci la descrizione del fumetto',
-                      inputRequired: true,
+                    hintText: 'Inserisci la descrizione del fumetto',
+                    height: 300,
+                    keyboardType: TextInputType.multiline,
+                    inputRequired: true,
                     controller: _descriptionController,
                     onFieldSubmitted: (value) => provider.description = value,
                   ),
@@ -124,8 +127,7 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                       Expanded(
                         child: ComicSansTextInput(
                           title: 'Prezzo',
-                          hintText: 'Prezzo',
-                          labelText: 'Inserisci un prezzo appropriato',
+                          hintText: 'Inserisci un prezzo appropriato',
                           inputRequired: true,
                           keyboardType: TextInputType.number,
                           controller: _priceController,
@@ -148,7 +150,7 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
 
                   // Conditions
                   ComicSansRadioButtons(
-                    title: 'Condizioni',
+                    title: 'Condizioni ',
                     options: Conditions.values.map((condition) => conditionsToString(condition)).toList(),
                     inputRequired: true,
                     controller: _conditionsController,
@@ -159,7 +161,8 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                       }
                       setState(() {});
                     },
-                    selectedValue: conditionsToString(context.watch<SellInfoProvider>().conditions) // Selected value from provider
+                    // Selected value from the comic i'm modifying (if any) or from provider
+                    selectedValue: conditionsToString(widget.comicToModify != null ? widget.comicToModify!.conditions : provider.conditions)
                   ),
                   const SizedBox(height: bottomSpaceForButton),
                 ]
@@ -168,13 +171,8 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                 bottom: 20,
                 left: 0,
                 right: 0,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(60),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7),
-                    ),
-                  ),
+                child: ComicSansButton(
+                  text: 'Continua',
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       Navigator.push(
@@ -183,7 +181,6 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                       );
                     }
                   },
-                  child: const Text('Continua')
                 ),
               )
             ]

@@ -21,13 +21,12 @@ class ComicSansRadioButtons extends StatelessWidget {
     this.selectedValue,
   });
 
-
-  Widget addAsterisk() {
+  Widget addAsterisk(BuildContext context) {
     return inputRequired
-      ? const Text(
+      ? Text(
         '*',
         style: TextStyle(
-          color: Colors.red,
+          color: Theme.of(context).colorScheme.primary,
           fontWeight: FontWeight.bold,
         ),
       )
@@ -54,12 +53,13 @@ class ComicSansRadioButtons extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: title,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontWeight: FontWeight.bold
                     ),
                   ),
-                  WidgetSpan(child: addAsterisk()),
+                  WidgetSpan(child: addAsterisk(context)),
                 ]
               ),
             ),

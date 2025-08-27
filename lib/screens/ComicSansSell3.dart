@@ -1,3 +1,4 @@
+import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/components/ComicSansAppBar.dart';
@@ -38,11 +39,21 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
   late TextEditingController _editionYearController;
   late TextEditingController _isbnController;
   late TextEditingController _bookbindingController;
+  List<String> _suggestedAuthors = [];
+  late int _controllerIndex;
+  late double _position;
+  final ScrollController _scrollController = ScrollController();
+  List<GlobalKey> _authorTextFieldKeys = [];
+  final double _maxPositionY = 500;
 
   @override
   void initState() {
     super.initState();
     final provider = context.read<SellInfoProvider>();
+
+    _scrollController.addListener(() {
+      setState(() {}); // Forza un rebuild per correggere la posizione durante lo scroll
+    });
 
     if(provider.authors.isEmpty) {
       provider.addAuthor('');
@@ -61,21 +72,24 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
     _bookbindingController = TextEditingController(text: widget.comicToModify != null ? bindingToString(widget.comicToModify?.bookbinding) : '');
 
     _syncAuthors(provider);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider.publicationYear = widget.comicToModify?.publicationYear;
+      provider.language = widget.comicToModify?.language;
+      provider.italianPublisher = widget.comicToModify?.italianPublisher;
+      provider.originalPublisher = widget.comicToModify?.originalPublisher;
+      provider.series = widget.comicToModify?.series;
+      provider.country = widget.comicToModify?.country;
+      provider.editionYear = widget.comicToModify?.editionYear;
+      provider.isbn = widget.comicToModify?.isbn;
+      provider.bookbinding = widget.comicToModify?.bookbinding;
+      provider.variant = widget.comicToModify?.variant;
+      provider.graded = widget.comicToModify?.graded;
+      provider.signed = widget.comicToModify?.signed;
+      provider.genre = widget.comicToModify?.genre ?? [];
+      provider.authors = widget.comicToModify?.authors ?? [];
+    });
 
-    provider.publicationYear = widget.comicToModify?.publicationYear;
-    provider.language = widget.comicToModify?.language;
-    provider.italianPublisher = widget.comicToModify?.italianPublisher;
-    provider.originalPublisher = widget.comicToModify?.originalPublisher;
-    provider.series = widget.comicToModify?.series;
-    provider.country = widget.comicToModify?.country;
-    provider.editionYear = widget.comicToModify?.editionYear;
-    provider.isbn = widget.comicToModify?.isbn;
-    provider.bookbinding = widget.comicToModify?.bookbinding;
-    provider.variant = widget.comicToModify?.variant;
-    provider.graded = widget.comicToModify?.graded;
-    provider.signed = widget.comicToModify?.signed;
-    provider.genre = widget.comicToModify?.genre ?? [];
-    provider.authors = widget.comicToModify?.authors ?? [];
+    _authorTextFieldKeys = List.generate(_authorControllers.length, (_) => GlobalKey<FormState>());
   }
 
   @override
@@ -95,6 +109,16 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
     super.dispose();
   }
 
+  void _filterAuthors(String query) {
+    final suggestions = SampleData.allAuthors.where((author) {
+      return author.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+
+    setState(() {
+      _suggestedAuthors = suggestions;
+    });
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -106,14 +130,20 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
         c.dispose();
       }
       _authorControllers.clear();
+      _authorTextFieldKeys.clear();
       _authorControllers.addAll(authors.map((a) => TextEditingController(text: a)));
+      _authorTextFieldKeys.addAll(List.generate(authors.length, (_) => GlobalKey<FormState>()));
     }
   }
 
   // Add new author
   void _addAuthor() {
     context.read<SellInfoProvider>().addAuthor('');
-    setState(() => _authorControllers.add(TextEditingController()));
+    setState(() {
+      _authorControllers.add(TextEditingController());
+      _authorTextFieldKeys.add(GlobalKey());
+      _controllerIndex = _authorControllers.length - 1;
+    });
   }
 
   // Remove existing author
@@ -131,7 +161,62 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
       _authorControllers.add(TextEditingController());
     }
 
-    setState(() {}); // Force the rebuild after safe update
+    setState(() {
+      _controllerIndex--;
+    }); // Force the rebuild after safe update
+  }
+
+  void _getWidgetPosition(BuildContext context) {
+    final renderBox = context.findRenderObject() as RenderBox?;
+
+    if (renderBox != null) {
+      Offset position = renderBox.localToGlobal(Offset.zero);
+      // Find position only if widget is visible
+      if (position.dy > 0 && position.dy < _maxPositionY) {
+        setState(() {
+          _position = position.dy;
+        });
+      }
+    } else {
+      print("Errore nel calcolare la posizione: il RenderObject è null");
+    }
+  }
+
+  Widget _buildSuggestions() {
+    if (_suggestedAuthors.isNotEmpty && _authorControllers.isNotEmpty) {
+      return Positioned(
+        left: 8,
+        right: 60,
+        top: _position - 12,
+        child: Material(
+          elevation: 5,
+          color: Colors.white,
+          child: SizedBox(
+            height: 50.toDouble() * (_suggestedAuthors.length > 5 ? 5 : _suggestedAuthors.length), // Adjust the height for the dropdown
+            child: ListView.builder(
+              itemCount: _suggestedAuthors.length > 5
+                  ? 5
+                  : _suggestedAuthors.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  minTileHeight: 50,
+                  title: Text(_suggestedAuthors[index], style: TextStyle(fontSize: 16),),
+                  onTap: () {
+                    // User selects an author
+                    _authorControllers[_controllerIndex].text = _suggestedAuthors[index];
+                    setState(() {
+                      _suggestedAuthors = []; // Hide list after selection
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      );
+    } else {
+      return SizedBox();
+    }
   }
 
   @override
@@ -156,44 +241,70 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
               fit: StackFit.expand,
               children: [
                 ListView(
+                  controller: _scrollController,
                   children: [
-                    Text('Le seguenti informazioni non sono obbligatorie'),
+                    Text('Informazioni non obbligatorie'),
                     SizedBox(height: 20),
 
                     // Authors
                     Text(
                       'Autori',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      )
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(), // Disable scrolling of inner ListView
                       itemCount: _authorControllers.length,
-                      itemBuilder: (_, i) => Row (
+                      itemBuilder: (_, i) => Column(
                         children: [
-                          Expanded(
-                            child: ComicSansTextInput(
-                              title: '',
-                              hintText: 'Sceneggiatore, disegnatore',
-                              labelText: '',
-                              controller: _authorControllers[i],
-                              onChanged: (val) => providerWatch.updateAuthor(i, val),
-                            ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ComicSansTextInput(
+                                  key: _authorTextFieldKeys[i],
+                                  title: '',
+                                  hintText: 'Sceneggiatore, disegnatore',
+                                  controller: _authorControllers[i],
+                                  onChanged: (val) {
+                                    providerWatch.updateAuthor(i, val);
+                                    _filterAuthors(val);
+                                  }
+                                ),
+                              ),
+                              if (_authorControllers.length > 1)
+                                Padding(
+                                  padding: EdgeInsetsGeometry.only(top: 23),
+                                  child: IconButton(
+                                    icon: const Icon(Icons.remove_circle_outline),
+                                    onPressed: () => _removeAuthor(i),
+                                  ),
+                                ),
+                            ],
                           ),
-                          if (_authorControllers.length > 1)
-                            IconButton(
-                              icon: const Icon(Icons.remove_circle_outline),
-                              onPressed: () => _removeAuthor(i),
-                            ),
+                          Builder(
+                            builder: (context) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                final currentContext = _authorTextFieldKeys[i].currentContext;
+
+                                if (currentContext != null) {
+                                  _getWidgetPosition(currentContext);
+                                } else {
+                                  print("Errore: currentContext è null per l'autore con indice $i");
+                                }
+                              });
+                              return SizedBox(); // Return an empty widget to trigger the call
+                            },
+                          )
                         ],
                       ),
                     ),
                     // Button to add a new author
                     Align(
-                      alignment: Alignment.centerRight,
+                      alignment: Alignment.centerLeft,
                       child: TextButton.icon(
                         icon: Icon(Icons.add),
                         label: Text('Aggiungi autore'),
@@ -217,8 +328,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Publication year
                     ComicSansTextInput(
                       title: 'Anno di pubblicazione',
-                      hintText: 'Anno di pubblicazione',
-                      labelText: 'Inserisci la data di pubblicazione dell\'opera',
+                      hintText: 'Inserisci la data di pubblicazione dell\'opera',
                       keyboardType: TextInputType.number,
                       controller: _publicationYearController,
                       onFieldSubmitted: (value) => providerRead.publicationYear = int.tryParse(value)
@@ -237,8 +347,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Italian publisher
                     ComicSansTextInput(
                       title: 'Editore italiano',
-                      hintText: 'Editore italiano',
-                      labelText: 'Inserisci l\'editore italiano del fumetto',
+                      hintText: 'Inserisci l\'editore italiano del fumetto',
                       controller: _italianPublisherController,
                       onFieldSubmitted: (value) => providerRead.italianPublisher = value,
                     ),
@@ -247,8 +356,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Original publisher
                     ComicSansTextInput(
                       title: 'Editore paese di origine',
-                      hintText: 'Editore paese di origine',
-                      labelText: 'Inserisci l\'editore originale del fumetto',
+                      hintText: 'Inserisci l\'editore originale del fumetto',
                       controller: _originalPublisherController,
                       onFieldSubmitted: (value) => providerRead.originalPublisher = value,
                     ),
@@ -257,8 +365,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Series
                     ComicSansTextInput(
                       title: 'Collana',
-                      hintText: 'Collana',
-                      labelText: 'Inserisci la collana di appartenenza del fumetto',
+                      hintText: 'Inserisci la collana di appartenenza del fumetto',
                       controller: _collanaController,
                       onFieldSubmitted: (value) => providerRead.series = value,
                     ),
@@ -267,8 +374,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Country of origin
                     ComicSansTextInput(
                       title: 'Paese di origine',
-                      hintText: 'Paese di origine',
-                      labelText: 'Inserisci il paese di origine del fumetto',
+                      hintText: 'Inserisci il paese di origine del fumetto',
                       controller: _countryController,
                       onFieldSubmitted: (value) => providerRead.country = value,
                     ),
@@ -316,8 +422,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Edition year
                     ComicSansTextInput(
                       title: 'Anno edizione',
-                      hintText: 'Anno edizione',
-                      labelText: 'Inserisci la data di uscita dell\'edizione',
+                      hintText: 'Inserisci la data di uscita dell\'edizione',
                       keyboardType: TextInputType.number,
                       controller: _editionYearController,
                       onFieldSubmitted: (value) => providerRead.editionYear = int.tryParse(value),
@@ -327,8 +432,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // ISBN
                     ComicSansTextInput(
                       title: 'ISBN',
-                      hintText: 'ISBN',
-                      labelText: 'Inserisci l\'ISBN del volume',
+                      hintText: 'Inserisci l\'ISBN del volume',
                       controller: _isbnController,
                       keyboardType: TextInputType.number,
                       onFieldSubmitted: (value) => providerRead.isbn = int.tryParse(value),
@@ -336,12 +440,15 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     SizedBox(height: bottomSpaceForButton)
                   ]
                 ),
+
+                _buildSuggestions(),
+
                 Positioned(
                   bottom: 20,
                   left: 0,
                   right: 0,
                   child: ComicSansButton (
-                    text: 'Pubblica',
+                    text: widget.comicToModify == null ? 'Pubblica' : 'Modifica',
                     onPressed: () {
                       final ComicsProvider comicsProvider = context.read<ComicsProvider>();
                       final UserProvider userProvider = context.read<UserProvider>();
@@ -353,8 +460,8 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                         userProvider.addComicToLibrary(newComic); // Add comic to the user's library
                         providerRead.resetInformations(); // Reset the provider (clear fields)
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/', // return to the main screen
-                              (route) => false, // remove from the stack all the visited routes
+                          '/user_vendor_screen', // Go to the vendor screen
+                          (route) => false, // remove from the stack all the visited routes
                         );
                       } else {
                         providerRead.updateComic(context, widget.comicToModify!);
@@ -367,10 +474,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                           return count > 4; // When count > 4, stop popping pages
                         });
 
-                        Navigator.of(context).pushReplacementNamed(
-                          '/vendor_screen',
-                          arguments: widget.comicToModify!.seller,
-                        );
+                        Navigator.of(context).pushReplacementNamed('/user_vendor_screen');
                       }
                     },
                   ),
@@ -385,16 +489,15 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
   void _syncAuthors(SellInfoProvider provider) {
     final authors = provider.authors;
 
-    // If the number of controllers and authors differ, resync
-    if (_authorControllers.length != authors.length) {
-      // Update the controllers to match authors safely
-      while (_authorControllers.length > authors.length) {
-        _authorControllers.removeLast().dispose();
-      }
+    // Update the controllers to match authors safely
+    while (_authorControllers.length > authors.length) {
+      _authorControllers.removeLast().dispose();
+      _authorTextFieldKeys.removeLast();
+    }
 
-      while (_authorControllers.length < authors.length) {
-        _authorControllers.add(TextEditingController(text: authors[_authorControllers.length]));
-      }
+    while (_authorControllers.length < authors.length) {
+      _authorControllers.add(TextEditingController(text: authors[_authorControllers.length]));
+      _authorTextFieldKeys.add(GlobalKey());
     }
 
     // Update the text if needed
@@ -403,5 +506,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
         _authorControllers[i].text = authors[i];
       }
     }
+
+    _controllerIndex =  authors.length - 1;
   }
 }

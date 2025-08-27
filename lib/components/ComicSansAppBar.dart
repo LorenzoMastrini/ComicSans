@@ -91,44 +91,25 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
             ];
           },
         )
-        /*IconButton(
-          icon: const Icon(Icons.more_vert),
-          onPressed: onOverflowMenuPressed ?? () {
-            // Implementa qui la logica di default per l'overflow menu
-            // o lascia che sia gestita dalla pagina che usa l'AppBar
-            print("Overflow menu pressed (default action)");
-            // Esempio: Scaffold.of(context).openEndDrawer(); // Se hai un endDrawer
-            // O mostra un PopupMenuButton
-            PopupMenuButton(
-              itemBuilder: (context) {
-                return [
-                  PopupMenuItem(
-                    child: Text("Segnala"),
-                    onTap: () {
-                      print("Opzione 1 selezionata");
-                    },
-                  ),
-                  PopupMenuItem(
-                    child: Text("Condividi"),
-                    onTap: () {
-                      print("Opzione 2 selezionata");
-                    },
-                  )
-                ];
-              },
-            );
-          },
-        ),*/
       );
     }
     else if (actionType == AppBarActionType.reset) {
       actionsList.add(
         TextButton(
-          child: Text("Reset", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18, decoration: TextDecoration.underline)),
           onPressed: onResetPressed ?? () {
             //Provider.of<ComicsProvider>(context, listen: false).resetInformations();
             context.read<ComicsProvider>().resetInformations();
           },
+          child: Text(
+            "Reset",
+            style: style ?? TextStyle(
+              color: Color(0xFFc11720),
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              decoration: TextDecoration.underline,
+              decorationColor: Color(0xFFc11720)
+            )
+          ),
         )
       );
     }
@@ -142,14 +123,17 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
           Flexible(
             child: Text(
               title,
-              style: style ?? Theme.of(context).textTheme.titleMedium,
+              style: style ?? TextStyle(
+                color: Color(0xFFc11720),
+                fontWeight: FontWeight.bold,
+              ),
             )
           )
         ],
       ), // title not given
       automaticallyImplyLeading: false,
       leading: showBackButton ? IconButton(
-        icon: Icon(Icons.arrow_back, color: iconColor ?? Colors.black,),
+        icon: Icon(Icons.arrow_back, color: iconColor,),
         onPressed: () {
           if (Navigator.canPop(context)) {
             Navigator.pop(context);

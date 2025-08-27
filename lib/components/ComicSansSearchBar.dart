@@ -143,23 +143,28 @@ class MySearchDelegate extends SearchDelegate {
     }
 
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:<Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            child: FilterChip(
-              label: Text("Ricerca per ISBN"),
-              selected: false,
-              onSelected: (bool value) {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => IsbnSearchScreen(),
-                ));
-              },
-              avatar: Icon(Icons.search, size: 18),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:<Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          child: FilterChip(
+            label: Text(
+              "Ricerca per ISBN",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 12,
               )
             ),
+            selected: false,
+            onSelected: (bool value) {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => IsbnSearchScreen(),
+              ));
+            },
+            avatar: Icon(Icons.search, size: 18),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            )
           ),
           Expanded(
             child: ListView.builder(

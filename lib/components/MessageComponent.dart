@@ -1,4 +1,5 @@
 import 'package:comicsans/Chat.dart';
+import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/providers/messages_provider.dart';
@@ -52,7 +53,7 @@ class _MessageComponentState extends State<MessageComponent> {
           children: [
             // User icon on the left if not sent by current user
             !isSentByCurrentUser
-              ? Icon(Icons.account_circle, color: Colors.black, size: 32)
+              ? Icon(Icons.account_circle, color: Theme.of(context).colorScheme.secondary, size: 32)
               : Container(),
 
             // Message body
@@ -61,7 +62,7 @@ class _MessageComponentState extends State<MessageComponent> {
                 margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 decoration: BoxDecoration(
-                  color: isSentByCurrentUser ? Colors.blueAccent : Colors.grey[300],
+                  color: isSentByCurrentUser ? quaternary : Colors.grey[300],
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -76,7 +77,7 @@ class _MessageComponentState extends State<MessageComponent> {
 
             // User icon on the right if sent by current user
             isSentByCurrentUser
-              ? Icon(Icons.account_circle, color: Colors.black, size: 32)
+              ? Icon(Icons.account_circle, color: Theme.of(context).colorScheme.secondary, size: 32)
               : Container(),
           ],
         ),
@@ -107,7 +108,7 @@ class _MessageComponentState extends State<MessageComponent> {
               Text(
                 _getMessageText(context),
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.secondary,
                   fontSize: 16,
                 ),
               ),
@@ -137,7 +138,7 @@ class _MessageComponentState extends State<MessageComponent> {
                           text: 'Accetta',
                           onPressed: () {
                             _disableButtons();
-                            messageProviderRead.acceptOffer(context, widget.chat);
+                            messageProviderRead.acceptOffer(context, widget.chat, userProviderWatch.loggedInUser!);
                           },
                           enabled: widget.chat.currentOfferPrice != null && _areButtonsEnabled
                         ),
@@ -155,7 +156,7 @@ class _MessageComponentState extends State<MessageComponent> {
   Widget _buildAcceptOfferMessage(BuildContext context, Message message) {
     final userProviderWatch = context.watch<UserProvider>();
     final comicsProvider = context.watch<ComicsProvider>();
-    final bool isSentByCurrentUser = message.sender == userProviderWatch.loggedInUser;
+    final bool receiverIsCurrentUser = message.receiver == userProviderWatch.loggedInUser;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
@@ -174,12 +175,12 @@ class _MessageComponentState extends State<MessageComponent> {
               Text(
                 _getMessageText(context),
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.secondary,
                   fontSize: 16,
                 ),
               ),
 
-              if(!isSentByCurrentUser) // Different results for buyer and seller
+              if(receiverIsCurrentUser) // Different results for buyer and seller
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Row(
