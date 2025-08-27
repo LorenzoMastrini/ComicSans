@@ -21,18 +21,19 @@ class ComicCard extends StatefulWidget{
 
 class _ComicCardState extends State<ComicCard> {
   final GlobalKey favourite = GlobalKey();
+
   void toggleFavourite(bool isFavorite, UserProvider provider){
     if(isFavorite) {
-      provider.removeFavorite(comic);
+      provider.removeFavorite(widget.comic);
     } else {
-      provider.addFavorite(comic);
+      provider.addFavorite(widget.comic);
     }
   }
 
   @override
   Widget build(BuildContext context){
     final userProvider = context.watch<UserProvider>();
-    final isFavorite = userProvider.isFavorite(comic);
+    final isFavorite = userProvider.isFavorite(widget.comic);
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
@@ -43,14 +44,14 @@ class _ComicCardState extends State<ComicCard> {
             height: MediaQuery.of(context).size.height,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(7),
-              child: comic.coverPath.startsWith('assets/')
+              child: widget.comic.coverPath.startsWith('assets/')
                 ? Image.asset(
-                  comic.coverPath,
+                  widget.comic.coverPath,
                   fit: BoxFit.fill
                 )
-                : comic.coverPath.isEmpty || !File(comic.coverPath).existsSync()
+                : widget.comic.coverPath.isEmpty || !File(widget.comic.coverPath).existsSync()
                   ? Image.asset('assets/no_image.png', fit: BoxFit.fitHeight)
-                  : Image.file(File(comic.coverPath), fit: BoxFit.fitHeight),
+                  : Image.file(File(widget.comic.coverPath), fit: BoxFit.fitHeight),
             ),
           ),
           Positioned(
@@ -72,7 +73,7 @@ class _ComicCardState extends State<ComicCard> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              comic.title,
+                              widget.comic.title,
                               style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
                               overflow: TextOverflow.ellipsis
                             ),
@@ -83,7 +84,7 @@ class _ComicCardState extends State<ComicCard> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "${comic.price}€",
+                              "${widget.comic.price}€",
                               style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500)
                             ),
                           ),
@@ -108,14 +109,14 @@ class _ComicCardState extends State<ComicCard> {
                               if(!userProvider.hasSeenFavouriteShowcasePerUser(userProvider.loggedInUser!.id)) {
                                 Future.delayed(const Duration(seconds: 2), () {
                                   if (mounted && info.visibleFraction > 0.5) {
-                                    ShowCaseWidget.of(context)?.startShowCase([favourite]);
+                                    ShowCaseWidget.of(context).startShowCase([favourite]);
                                     userProvider.setHasSeenFavouriteShowcasePerUser(userProvider.loggedInUser!.id, true);
                                   }
                                 });
                               }
                               Future.delayed(const Duration(seconds: 5), () {
                                 if(favourite.currentContext != null){
-                                  ShowCaseWidget.of(context)?.completed(favourite);
+                                  ShowCaseWidget.of(context).completed(favourite);
                                 }
                               });
                             }

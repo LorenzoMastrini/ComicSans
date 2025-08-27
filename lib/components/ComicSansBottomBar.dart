@@ -31,12 +31,12 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
       final userProvider = context.read<UserProvider>();
 
       if(!userProvider.hasSeenAddComicShowcasePerUser(userProvider.loggedInUser!.id)) {
-        ShowCaseWidget.of(context)?.startShowCase([add]);
+        ShowCaseWidget.of(context).startShowCase([add]);
         userProvider.setHasSeenAddComicShowcasePerUser(userProvider.loggedInUser!.id, true);
       }
       Future.delayed(const Duration(seconds: 2), () {
         if(add.currentContext != null){
-          ShowCaseWidget.of(context)?.completed(add);
+          ShowCaseWidget.of(context).completed(add);
         }
       });
     });
@@ -61,18 +61,18 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         backgroundColor: Theme.of(context).colorScheme.tertiary,
-        currentIndex: selectedIndex,
-        onTap: onDestinationSelected,
+        currentIndex: widget.selectedIndex,
+        onTap: widget.onDestinationSelected,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).colorScheme.tertiary,
-            activeIcon: Icon(Icons.home, size: iconsSize),
-            icon: Icon(Icons.home_outlined, size: iconsSize, color: Theme.of(context).colorScheme.secondary,),
+            activeIcon: Icon(Icons.home, size: widget.iconsSize),
+            icon: Icon(Icons.home_outlined, size: widget.iconsSize, color: Theme.of(context).colorScheme.secondary,),
             label: '',
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.bookmark, size: iconsSize),
-            icon: Icon(Icons.bookmark_border, size: iconsSize, color: Theme.of(context).colorScheme.secondary),
+            activeIcon: Icon(Icons.bookmark, size: widget.iconsSize),
+            icon: Icon(Icons.bookmark_border, size: widget.iconsSize, color: Theme.of(context).colorScheme.secondary),
             label: '',
           ),
           BottomNavigationBarItem(
@@ -98,13 +98,13 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
             label: '',
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.inbox, size: iconsSize),
-            icon: Icon(Icons.inbox_outlined, size: iconsSize, color: Theme.of(context).colorScheme.secondary),
+            activeIcon: Icon(Icons.inbox, size: widget.iconsSize),
+            icon: Icon(Icons.inbox_outlined, size: widget.iconsSize, color: Theme.of(context).colorScheme.secondary),
             label: '',
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.person, size: iconsSize),
-            icon: Icon(Icons.person_outline, size: iconsSize, color: Theme.of(context).colorScheme.secondary),
+            activeIcon: Icon(Icons.person, size: widget.iconsSize),
+            icon: Icon(Icons.person_outline, size: widget.iconsSize, color: Theme.of(context).colorScheme.secondary),
             label: '',
           ),
         ],

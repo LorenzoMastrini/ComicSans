@@ -24,6 +24,7 @@ class ProductDetail extends StatefulWidget {
   final Comic comic;
 
   const ProductDetail({super.key, required this.comic});
+
   @override
   State<ProductDetail> createState() => _ProductDetailState();
 }
@@ -45,8 +46,8 @@ class _ProductDetailState extends State<ProductDetail> {
     super.dispose();
   }
 
-  void toggleFavourite(bool isFavorite, UserProvider provider){
-    if(isFavorite) {
+  void toggleFavourite(bool isFavorite, UserProvider provider) {
+    if (isFavorite) {
       provider.removeFavorite(widget.comic);
     } else {
       provider.addFavorite(widget.comic);
@@ -65,60 +66,63 @@ class _ProductDetailState extends State<ProductDetail> {
               Flexible(
                 child: Column(
                   children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 3, 0, 0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        widget.comic.title,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold
-                        ),
-                        overflow: TextOverflow.ellipsis
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 0, 10),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "${widget.comic.price}€",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500
-                        )
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    child: Row(children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
-                        child: Icon(FontAwesomeIcons.truck, color: quaternary, size: 18)
-                      ),
-                      Align(
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 3, 0, 0),
+                      child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                        " Spedizione a partire da: 0€",
-                        style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.w500)
+                          widget.comic.title,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ]),
-                  ),
-                ]),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 10),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "${widget.comic.price}€",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
+                            child: Icon(FontAwesomeIcons.truck, color: quaternary, size: 18),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              " Spedizione a partire da: 0€",
+                              style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               IconButton(
                 iconSize: 40,
                 icon: isFavorite
-                  ? Icon(Icons.bookmark, color: Theme.of(context).colorScheme.secondary)
-                  : Icon(Icons.bookmark_border, color: Theme.of(context).colorScheme.secondary),
+                    ? Icon(Icons.bookmark, color: Theme.of(context).colorScheme.secondary)
+                    : Icon(Icons.bookmark_border, color: Theme.of(context).colorScheme.secondary),
                 onPressed: () async {
-                  if(isFavorite) {
+                  if (isFavorite) {
                     bool? confirm = await showDialog<bool>(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -142,117 +146,101 @@ class _ProductDetailState extends State<ProductDetail> {
                   } else {
                     toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
                   }
-
-                }
-              )
-            ]
+                },
+              ),
+            ],
           ),
           Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Theme.of(context).colorScheme.secondary),
           Row(
             children: <Widget>[
               Expanded(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  GestureDetector(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                      child: Row(children: <Widget>[
-                        Icon(Icons.account_circle, color: Theme.of(context).colorScheme.secondary, size: 80),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(widget.comic.seller.username,
-                              style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.w500)),
-                            ReviewWidget(user: widget.comic.seller),
-                            GestureDetector(
-                              child: Text("Recensioni",
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                  decoration: TextDecoration.underline
-                                )
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    GestureDetector(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                        child: Row(children: <Widget>[
+                          Icon(Icons.account_circle, color: Theme.of(context).colorScheme.secondary, size: 80),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(widget.comic.seller.username,
+                                  style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.w500)),
+                              ReviewWidget(user: widget.comic.seller),
+                              GestureDetector(
+                                child: Text("Recensioni",
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
+                                    decoration: TextDecoration.underline
+                                  )
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => VendorScreen(seller: widget.comic.seller, initialTab: 1),
+                                    ),
+                                  );
+                                },
                               ),
-                              onTap: () {
-                                Navigator.push(
-                                  context, MaterialPageRoute(
-                                    builder: (context) => VendorScreen(seller: widget.comic.seller, initialTab: 1)
-                                ));
-                              },
-                            ),
-                          ]
-                        )
-                      ]),
+                            ],
+                          )
+                        ]),
+                      ),
                     ),
-                  ]),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => ShowCaseWidget(
-                          builder: (context) => ChatScreen(
-                            chat: Chat(
-                              [],
-                              userProvider.loggedInUser!,
-                              widget.comic.seller,
-                              widget.comic,
-                              false
-                            )
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 9),
+                            child: Icon(FontAwesomeIcons.locationDot, color: quaternary, size: 18),
                           ),
-                        )
-                      ));
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsetsGeometry.symmetric(horizontal: 9),
-                          child: Icon(FontAwesomeIcons.locationDot, color: quaternary, size: 18)
-                        ),
-                        Text(
-                          widget.comic.seller.address!.country,
-                          style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.normal)
-                        ),
-                      ]
+                          Text(
+                            widget.comic.seller.address!.country,
+                            style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.normal),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ]),
+                  ]
+                ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 20, 16),
+                padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                  ),
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => ChatScreen(
-                        chat: Chat(
-                          [],
-                          userProvider.loggedInUser!,
-                          widget.comic.seller,
-                          widget.comic,
-                          false
-                        )
-                      )
+                      builder: (context) => ShowCaseWidget(
+                        builder: (context) => ChatScreen(
+                          chat: Chat(
+                            [],
+                            userProvider.loggedInUser!,
+                            widget.comic.seller,
+                            widget.comic,
+                            false,
+                          ),
+                        ),
+                      ),
                     ));
                   },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7),
-                    ),
-                  ),
                   child: Text(
-                    'Chat',
+                    "chat",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontSize: 16,
                       fontWeight: FontWeight.normal
                     )
-                  ),
+                  )
                 ),
-              )
-            ]
+              ),
+            ],
           ),
           Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Theme.of(context).colorScheme.secondary),
           Column(
@@ -263,23 +251,16 @@ class _ProductDetailState extends State<ProductDetail> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Condizioni",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    )
-                  ),
+                      style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(conditionsToString(widget.comic.conditions),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 15,
-                    )
+                  child: Text(
+                    conditionsToString(widget.comic.conditions),
+                    style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15),
                   ),
                 ),
               ),
@@ -289,11 +270,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Descrizione",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    )
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -303,10 +280,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     widget.comic.description,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 15,
-                    )
+                    style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 15),
                   ),
                 ),
               ),
@@ -315,16 +289,15 @@ class _ProductDetailState extends State<ProductDetail> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: GestureDetector(
-                    child:
-                    Text(
+                    child: Text(
                       "Dettagli",
                       style: TextStyle(
                         color: quaternary,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         decoration: TextDecoration.underline,
-                        decorationColor: quaternary
-                      )
+                        decorationColor: quaternary,
+                      ),
                     ),
                     onTap: () {
                       showModalBottomSheet(
@@ -344,14 +317,15 @@ class _ProductDetailState extends State<ProductDetail> {
                           ),
                         ),
                       );
-                    }),
+                    },
+                  ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 60)
+          SizedBox(height: 60),
         ],
-      )
+      ),
     );
   }
 
@@ -362,10 +336,8 @@ class _ProductDetailState extends State<ProductDetail> {
     return Scaffold(
       body: Stack(
         children: [
-          // Scrollable content
           CustomScrollView(
             slivers: [
-              // Images carousel
               SliverToBoxAdapter(
                 child: GestureDetector(
                   onTap: () {
@@ -383,29 +355,31 @@ class _ProductDetailState extends State<ProductDetail> {
                           enlargeCenterPage: false,
                           enableInfiniteScroll: allImages.length > 1,
                           scrollPhysics: allImages.length > 1
-                            ? const PageScrollPhysics()
-                            : const NeverScrollableScrollPhysics(),
+                              ? const PageScrollPhysics()
+                              : const NeverScrollableScrollPhysics(),
                           onPageChanged: (index, reason) {
                             setState(() {
                               current = index;
                             });
                           },
                         ),
-                        items: allImages.map((item) => SizedBox(
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: item.startsWith('assets/')
-                            ? Image.asset(
+                        items: allImages.map((item) {
+                          return SizedBox(
+                            width: double.infinity,
+                            height: double.infinity,
+                            child: item.startsWith('assets/')
+                                ? Image.asset(
                               item,
-                              fit: BoxFit.fill
+                              fit: BoxFit.fill,
                             )
-                            : item.isEmpty || !File(item).existsSync()
-                              ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
-                              : Image.file(
-                                File(item),
-                                fit: BoxFit.fill,
-                              ),
-                        )).toList(),
+                                : item.isEmpty || !File(item).existsSync()
+                                ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
+                                : Image.file(
+                              File(item),
+                              fit: BoxFit.fill,
+                            ),
+                          );
+                        }).toList(),
                       ),
                       Positioned(
                         bottom: 0,
@@ -422,8 +396,10 @@ class _ProductDetailState extends State<ProductDetail> {
                                 margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: (Theme.of(context).brightness == Brightness.dark ? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.secondary)
-                                    .withAlpha(current == entry.key ? 210 : 105),
+                                  color: (Theme.of(context).brightness == Brightness.dark
+                                      ? Theme.of(context).colorScheme.tertiary
+                                      : Theme.of(context).colorScheme.secondary)
+                                      .withAlpha(current == entry.key ? 210 : 105),
                                 ),
                               ),
                             );
@@ -434,7 +410,6 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ),
               ),
-
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 80),
@@ -443,8 +418,6 @@ class _ProductDetailState extends State<ProductDetail> {
               ),
             ],
           ),
-
-          // Fixed AppBar in overlay with the images
           Positioned(
             top: MediaQuery.of(context).padding.top,
             left: 0,
@@ -458,7 +431,6 @@ class _ProductDetailState extends State<ProductDetail> {
           ),
         ],
       ),
-
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: SizedBox(
         width: MediaQuery.of(context).size.width - 30,
@@ -466,7 +438,7 @@ class _ProductDetailState extends State<ProductDetail> {
           text: 'Acquista',
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(
-              builder: (context) => PurchaseScreen(comic: widget.comic)
+              builder: (context) => PurchaseScreen(comic: widget.comic),
             ));
           },
         ),

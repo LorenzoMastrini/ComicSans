@@ -166,33 +166,34 @@ class MySearchDelegate extends SearchDelegate {
               borderRadius: BorderRadius.circular(20),
             )
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: matchQuery.length,
-              itemBuilder: (context, index){
-                Comic comics = matchQuery[index];
-                return TextButton(
-                  onPressed: () async {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    close(context, query);
-                    await Future<void>.delayed(const Duration(milliseconds: 1));
-                    if (!context.mounted) return;
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                      builder: (context) => SearchResults(comicsResults: [comics], query: query)
-                    ), (Route<dynamic> route) => route.isFirst,);
-                  },
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero, // Rectangular
-                    ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: matchQuery.length,
+            itemBuilder: (context, index){
+              Comic comics = matchQuery[index];
+              return TextButton(
+                onPressed: () async {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  close(context, query);
+                  await Future<void>.delayed(const Duration(milliseconds: 1));
+                  if (!context.mounted) return;
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                    builder: (context) => SearchResults(comicsResults: [comics], query: query)
+                  ), (Route<dynamic> route) => route.isFirst,);
+                },
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero, // Rectangular
                   ),
-                  child: ListTile(
-                    title: Text(comics.title),
-                  ),
-                );
-              }
-            ),
-          )
+                ),
+                child: ListTile(
+                  title: Text(comics.title),
+                ),
+              );
+            }
+          ),
+        )
         ],
       );
   }

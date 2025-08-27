@@ -70,35 +70,35 @@ class ComicSansProfileState extends State<ComicSansProfile> {
               disableMovingAnimation: true,
               tooltipBackgroundColor: Theme.of(context).colorScheme.secondary,
               textColor: Theme.of(context).colorScheme.tertiary,
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:<Widget>[
-                      Text(
-                        userProviderWatch.loggedInUser != null
-                          ? userProviderWatch.loggedInUser!.username
-                          : "",
-                        style: TextStyle(color: Colors.black, fontSize: 24)
-                      ),
-                      userProviderWatch.loggedInUser == null
-                        ? SizedBox() // Avoid null pointer exception
-                        : ReviewWidget(user: userProviderWatch.loggedInUser!),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(text: userProviderWatch.getLibraryLength().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
-                              TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
-                              TextSpan(text: userProviderWatch.getNumberOfReviews().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
-                              TextSpan(text: " recensioni", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
-                            ]
-                          )
+              child: Row( // Questa parentesi ora è correttamente scritta
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children:<Widget>[
+                        Text(
+                          userProviderWatch.loggedInUser != null
+                            ? userProviderWatch.loggedInUser!.username
+                            : "",
+                          style: TextStyle(color: Colors.black, fontSize: 24)
                         ),
-                        ReviewWidget(user: userProviderWatch.loggedInUser!),
+                        userProviderWatch.loggedInUser == null
+                          ? SizedBox() // Avoid null pointer exception
+                          : ReviewWidget(user: userProviderWatch.loggedInUser!),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(text: userProviderWatch.getLibraryLength().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
+                                TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
+                                TextSpan(text: userProviderWatch.getNumberOfReviews().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
+                                TextSpan(text: " recensioni", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
+                              ]
+                            )
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: RichText(
@@ -118,8 +118,7 @@ class ComicSansProfileState extends State<ComicSansProfile> {
                   Spacer(),
                   Icon(Icons.arrow_forward_ios, color: Colors.black),
                 ]
-              ),
-            ),
+              ), // Ora la chiusura di Row è corretta
             ),
           ),
         ),
