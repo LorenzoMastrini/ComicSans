@@ -74,7 +74,7 @@ class _ComicCardState extends State<ComicCard> {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               widget.comic.title,
-                              style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+                              style: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 15, fontWeight: FontWeight.w500),
                               overflow: TextOverflow.ellipsis
                             ),
                           ),
@@ -85,7 +85,7 @@ class _ComicCardState extends State<ComicCard> {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               "${widget.comic.price}€",
-                              style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500)
+                              style: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 15, fontWeight: FontWeight.w500)
                             ),
                           ),
                         ),
@@ -94,64 +94,64 @@ class _ComicCardState extends State<ComicCard> {
                   ),
                   widget.showFavoriteButton
                     ? Showcase(
-                        key: favourite,
-                        description: "Premi qui per aggiungere un fumetto tra i preferiti",
-                        overlayOpacity: 0,
-                        disableMovingAnimation: true,
-                        tooltipBackgroundColor: Theme.of(context).colorScheme.secondary,
-                        textColor: Theme.of(context).colorScheme.tertiary,
-                        child: VisibilityDetector(
-                          key: Key("fav-btn-$widget.comic.id"),
-                          onVisibilityChanged: (info){
-                            if (info.visibleFraction > 0.5){
-                              final userProvider = context.read<UserProvider>();
+                      key: favourite,
+                      description: "Premi qui per aggiungere un fumetto tra i preferiti",
+                      overlayOpacity: 0,
+                      disableMovingAnimation: true,
+                      tooltipBackgroundColor: Theme.of(context).colorScheme.secondary,
+                      textColor: Theme.of(context).colorScheme.tertiary,
+                      child: VisibilityDetector(
+                        key: Key("fav-btn-$widget.comic.id"),
+                        onVisibilityChanged: (info){
+                          if (info.visibleFraction > 0.5){
+                            final userProvider = context.read<UserProvider>();
 
-                              if(!userProvider.hasSeenFavouriteShowcasePerUser(userProvider.loggedInUser!.id)) {
-                                Future.delayed(const Duration(seconds: 2), () {
-                                  if (mounted && info.visibleFraction > 0.5) {
-                                    ShowCaseWidget.of(context).startShowCase([favourite]);
-                                    userProvider.setHasSeenFavouriteShowcasePerUser(userProvider.loggedInUser!.id, true);
-                                  }
-                                });
-                              }
-                              Future.delayed(const Duration(seconds: 5), () {
-                                if(favourite.currentContext != null){
-                                  ShowCaseWidget.of(context).completed(favourite);
+                            if(!userProvider.hasSeenFavouriteShowcasePerUser(userProvider.loggedInUser!.id)) {
+                              Future.delayed(const Duration(seconds: 2), () {
+                                if (mounted && info.visibleFraction > 0.5) {
+                                  ShowCaseWidget.of(context).startShowCase([favourite]);
+                                  userProvider.setHasSeenFavouriteShowcasePerUser(userProvider.loggedInUser!.id, true);
                                 }
                               });
                             }
-                          },
-                          child: IconButton(
-                              icon: isFavorite
-                                ? Icon(Icons.bookmark, color: Theme.of(context).colorScheme.tertiary)
-                                : Icon(Icons.bookmark_border, color: Theme.of(context).colorScheme.tertiary),
-                            onPressed: () async {
-                              if(isFavorite) {
-                                bool? confirm = await showDialog<bool>(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    content: Text("Sei sicuro di voler rimuovere questo fumetto dai preferiti?"),
-                                    actions: [
-                                      TextButton(
-                                        child: Text("Annulla"),
-                                        onPressed: () => Navigator.of(context).pop(false),
-                                      ),
-                                      TextButton(
-                                        child: Text("Conferma"),
-                                        onPressed: () => Navigator.of(context).pop(true),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                                if (confirm == true) {
-                                  toggleFavourite(isFavorite, userProvider);
-                                }
-                              } else {
-                                toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
+                            Future.delayed(const Duration(seconds: 5), () {
+                              if(favourite.currentContext != null){
+                                ShowCaseWidget.of(context).completed(favourite);
                               }
-                            },
-                          ),
+                            });
+                          }
+                        },
+                        child: IconButton(
+                            icon: isFavorite
+                              ? Icon(Icons.bookmark, color: Theme.of(context).colorScheme.tertiary)
+                              : Icon(Icons.bookmark_border, color: Theme.of(context).colorScheme.tertiary),
+                          onPressed: () async {
+                            if(isFavorite) {
+                              bool? confirm = await showDialog<bool>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  content: Text("Sei sicuro di voler rimuovere questo fumetto dai preferiti?"),
+                                  actions: [
+                                    TextButton(
+                                      child: Text("Annulla"),
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                    ),
+                                    TextButton(
+                                      child: Text("Conferma"),
+                                      onPressed: () => Navigator.of(context).pop(true),
+                                    ),
+                                  ],
+                                ),
+                              );
+                              if (confirm == true) {
+                                toggleFavourite(isFavorite, userProvider);
+                              }
+                            } else {
+                              toggleFavourite(isFavorite, userProvider); // Adding is direct, without confirmation
+                            }
+                          },
                         ),
+                      ),
                     )
                     : Container()
                 ]

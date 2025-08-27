@@ -128,9 +128,7 @@ class SearchResults extends StatelessWidget {
                     tooltip: 'Filtri',
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(
-                        builder: (context){
-                          return FiltersScreen(query: query);
-                        }
+                        builder: (context) => FiltersScreen(query: query)
                       ));
                     },
                   ),
@@ -148,11 +146,15 @@ class SearchResults extends StatelessWidget {
                     children: <Widget>[
                       Builder(
                         builder: (context) => FilterChip(
-                          label: Text("Ordina per"),
+                          label: Text(
+                            "Ordina per",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: 12,
+                            )
+                          ),
                           selected: false,
-                          onSelected: (bool value) {
-                            Scaffold.of(context).openDrawer();
-                          },
+                          onSelected: (bool value) => Scaffold.of(context).openDrawer(),
                           avatar: Icon(Icons.swap_vert, size: 18),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
@@ -160,17 +162,21 @@ class SearchResults extends StatelessWidget {
                         ),
                       ),
                       FilterChip(
-                        label: Text("Ricerca per ISBN"),
+                        label: Text(
+                          "Ricerca per ISBN",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 12,
+                          )
+                        ),
                         selected: false,
                         onSelected: (bool value) {
                           Navigator.push(context, MaterialPageRoute(
                             builder: (context) => IsbnSearchScreen(),
-                            ));
-                          },
+                          ));
+                        },
                         avatar: Icon(Icons.search, size: 18),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        )
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
                       )
                     ]
                   )
@@ -190,9 +196,7 @@ class SearchResults extends StatelessWidget {
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
-                        builder: (context){
-                          return ProductDetail(comic: sortedResults[index]);
-                        }
+                        builder: (context) => ProductDetail(comic: sortedResults[index])
                       ));
                     },
                     child: ShowCaseWidget(builder: (context) => ComicCard(comic: sortedResults[index]))

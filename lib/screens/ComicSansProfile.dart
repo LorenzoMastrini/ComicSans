@@ -50,7 +50,7 @@ class ComicSansProfileState extends State<ComicSansProfile> {
         DecoratedBox(
           decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: Colors.black, width: 1),
+              bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
             ),
           ),
           child: TextButton(
@@ -81,7 +81,7 @@ class ComicSansProfileState extends State<ComicSansProfile> {
                           userProviderWatch.loggedInUser != null
                             ? userProviderWatch.loggedInUser!.username
                             : "",
-                          style: TextStyle(color: Colors.black, fontSize: 24)
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 24)
                         ),
                         userProviderWatch.loggedInUser == null
                           ? SizedBox() // Avoid null pointer exception
@@ -91,41 +91,28 @@ class ComicSansProfileState extends State<ComicSansProfile> {
                           child: RichText(
                             text: TextSpan(
                               children: [
-                                TextSpan(text: userProviderWatch.getLibraryLength().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
-                                TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
-                                TextSpan(text: userProviderWatch.getNumberOfReviews().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
-                                TextSpan(text: " recensioni", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
+                                TextSpan(text: userProviderWatch.getLibraryLength().toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.w500)),
+                                TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.normal)),
+                                TextSpan(text: userProviderWatch.getNumberOfReviews().toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.w500)),
+                                TextSpan(text: " recensioni", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.normal)),
                               ]
                             )
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(text: userProviderWatch.getLibraryLength().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
-                                TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
-                                TextSpan(text: userProviderWatch.getNumberOfReviews().toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500)),
-                                TextSpan(text: " recensioni", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal)),
-                              ]
-                            )
-                          ),
-                        )
                       ]
                     ),
                   ),
                   Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                  Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
                 ]
-              ), // Ora la chiusura di Row è corretta
+              ),
             ),
           ),
         ),
         DecoratedBox(
           decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: Colors.black, width: 1),
+              bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
             ),
           ),
           child: TextButton(
@@ -140,9 +127,9 @@ class ComicSansProfileState extends State<ComicSansProfile> {
             ),
             child: Row(
               children: <Widget>[
-                Text("Acquisti effettuati", style: TextStyle(color: Colors.black, fontSize: 16)),
+                Text("Acquisti effettuati", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16)),
                 Spacer(),
-                Icon(Icons.arrow_forward_ios, color: Colors.black),
+                Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
               ]
             ),
           ),
@@ -150,7 +137,7 @@ class ComicSansProfileState extends State<ComicSansProfile> {
         DecoratedBox(
           decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: Colors.black, width: 1),
+              bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
             ),
           ),
           child: TextButton(
@@ -166,9 +153,9 @@ class ComicSansProfileState extends State<ComicSansProfile> {
             ),
             child: Row(
               children: <Widget>[
-                Text("Vendite effettuate", style: TextStyle(color: Colors.black, fontSize: 16)),
+                Text("Vendite effettuate", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16)),
                 Spacer(),
-                Icon(Icons.arrow_forward_ios, color: Colors.black),
+                Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
               ]
             ),
           ),
@@ -176,7 +163,7 @@ class ComicSansProfileState extends State<ComicSansProfile> {
         DecoratedBox(
           decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: Colors.black, width: 1),
+              bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
             ),
           ),
           child: TextButton(
@@ -191,9 +178,9 @@ class ComicSansProfileState extends State<ComicSansProfile> {
             ),
             child: Row(
                 children: <Widget>[
-                  Text("Account seguiti", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  Text("Account seguiti", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16)),
                   Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                  Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
                 ]
             ),
           ),
@@ -203,8 +190,8 @@ class ComicSansProfileState extends State<ComicSansProfile> {
           child: DecoratedBox(
             decoration: BoxDecoration(
               border: Border(
-                top: BorderSide(color: Colors.black, width: 1),
-                bottom: BorderSide(color: Colors.black, width: 1),
+                top: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
+                bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
               ),
             ),
             child: TextButton(
@@ -219,9 +206,9 @@ class ComicSansProfileState extends State<ComicSansProfile> {
               ),
               child: Row(
                 children: <Widget>[
-                  Text("Impostazioni account", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  Text("Impostazioni account", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16)),
                   Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                  Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
                 ]
               ),
             ),
@@ -230,8 +217,8 @@ class ComicSansProfileState extends State<ComicSansProfile> {
         DecoratedBox(
           decoration: BoxDecoration(
             border: Border(
-              top: BorderSide(color: Colors.black, width: 1),
-              bottom: BorderSide(color: Colors.black, width: 1),
+              top: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
+              bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
             ),
           ),
           child: TextButton(
@@ -248,9 +235,9 @@ class ComicSansProfileState extends State<ComicSansProfile> {
             ),
             child: Row(
               children: <Widget>[
-                Text("Assistenza", style: TextStyle(color: Colors.black, fontSize: 16)),
+                Text("Assistenza", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16)),
                 Spacer(),
-                Icon(Icons.arrow_forward_ios, color: Colors.black),
+                Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
               ]
             ),
           ),
@@ -258,7 +245,7 @@ class ComicSansProfileState extends State<ComicSansProfile> {
         DecoratedBox(
           decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: Colors.black, width: 1),
+              bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
             ),
           ),
           child: TextButton(
@@ -269,9 +256,9 @@ class ComicSansProfileState extends State<ComicSansProfile> {
             ),
             child: Row(
               children: <Widget>[
-                Text("Invia un feedback", style: TextStyle(color: Colors.black, fontSize: 16)),
+                Text("Invia un feedback", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16)),
                 Spacer(),
-                Icon(Icons.arrow_forward_ios, color: Colors.black),
+                Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
               ]
             ),
           ),

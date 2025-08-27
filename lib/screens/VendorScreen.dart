@@ -7,6 +7,7 @@ import 'package:comicsans/components/ReviewComponent.dart';
 import 'package:comicsans/components/ReviewWidget.dart';
 import 'package:comicsans/user.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 
 
@@ -53,25 +54,25 @@ class _VendorScreenState extends State<VendorScreen> {
               padding: const EdgeInsets.fromLTRB(8, 15, 0, 0),
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.account_circle, color: Colors.black, size: 100),
+                  Icon(Icons.account_circle, color: Theme.of(context).colorScheme.secondary, size: 100),
                   SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(widget.seller.username,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.secondary,
                           fontSize: 24,
-                          fontWeight: FontWeight.w500)),
+                          fontWeight: FontWeight.w500
+                        )
+                      ),
                       ReviewWidget(user: widget.seller),
                       SizedBox(height: 8),
                       SizedBox(
-                        width: 120,
-                        height: 25,
+                        width: isFollowed ? 145 : 120,
+                        height: 28,
                         child: ElevatedButton(
-                          onPressed: () {
-                            toggleFollow();
-                          },
+                          onPressed: () => toggleFollow(),
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(7),
@@ -80,8 +81,9 @@ class _VendorScreenState extends State<VendorScreen> {
                           child: Text(
                             isFollowed ? 'Non seguire più' : 'Segui',
                             style: TextStyle(
-                              color: Colors.black,
-                              fontSize: isFollowed ? 10 : 16,
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: 12,
+                              letterSpacing: 0.1
                             )
                           ),
                         ),
@@ -98,9 +100,9 @@ class _VendorScreenState extends State<VendorScreen> {
                 Tab(text: "Recensioni"),
                 Tab(text: "Informazioni")
               ],
-              labelColor: Colors.black,
+              labelColor: Theme.of(context).colorScheme.secondary,
               unselectedLabelColor: Colors.grey,
-              indicatorColor: Colors.black,
+              indicatorColor: Theme.of(context).colorScheme.secondary,
             ),
 
             Expanded(
@@ -122,11 +124,10 @@ class _VendorScreenState extends State<VendorScreen> {
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(
-                              builder: (_) =>
-                                  ProductDetail(comic: comic)
+                              builder: (_) => ProductDetail(comic: comic)
                             ));
                           },
-                          child: ComicCard(comic: comic)
+                          child: ShowCaseWidget(builder: (context) => ComicCard(comic: comic))
                         );
                       },
                     ),
@@ -143,7 +144,7 @@ class _VendorScreenState extends State<VendorScreen> {
                       children: <Widget>[
                         Text("Statistiche",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 22,
                             fontWeight: FontWeight.w500
                           ),
@@ -151,24 +152,25 @@ class _VendorScreenState extends State<VendorScreen> {
                         RichText(
                           text: TextSpan(
                             children: <TextSpan>[
-                              TextSpan(text: widget.seller.sellings.length.toString(), style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
-                              TextSpan(text: " vendite, ", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
-                              TextSpan(text: widget.seller.purchases.length.toString(), style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
-                              TextSpan(text: " acquisti", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal))
+                              TextSpan(text: widget.seller.sellings.length.toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.w500)),
+                              TextSpan(text: " vendite, ", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.normal)),
+                              TextSpan(text: widget.seller.purchases.length.toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.w500)),
+                              TextSpan(text: " acquisti", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.normal))
                             ]
                           )
                         ),
                         SizedBox(height: 30),
-                        Text("Posizione",
+                        Text(
+                          "Posizione",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 22,
                             fontWeight: FontWeight.w500
                           ),
                         ),
                         Text(widget.seller.address!.country,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 18,
                             fontWeight: FontWeight.normal
                           ),

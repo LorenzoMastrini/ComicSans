@@ -1,6 +1,7 @@
 import 'package:comicsans/Chat.dart';
 import 'package:comicsans/MainScreen.dart';
 import 'package:comicsans/screens/ChatScreen.dart';
+import 'package:comicsans/screens/ComicSansHome.dart';
 import 'package:comicsans/screens/Login.dart';
 import 'package:comicsans/screens/Registration.dart';
 import 'package:comicsans/screens/UserVendorScreen.dart';
@@ -17,6 +18,8 @@ class RouteGenerator {
     switch(routeSettings.name) {
       case '/login':
         return MaterialPageRoute(builder: (_) => const Login());
+      case '/home':
+        return MaterialPageRoute(builder: (_) => const ComicSansHome());
       case '/forgot_password':
         return MaterialPageRoute(builder: (_) => MainScreen());
       case '/registration':

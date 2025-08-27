@@ -174,6 +174,21 @@ class _ComicSansSell1State extends State<ComicSansSell1> {
                 child: ComicSansButton(
                   text: 'Continua',
                   onPressed: () {
+                    if (_titleController.text.isEmpty || _descriptionController.text.isEmpty || _priceController.text.isEmpty || _conditionsController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          duration: const Duration(seconds: 2),
+                          backgroundColor: Theme.of(context).colorScheme.secondary,
+                          content: Text(
+                            'Devi riempire tutti i campi obbligatori per continuare.',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary,
+                            )
+                          )
+                        ),
+                      );
+                      return; // Stop the navigation
+                    }
                     if (_formKey.currentState!.validate()) {
                       Navigator.push(
                         context,

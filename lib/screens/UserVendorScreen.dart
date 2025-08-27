@@ -20,8 +20,8 @@ class UserVendorScreen extends StatelessWidget{
       length: 3,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40),
-          child: ComicSansAppBar(showBackButton: true)
+            preferredSize: Size.fromHeight(40),
+            child: ComicSansAppBar(showBackButton: true)
         ),
         body: Column(
           children: <Widget>[
@@ -32,7 +32,7 @@ class UserVendorScreen extends StatelessWidget{
                   Icon(
                     Icons.account_circle,
                     color: Theme.of(context).colorScheme.secondary,
-                    size: 100
+                    size: 100,
                   ),
                   SizedBox(width: 10),
                   Column(
@@ -43,7 +43,7 @@ class UserVendorScreen extends StatelessWidget{
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                           fontSize: 24,
-                          fontWeight: FontWeight.w500
+                          fontWeight: FontWeight.w500,
                         )
                       ),
                       ReviewWidget(user: userProviderWatch.loggedInUser!),
@@ -103,7 +103,6 @@ class UserVendorScreen extends StatelessWidget{
               labelStyle: Theme.of(context).textTheme.headlineSmall,
               unselectedLabelColor: Colors.grey,
             ),
-
             Expanded(
               child: TabBarView(
                 children: [
@@ -120,12 +119,9 @@ class UserVendorScreen extends StatelessWidget{
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(
-                              builder: (context){
-                                return ProductDetailsModifyScreen(
-                                  comic: userProviderWatch.getLibrary()[index],
-                                );
-                              })
-                            );
+                              builder: (context) =>
+                                  ProductDetailsModifyScreen(comic: userProviderWatch.getLibrary()[index])
+                            ));
                           },
                           child: ComicCardDelete(
                             comic: userProviderWatch.getLibrary()[index],

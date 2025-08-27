@@ -122,6 +122,12 @@ class _MessageComponentState extends State<MessageComponent> {
                         child: ComicSansButton(
                           text: 'Controfferta',
                           height: 40,
+                          textStyle: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.1,
+                            color: Theme.of(context).colorScheme.tertiary
+                          ),
                           onPressed: () {
                             _disableButtons();
                             Navigator.push(context, MaterialPageRoute(
@@ -135,6 +141,12 @@ class _MessageComponentState extends State<MessageComponent> {
                       Expanded(
                         child: ComicSansButton(
                           height: 40,
+                          textStyle: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.1,
+                            color: Theme.of(context).colorScheme.tertiary
+                          ),
                           text: 'Accetta',
                           onPressed: () {
                             _disableButtons();

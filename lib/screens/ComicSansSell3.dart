@@ -328,7 +328,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Publication year
                     ComicSansTextInput(
                       title: 'Anno di pubblicazione',
-                      hintText: 'Inserisci la data di pubblicazione dell\'opera',
+                      hintText: 'Inserisci la data di uscita',
                       keyboardType: TextInputType.number,
                       controller: _publicationYearController,
                       onFieldSubmitted: (value) => providerRead.publicationYear = int.tryParse(value)
@@ -347,7 +347,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Italian publisher
                     ComicSansTextInput(
                       title: 'Editore italiano',
-                      hintText: 'Inserisci l\'editore italiano del fumetto',
+                      hintText: 'Inserisci l\'editore italiano',
                       controller: _italianPublisherController,
                       onFieldSubmitted: (value) => providerRead.italianPublisher = value,
                     ),
@@ -356,7 +356,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Original publisher
                     ComicSansTextInput(
                       title: 'Editore paese di origine',
-                      hintText: 'Inserisci l\'editore originale del fumetto',
+                      hintText: 'Inserisci l\'editore originale',
                       controller: _originalPublisherController,
                       onFieldSubmitted: (value) => providerRead.originalPublisher = value,
                     ),
@@ -365,7 +365,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Series
                     ComicSansTextInput(
                       title: 'Collana',
-                      hintText: 'Inserisci la collana di appartenenza del fumetto',
+                      hintText: 'Inserisci la collana/serie',
                       controller: _collanaController,
                       onFieldSubmitted: (value) => providerRead.series = value,
                     ),
@@ -374,7 +374,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Country of origin
                     ComicSansTextInput(
                       title: 'Paese di origine',
-                      hintText: 'Inserisci il paese di origine del fumetto',
+                      hintText: 'Inserisci il paese di origine',
                       controller: _countryController,
                       onFieldSubmitted: (value) => providerRead.country = value,
                     ),
@@ -459,10 +459,14 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                         comicsProvider.addComic(newComic); // Add the comic to the global list
                         userProvider.addComicToLibrary(newComic); // Add comic to the user's library
                         providerRead.resetInformations(); // Reset the provider (clear fields)
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/user_vendor_screen', // Go to the vendor screen
-                          (route) => false, // remove from the stack all the visited routes
-                        );
+                        int count = 0; // Counter of removed pages
+                        // Go back until reaching the vendor screen
+                        Navigator.of(context).popUntil((route) {
+                          count++;
+                          return count > 4; // When count > 4, stop popping pages
+                        });
+
+                        Navigator.of(context).pushNamed('/user_vendor_screen');
                       } else {
                         providerRead.updateComic(context, widget.comicToModify!);
                         providerRead.resetInformations(); // Reset the provider (clear fields)

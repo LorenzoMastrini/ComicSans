@@ -53,11 +53,7 @@ class ComicSansRadioButtons extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: title,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontWeight: FontWeight.bold
-                    ),
+                    style: Theme.of(context).textTheme.labelMedium
                   ),
                   WidgetSpan(child: addAsterisk(context)),
                 ]

@@ -190,6 +190,14 @@ class _ProductDetailState extends State<ProductDetail> {
                           )
                         ]),
                       ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VendorScreen(seller: widget.comic.seller, initialTab: 0),
+                          ),
+                        );
+                      },
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
@@ -231,12 +239,13 @@ class _ProductDetailState extends State<ProductDetail> {
                     ));
                   },
                   child: Text(
-                    "chat",
+                    "Chat",
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal
-                    )
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.1,
+                        color: Theme.of(context).colorScheme.secondary
+                    ),
                   )
                 ),
               ),
@@ -250,8 +259,14 @@ class _ProductDetailState extends State<ProductDetail> {
                 padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Condizioni",
-                      style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 20, fontWeight: FontWeight.bold)),
+                  child: Text(
+                    "Condizioni",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                    )
+                  ),
                 ),
               ),
               Padding(

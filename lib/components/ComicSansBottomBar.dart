@@ -30,15 +30,20 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final userProvider = context.read<UserProvider>();
 
-      if(!userProvider.hasSeenAddComicShowcasePerUser(userProvider.loggedInUser!.id)) {
-        ShowCaseWidget.of(context).startShowCase([add]);
-        userProvider.setHasSeenAddComicShowcasePerUser(userProvider.loggedInUser!.id, true);
-      }
-      Future.delayed(const Duration(seconds: 2), () {
-        if(add.currentContext != null){
-          ShowCaseWidget.of(context).completed(add);
+      if(userProvider.loggedInUser != null) {
+        if (!userProvider.hasSeenAddComicShowcasePerUser(
+            userProvider.loggedInUser!.id)) {
+          ShowCaseWidget.of(context).startShowCase([add]);
+          userProvider.setHasSeenAddComicShowcasePerUser(
+              userProvider.loggedInUser!.id, true);
         }
-      });
+
+        Future.delayed(const Duration(seconds: 4), () {
+          if(add.currentContext != null){
+            ShowCaseWidget.of(context).completed(add);
+          }
+        });
+      }
     });
   }
 
@@ -48,7 +53,7 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withAlpha(50),
             spreadRadius: -8,
             blurRadius: 10,
             offset: Offset(0, -4),
@@ -76,25 +81,17 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
             label: '',
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.add_circle, size: 40),
             icon: Center(
-                    child: Showcase(
-                      key: add,
-                      description: "Premi qui per vendere un fumetto",
-                      overlayOpacity: 0,
-                      disableMovingAnimation: true,
-                      tooltipBackgroundColor: Theme.of(context).colorScheme.secondary,
-                      textColor: Theme.of(context).colorScheme.tertiary,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          shape: BoxShape.rectangle,
-                          border: Border.all(color: Theme.of(context).colorScheme.secondary, width: 2)
-                        ),
-                        child: Icon(Icons.add_circle_outline, size: 40, color: Theme.of(context).colorScheme.secondary)
-                      ),
-                    ),
-                  ),
+              child: Showcase(
+                key: add,
+                description: "Premi qui per vendere un fumetto",
+                overlayOpacity: 0,
+                disableMovingAnimation: true,
+                tooltipBackgroundColor: Theme.of(context).colorScheme.secondary,
+                textColor: Theme.of(context).colorScheme.tertiary,
+                child: Icon(Icons.add_circle_outline, size: 44, color: Theme.of(context).colorScheme.secondary),
+              ),
+            ),
             label: '',
           ),
           BottomNavigationBarItem(

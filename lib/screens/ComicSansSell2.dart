@@ -175,7 +175,7 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                             )
                           ),
                         );
-                        return; // Blocca la navigazione
+                        return; // Stop the navigation
                       }
 
                       Navigator.push(

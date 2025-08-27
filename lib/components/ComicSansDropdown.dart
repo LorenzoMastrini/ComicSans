@@ -27,11 +27,7 @@ class ComicSansDropdown extends StatelessWidget {
       children: <Widget>[
         Text(
           title,
-          style: TextStyle(
-            fontSize: 14,
-            color: Theme.of(context).colorScheme.secondary,
-            fontWeight: FontWeight.bold
-          ),
+          style: Theme.of(context).textTheme.labelMedium
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
@@ -45,10 +41,7 @@ class ComicSansDropdown extends StatelessWidget {
               isExpanded: isExpanded,
               icon: const Icon(Icons.arrow_drop_down),
               elevation: 16,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.titleMedium?.color,
-                fontSize: 16,
-              ),
+              style: Theme.of(context).textTheme.labelMedium,
               onChanged: (newValue) {
                 if (onChanged != null) {
                   onChanged!(newValue);
@@ -60,7 +53,10 @@ class ComicSansDropdown extends StatelessWidget {
               items: options.map<DropdownMenuItem<String>>((String option) {
                 return DropdownMenuItem<String>(
                   value: option,
-                  child: Text(option), // Show the text
+                  child: Text(
+                    option,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ), // Show the text
                 );
               }).toList(),
             ),

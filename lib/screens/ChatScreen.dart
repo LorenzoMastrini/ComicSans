@@ -94,23 +94,23 @@ class _ChatScreenState extends State<ChatScreen> {
             // Show the offer button only if the current user is the buyer
             child: widget.chat.buyer == userProviderWatch.loggedInUser
               ? Showcase(
-                  key: offer,
-                  description: "Premi qui per fare un'offerta al venditore",
-                  overlayOpacity: 0,
-                  disableMovingAnimation: true,
-                  tooltipBackgroundColor: Theme.of(context).colorScheme.secondary,
-                  textColor: Theme.of(context).colorScheme.tertiary,
-                  child: ComicSansButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(
-                       builder: (context) => OfferScreen(chat: widget.chat)
-                      ));
-                    },
-                    text: "Fai un'offerta",
-                    height: 40,
-                    width: 200,
-                  ),
-                )
+                key: offer,
+                description: "Premi qui per fare un'offerta al venditore",
+                overlayOpacity: 0,
+                disableMovingAnimation: true,
+                tooltipBackgroundColor: Theme.of(context).colorScheme.secondary,
+                textColor: Theme.of(context).colorScheme.tertiary,
+                child: ComicSansButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(
+                     builder: (context) => OfferScreen(chat: widget.chat)
+                    ));
+                  },
+                  text: "Fai un'offerta",
+                  height: 50,
+                  width: 200,
+                ),
+              )
               : null,
           ),
           _buildMessageInput()
@@ -177,12 +177,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   fontWeight: FontWeight.normal
                 )
               ),
-              Divider(height: 4,),
               Text(
                 widget.chat.product.title,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.w500
                 )
               )

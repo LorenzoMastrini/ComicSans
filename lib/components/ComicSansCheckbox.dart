@@ -24,11 +24,7 @@ class ComicSansCheckbox extends StatelessWidget {
       children: <Widget>[
         Text(
           title,
-          style: TextStyle(
-            fontSize: 14,
-            color: Theme.of(context).colorScheme.secondary,
-            fontWeight: FontWeight.bold
-          ),
+          style: Theme.of(context).textTheme.labelMedium
         ),
         GridView.builder(
           itemCount: options.length,
@@ -54,10 +50,7 @@ class ComicSansCheckbox extends StatelessWidget {
                   offset: const Offset(-15, 0),
                   child: Text(
                     optionTitle,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+                    style: Theme.of(context).textTheme.headlineMedium
                   ),
                 ),
                 value: optionValue,

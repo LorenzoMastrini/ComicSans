@@ -1,9 +1,6 @@
-import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-
-import '../user.dart';
+import 'package:comicsans/user.dart';
 
 
 
@@ -25,7 +22,7 @@ class ReviewWidgetState extends State<ReviewWidget> {
         stars.add(Icon(FontAwesomeIcons.solidStar, color: Colors.amberAccent, size: 18));
       }
       else{
-        stars.add(Icon(FontAwesomeIcons.star, color: Colors.black, size: 18));
+        stars.add(Icon(FontAwesomeIcons.star, color: Theme.of(context).colorScheme.secondary, size: 18));
       }
     }
     return stars;
@@ -33,13 +30,9 @@ class ReviewWidgetState extends State<ReviewWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProviderWatch = context.watch<UserProvider>();
-
     return Row(
       children: [
-        ...printStar(widget.user != null
-            ? widget.user!.rating
-            : 0)
+        ...printStar(widget.user.rating)
       ]
     );
   }

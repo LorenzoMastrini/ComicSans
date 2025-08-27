@@ -95,11 +95,7 @@ class _ComicSansTextInputState extends State<ComicSansTextInput> {
           children: [
             TextSpan(
               text: widget.title,
-              style: widget.style ?? TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).colorScheme.secondary,
-                fontWeight: FontWeight.bold
-              ),
+              style: widget.style ?? Theme.of(context).textTheme.labelMedium
             ),
             if (widget.inputRequired)
               TextSpan(
@@ -155,15 +151,6 @@ class _ComicSansTextInputState extends State<ComicSansTextInput> {
                 )
                 : null, // Otherwise don't show the icon
             ),
-            validator: (value) {
-              if (widget.validator != null) {
-                return widget.validator!(value); // If the validator is provided, use it
-                // Otherwise use the input required validator (default)
-              } else if(widget.inputRequired && (value == null || value.trim().isEmpty)) {
-                return 'Campo obbligatorio';
-              }
-              return widget.validator?.call(value);
-            },
             onFieldSubmitted: widget.onFieldSubmitted,
             onChanged: widget.onChanged,
           ),

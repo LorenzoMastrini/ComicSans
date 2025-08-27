@@ -83,7 +83,7 @@ class _OfferScreenState extends State<OfferScreen> {
                     }
                   },
                   text: "Fai un'offerta",
-                  height: 50,
+                  height: 60,
                   width: 200,
                 )
               ]

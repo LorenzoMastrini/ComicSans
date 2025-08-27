@@ -1,4 +1,3 @@
-import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/components/ProductsGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/CategoriesGrid.dart';
@@ -9,8 +8,7 @@ import 'package:comicsans/providers/user_provider.dart';
 
 
 class ComicSansHome extends StatefulWidget {
-  final String title;
-  const ComicSansHome({super.key, this.title = ""});
+  const ComicSansHome({super.key});
 
   @override
   State<ComicSansHome> createState() => _ComicSansHomeState();

@@ -8,6 +8,7 @@ class ComicSansButton extends StatelessWidget {
   bool enabled;
   final double height;
   final double width;
+  final TextStyle? textStyle;
 
   ComicSansButton({
     super.key,
@@ -16,6 +17,7 @@ class ComicSansButton extends StatelessWidget {
     this.enabled = true,
     this.height = 60,
     this.width = 318,
+    this.textStyle,
   });
 
   @override
@@ -31,10 +33,10 @@ class ComicSansButton extends StatelessWidget {
       onPressed: enabled ? onPressed : null,
       child: Text(
         text,
-        style: TextStyle(
+        style: textStyle ?? TextStyle(
           fontSize: 18,
-          fontWeight: FontWeight.w400,
-          letterSpacing: 0.15,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0.1,
           color: Theme.of(context).colorScheme.tertiary
         ),
       )

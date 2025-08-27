@@ -13,6 +13,12 @@ class ComicSansTheme {
       fontWeight: FontWeight.w500,
       color: Color(0xFF0C3148)
     ),
+    // Checkbox and dropdown elements
+    headlineMedium: GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+        color: Color(0xFF0C3148)
+    ),
     titleLarge: GoogleFonts.poppins(
       fontSize: 22,
       fontWeight: FontWeight.w500,
@@ -25,28 +31,17 @@ class ComicSansTheme {
       letterSpacing: 0.15,
       color: Color(0xFF0C3148)
     ),
-    titleSmall: GoogleFonts.poppins(
-      fontSize: 15,
-      fontWeight: FontWeight.w500,
-      letterSpacing: 0.1,
-      color: Colors.black
-    ),
-    bodyLarge: GoogleFonts.poppins(
-      fontSize: 17,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.5,
-      color: Colors.black
-    ),
-    bodyMedium: GoogleFonts.poppins(
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.25,
-      color: Colors.black
-    ),
     labelLarge: GoogleFonts.poppins(
       fontSize: 15,
       fontWeight: FontWeight.w500,
       letterSpacing: 1.25,
+      color: Color(0xFF0C3148)
+    ),
+    // Input field labels
+    labelMedium: GoogleFonts.poppins(
+      fontSize: 14,
+      letterSpacing: 0.1,
+      fontWeight: FontWeight.w600,
       color: Color(0xFF0C3148)
     ),
   );

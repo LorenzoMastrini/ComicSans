@@ -8,6 +8,7 @@ import 'package:comicsans/components/ComicSansTextInput.dart';
 import 'package:comicsans/components/ComicSansToggle.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/comic.dart';
@@ -45,14 +46,9 @@ class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
     final provider = context.read<ComicsProvider>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      /*if (provider.authors.isEmpty) {
-        provider.addAuthor('');
-      }*/
-
       _authorControllers.addAll(
           provider.authors.map((text) => TextEditingController(text: text)));
-
-      _syncAuthors(provider); // anche questa è sicura qui
+      _syncAuthors(provider);
     });
 
     // Initializations of TextEditingController controllers
@@ -67,7 +63,6 @@ class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
     _toPublicationYearController = TextEditingController(text: provider.toPublicationYear?.toString() ?? '');
     _fromEditionYearController = TextEditingController(text: provider.fromEditionYear?.toString() ?? '');
     _toEditionYearController = TextEditingController(text: provider.toEditionYear?.toString() ?? '');
-
   }
 
   @override
@@ -124,7 +119,6 @@ class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
       provider.addAuthor(''); // Add a new empty author if list is empty
       _authorControllers.add(TextEditingController());
     }
-
     setState(() {}); // Force the rebuild after safe update
   }
 
@@ -137,293 +131,315 @@ class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
     final providerRead = context.read<ComicsProvider>();
 
     return Scaffold(
-        appBar: ComicSansAppBar(
-            showBackButton: true,
-            actionType: AppBarActionType.reset,
-            onResetPressed: _resetFilters
-        ),
-        body: Form(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(18, 0, 18, 5),
-              child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Positioned.fill(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 100),
-                        child: ListView(
-                            children: [
-                              Text(
-                                  'Prezzo',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  )
+      appBar: ComicSansAppBar(
+          showBackButton: true,
+          actionType: AppBarActionType.reset,
+          onResetPressed: _resetFilters
+      ),
+      body: Form(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 0, 18, 5),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Positioned.fill(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 100),
+                  child: ListView(
+                    children: [
+                      Text('Prezzo', style: Theme.of(context).textTheme.labelMedium),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 150,
+                            child: ComicSansTextInput(
+                              title: 'Da',
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                letterSpacing: 0.1,
+                                fontWeight: FontWeight.normal,
+                                color: Color(0xFF0C3148)
                               ),
-                              Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 150,
-                                      child: ComicSansTextInput(
-                                          title: 'Da',
-                                          keyboardType: TextInputType.number,
-                                          controller: _fromPriceController,
-                                          onChanged: (value) => providerRead.fromPrice = double.tryParse(value)
-                                      ),
-                                    ),
-                                    SizedBox(width: 20),
-                                    SizedBox(
-                                      width: 150,
-                                      child: ComicSansTextInput(
-                                          title: 'A',
-                                          controller: _toPriceController,
-                                          keyboardType: TextInputType.number,
-                                          onChanged: (value) => providerRead.toPrice = double.tryParse(value)
-                                      ),
-                                    ),
-                                  ]
+                              keyboardType: TextInputType.number,
+                              controller: _fromPriceController,
+                              onChanged: (value) => providerRead.fromPrice = double.tryParse(value)
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          SizedBox(
+                            width: 150,
+                            child: ComicSansTextInput(
+                              title: 'A',
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                letterSpacing: 0.1,
+                                fontWeight: FontWeight.normal,
+                                color: Color(0xFF0C3148)
                               ),
-                              SizedBox(height: 20),
+                              controller: _toPriceController,
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) => providerRead.toPrice = double.tryParse(value)
+                            ),
+                          ),
+                        ]
+                      ),
+                      SizedBox(height: 20),
 
-                              // Authors
-                              Text(
-                                  'Autori',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  )
+                      // Authors
+                      Text(
+                        'Autori',
+                        style: Theme.of(context).textTheme.labelMedium),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(), // Disable scrolling of inner ListView
+                        itemCount: _authorControllers.length,
+                        itemBuilder: (_, i) => Row (
+                          children: [
+                            Expanded(
+                              child: ComicSansTextInput(
+                                title: '',
+                                hintText: 'Sceneggiatore, disegnatore',
+                                controller: _authorControllers[i],
+                                onChanged: (val) => providerWatch.updateAuthor(i, val),
                               ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(), // Disable scrolling of inner ListView
-                                itemCount: _authorControllers.length,
-                                itemBuilder: (_, i) => Row (
-                                  children: [
-                                    Expanded(
-                                      child: ComicSansTextInput(
-                                        title: '',
-                                        hintText: 'Sceneggiatore, disegnatore',
-                                        labelText: '',
-                                        controller: _authorControllers[i],
-                                        onChanged: (val) => providerWatch.updateAuthor(i, val),
-                                      ),
-                                    ),
-                                    if (_authorControllers.length > 1)
-                                      IconButton(
-                                        icon: const Icon(Icons.remove_circle_outline),
-                                        onPressed: () => _removeAuthor(i),
-                                      ),
-                                  ],
+                            ),
+                            if (_authorControllers.length > 1)
+                              Padding(
+                                padding: EdgeInsets.only(top: 23),
+                                child: IconButton(
+                                  icon: const Icon(Icons.remove_circle_outline),
+                                  onPressed: () => _removeAuthor(i),
                                 ),
                               ),
-                              // Button to add a new author
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: TextButton.icon(
-                                  icon: Icon(Icons.add),
-                                  label: Text('Aggiungi autore'),
-                                  onPressed: _addAuthor,
-                                ),
-                              ),
-                              SizedBox(height: 20),
-
-                              //Conditions
-                              ComicSansCheckbox(
-                                  title: 'Condizioni',
-                                  options: Conditions.values.map((cond) => {
-                                    'title': conditionsToString(cond),
-                                    'value': providerWatch.conditions.contains(cond), // Provider initial state
-                                  }).toList(),
-                                  onChanged: (title, value) =>
-                                      context.read<ComicsProvider>().updateConditions(stringToConditions(title), value)
-                              ),
-                              SizedBox(height: 20),
-
-                              // Genres
-                              ComicSansCheckbox(
-                                  title: 'Genere',
-                                  options: Genre.values.map((genre) => {
-                                    'title': genreToString(genre),
-                                    'value': providerWatch.genre.contains(genre), // Provider initial state
-                                  }).toList(),
-                                  onChanged: (title, value) =>
-                                      context.read<ComicsProvider>().updateGenre(stringToGenre(title), value)
-                              ),
-                              SizedBox(height: 20),
-
-                              // Publication year
-                              Text(
-                                  'Anno di pubblicazione',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                              ),
-                              Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 150,
-                                      child: ComicSansTextInput(
-                                          title: 'Da',
-                                          controller: _fromPublicationYearController,
-                                          keyboardType: TextInputType.number,
-                                          onChanged: (value) => providerRead.fromPublicationYear = int.tryParse(value)
-                                      ),
-                                    ),
-                                    SizedBox(width: 20),
-                                    SizedBox(
-                                      width: 150,
-                                      child: ComicSansTextInput(
-                                          title: 'A',
-                                          controller: _toPublicationYearController,
-                                          keyboardType: TextInputType.number,
-                                          onChanged: (value) => providerRead.toPublicationYear = int.tryParse(value)
-                                      ),
-                                    ),
-                                  ]
-                              ),
-                              SizedBox(height: 20),
-
-                              ComicSansDropdown(
-                                  title: 'Lingua',
-                                  options: availableLanguages,
-                                  controller: _languageController,
-                                  onChanged: (newValue) => providerRead.language = newValue,
-                                  value: providerWatch.language
-                              ),
-                              SizedBox(height: 20),
-
-                              // Italian publisher
-                              ComicSansTextInput(
-                                title: 'Editore italiano',
-                                hintText: 'Editore italiano',
-                                labelText: 'Inserisci l\'editore italiano del fumetto',
-                                controller: _italianPublisherController,
-                                onChanged: (value) => providerRead.italianPublisher = value,
-                              ),
-                              SizedBox(height: 20),
-
-                              // Original publisher
-                              ComicSansTextInput(
-                                title: 'Editore paese di origine',
-                                hintText: 'Editore paese di origine',
-                                labelText: 'Inserisci l\'editore originale del fumetto',
-                                controller: _originalPublisherController,
-                                onChanged: (value) => providerRead.originalPublisher = value,
-                              ),
-                              SizedBox(height: 20),
-
-                              // Series
-                              ComicSansTextInput(
-                                title: 'Collana',
-                                hintText: 'Collana',
-                                labelText: 'Inserisci la collana di appartenenza del fumetto',
-                                controller: _collanaController,
-                                onChanged: (value) => providerRead.series = value,
-                              ),
-                              SizedBox(height: 20),
-
-                              // Country of origin
-                              ComicSansTextInput(
-                                title: 'Paese di origine',
-                                hintText: 'Paese di origine',
-                                labelText: 'Inserisci il paese di origine del fumetto',
-                                controller: _countryController,
-                                onChanged: (value) => providerRead.country = value,
-                              ),
-                              SizedBox(height: 20),
-
-                              // Variant
-                              ComicSansToggle(
-                                title: 'Variant',
-                                value: providerWatch.variant ?? false,
-                                onChanged: (value) => providerRead.variant = value,
-                              ),
-                              SizedBox(height: 20),
-
-                              // Bookbinding
-                              ComicSansCheckbox(
-                                  title: 'Rilegatura',
-                                  options: Binding.values.map((binding) => {
-                                    'title': bindingToString(binding),
-                                    'value': providerWatch.binding.contains(binding), // Provider initial state
-                                  }).toList(),
-                                  onChanged: (title, value) =>
-                                      context.read<ComicsProvider>().updateBinding(stringToBinding(title), value)
-                              ),
-                              SizedBox(height: 20),
-
-                              // Graded
-                              ComicSansToggle(
-                                title: 'Gradato',
-                                value: providerWatch.graded ?? false,
-                                onChanged: (value) => providerRead.graded = value,
-                              ),
-                              SizedBox(height: 20),
-
-                              // Signed
-                              ComicSansToggle(
-                                title: 'Firmato',
-                                value: providerWatch.signed ?? false,
-                                onChanged: (value) => providerRead.signed = value,
-                              ),
-                              SizedBox(height: 20),
-
-                              // Edition year
-                              Text(
-                                  'Anno edizione',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                              ),
-                              Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 150,
-                                      child: ComicSansTextInput(
-                                          title: 'Da',
-                                          keyboardType: TextInputType.number,
-                                          controller: _fromEditionYearController,
-                                          onChanged: (value) => providerRead.fromEditionYear = int.tryParse(value)
-                                      ),
-                                    ),
-                                    SizedBox(width: 20),
-                                    SizedBox(
-                                      width: 150,
-                                      child: ComicSansTextInput(
-                                          title: 'A',
-                                          controller: _toEditionYearController,
-                                          keyboardType: TextInputType.number,
-                                          onChanged: (value) => providerRead.toEditionYear = int.tryParse(value)
-                                      ),
-                                    ),
-                                  ]
-                              ),
-                              SizedBox(height: 20),
-                            ]
+                          ],
                         ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: 20,
-                      left: 0,
-                      right: 0,
-                      child: ComicSansButton (
-                        text: 'Applica',
-                        onPressed: () {
-                          List<Comic> filtered = providerRead.filterFavouriteComics(context.read<UserProvider>().loggedInUser, widget.query);
-
-                          Navigator.pushReplacement(context, MaterialPageRoute(
-                              builder: (context) => SearchResults(comicsResults: filtered, query: widget.query)
-                          ));
-                        },
+                      // Button to add a new author
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          icon: Icon(Icons.add),
+                          label: Text('Aggiungi autore'),
+                          onPressed: _addAuthor,
+                        ),
                       ),
-                    )
-                  ]
+                      SizedBox(height: 20),
+
+                      //Conditions
+                      ComicSansCheckbox(
+                        title: 'Condizioni',
+                        options: Conditions.values.map((cond) => {
+                          'title': conditionsToString(cond),
+                          'value': providerWatch.conditions.contains(cond), // Provider initial state
+                        }).toList(),
+                        onChanged: (title, value) =>
+                          context.read<ComicsProvider>().updateConditions(stringToConditions(title), value)
+                      ),
+                      SizedBox(height: 20),
+
+                      // Genres
+                      ComicSansCheckbox(
+                        title: 'Genere',
+                        options: Genre.values.map((genre) => {
+                          'title': genreToString(genre),
+                          'value': providerWatch.genre.contains(genre), // Provider initial state
+                        }).toList(),
+                        onChanged: (title, value) =>
+                          context.read<ComicsProvider>().updateGenre(stringToGenre(title), value)
+                      ),
+                      SizedBox(height: 20),
+
+                      // Publication year
+                      Text(
+                        'Anno di pubblicazione',
+                        style: Theme.of(context).textTheme.labelMedium
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 150,
+                            child: ComicSansTextInput(
+                              title: 'Da',
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                letterSpacing: 0.1,
+                                fontWeight: FontWeight.normal,
+                                color: Color(0xFF0C3148)
+                              ),
+                              controller: _fromPublicationYearController,
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) => providerRead.fromPublicationYear = int.tryParse(value)
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          SizedBox(
+                            width: 150,
+                            child: ComicSansTextInput(
+                              title: 'A',
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                letterSpacing: 0.1,
+                                fontWeight: FontWeight.normal,
+                                color: Color(0xFF0C3148)
+                              ),
+                              controller: _toPublicationYearController,
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) => providerRead.toPublicationYear = int.tryParse(value)
+                            ),
+                          ),
+                        ]
+                      ),
+                      SizedBox(height: 20),
+
+                      ComicSansDropdown(
+                        title: 'Lingua',
+                        options: availableLanguages,
+                        controller: _languageController,
+                        onChanged: (newValue) => providerRead.language = newValue,
+                        value: providerWatch.language
+                      ),
+                      SizedBox(height: 20),
+
+                      // Italian publisher
+                      ComicSansTextInput(
+                        title: 'Editore italiano',
+                        hintText: 'Editore italiano',
+                        labelText: 'Inserisci l\'editore italiano del fumetto',
+                        controller: _italianPublisherController,
+                        onChanged: (value) => providerRead.italianPublisher = value,
+                      ),
+                      SizedBox(height: 20),
+
+                      // Original publisher
+                      ComicSansTextInput(
+                        title: 'Editore paese di origine',
+                        hintText: 'Editore paese di origine',
+                        labelText: 'Inserisci l\'editore originale del fumetto',
+                        controller: _originalPublisherController,
+                        onChanged: (value) => providerRead.originalPublisher = value,
+                      ),
+                      SizedBox(height: 20),
+
+                      // Series
+                      ComicSansTextInput(
+                        title: 'Collana',
+                        hintText: 'Collana',
+                        labelText: 'Inserisci la collana di appartenenza del fumetto',
+                        controller: _collanaController,
+                        onChanged: (value) => providerRead.series = value,
+                      ),
+                      SizedBox(height: 20),
+
+                      // Country of origin
+                      ComicSansTextInput(
+                        title: 'Paese di origine',
+                        hintText: 'Paese di origine',
+                        labelText: 'Inserisci il paese di origine del fumetto',
+                        controller: _countryController,
+                        onChanged: (value) => providerRead.country = value,
+                      ),
+                      SizedBox(height: 20),
+
+                      // Variant
+                      ComicSansToggle(
+                        title: 'Variant',
+                        value: providerWatch.variant ?? false,
+                        onChanged: (value) => providerRead.variant = value,
+                      ),
+                      SizedBox(height: 20),
+
+                      // Bookbinding
+                      ComicSansCheckbox(
+                        title: 'Rilegatura',
+                        options: Binding.values.map((binding) => {
+                          'title': bindingToString(binding),
+                          'value': providerWatch.binding.contains(binding), // Provider initial state
+                        }).toList(),
+                        onChanged: (title, value) =>
+                            context.read<ComicsProvider>().updateBinding(stringToBinding(title), value)
+                      ),
+                      SizedBox(height: 20),
+
+                      // Graded
+                      ComicSansToggle(
+                        title: 'Gradato',
+                        value: providerWatch.graded ?? false,
+                        onChanged: (value) => providerRead.graded = value,
+                      ),
+                      SizedBox(height: 20),
+
+                      // Signed
+                      ComicSansToggle(
+                        title: 'Firmato',
+                        value: providerWatch.signed ?? false,
+                        onChanged: (value) => providerRead.signed = value,
+                      ),
+                      SizedBox(height: 20),
+
+                      // Edition year
+                      Text(
+                        'Anno edizione',
+                        style: Theme.of(context).textTheme.labelMedium
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 150,
+                            child: ComicSansTextInput(
+                              title: 'Da',
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                letterSpacing: 0.1,
+                                fontWeight: FontWeight.normal,
+                                color: Theme.of(context).colorScheme.secondary
+                              ),
+                              keyboardType: TextInputType.number,
+                              controller: _fromEditionYearController,
+                              onChanged: (value) => providerRead.fromEditionYear = int.tryParse(value)
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          SizedBox(
+                            width: 150,
+                            child: ComicSansTextInput(
+                              title: 'A',
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                letterSpacing: 0.1,
+                                fontWeight: FontWeight.normal,
+                                color: Theme.of(context).colorScheme.secondary
+                              ),
+                              controller: _toEditionYearController,
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) => providerRead.toEditionYear = int.tryParse(value)
+                            ),
+                          ),
+                        ]
+                      ),
+                      SizedBox(height: 20),
+                    ]
+                  ),
+                ),
               ),
-            )
+              Positioned(
+                bottom: 20,
+                left: 0,
+                right: 0,
+                child: ComicSansButton (
+                  text: 'Applica',
+                  onPressed: () {
+                    List<Comic> filtered = providerRead.filterFavouriteComics(context.read<UserProvider>().loggedInUser, widget.query);
+
+                    Navigator.pushReplacement(context, MaterialPageRoute(
+                      builder: (context) => SearchResults(comicsResults: filtered, query: widget.query)
+                    ));
+                  },
+                ),
+              )
+            ]
+          ),
         )
+      )
     );
   }
 
