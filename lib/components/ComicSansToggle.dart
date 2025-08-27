@@ -18,18 +18,21 @@ class ComicSansToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
-        contentPadding: EdgeInsetsGeometry.symmetric(horizontal: 0),
-        title: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            )
-        ),
-        value: value,
-        onChanged: onChanged,
-        activeColor: Theme.of(context).colorScheme.primary,
-        // secondary: Icon(_isNotificationsEnabled ? Icons.notifications_active : Icons.notifications_off),
+      contentPadding: EdgeInsetsGeometry.symmetric(horizontal: 0),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: 14,
+          color: Theme.of(context).colorScheme.secondary,
+          fontWeight: FontWeight.bold
+        )
+      ),
+      value: value,
+      onChanged: onChanged,
+      activeColor: Theme.of(context).colorScheme.tertiary,
+      inactiveThumbColor: Theme.of(context).colorScheme.secondary,
+      inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
+      // secondary: Icon(_isNotificationsEnabled ? Icons.notifications_active : Icons.notifications_off),
     );
   }
 }

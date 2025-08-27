@@ -1,4 +1,5 @@
 import 'package:comicsans/Chat.dart';
+import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
 import 'package:comicsans/components/MessageComponent.dart';
 import 'package:comicsans/global_constants.dart';
@@ -106,7 +107,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
             icon: Icon(Icons.attach_file),
             onPressed: () {
-              // TODO: attach files to chat(?)
+              // TODO: attach files to chat
             },
           ),
           // Text field to type the message
@@ -129,7 +130,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           // Send button
           IconButton(
-            icon: Icon(Icons.send, color: Colors.blue),
+            icon: Icon(Icons.send, color: quaternary),
             onPressed: _sendMessage,
           ),
         ],
@@ -149,7 +150,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Text(
                 usernameToDisplay(context, widget.chat),
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.secondary,
                   fontSize: 16,
                   fontWeight: FontWeight.normal
                 )
@@ -158,7 +159,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Text(
                 widget.chat.product.title,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.secondary,
                   fontSize: 18,
                   fontWeight: FontWeight.w500
                 )
@@ -168,7 +169,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Text(
             '${widget.chat.product.price.toString()}€',
             style: TextStyle(
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.secondary,
               fontSize: 20,
               fontWeight: FontWeight.w500
             )

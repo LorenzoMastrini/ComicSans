@@ -138,7 +138,12 @@ class _LoginState extends State<Login> {
                               children: [
                                 Image.asset('assets/google_logo.png', height: 24),
                                 const SizedBox(width: 12),
-                                const Text('Accedi con Google', style: TextStyle(color: Colors.black)),
+                                Text(
+                                  'Accedi con Google',
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                  )
+                                ),
                               ],
                             ),
                           ),
@@ -156,7 +161,12 @@ class _LoginState extends State<Login> {
                               children: [
                                 Image.asset('assets/facebook_logo.png', height: 24),
                                 const SizedBox(width: 12),
-                                const Text('Accedi con Facebook', style: TextStyle(color: Colors.black)),
+                                Text(
+                                  'Accedi con Facebook',
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                  )
+                                ),
                               ],
                             ),
                           ),

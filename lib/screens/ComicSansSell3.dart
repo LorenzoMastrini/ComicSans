@@ -243,16 +243,17 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                 ListView(
                   controller: _scrollController,
                   children: [
-                    Text('Le seguenti informazioni non sono obbligatorie'),
+                    Text('Informazioni non obbligatorie'),
                     SizedBox(height: 20),
 
                     // Authors
                     Text(
                       'Autori',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      )
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                     ListView.builder(
                       shrinkWrap: true,
@@ -267,7 +268,6 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                                   key: _authorTextFieldKeys[i],
                                   title: '',
                                   hintText: 'Sceneggiatore, disegnatore',
-                                  labelText: '',
                                   controller: _authorControllers[i],
                                   onChanged: (val) {
                                     providerWatch.updateAuthor(i, val);
@@ -276,20 +276,22 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                                 ),
                               ),
                               if (_authorControllers.length > 1)
-                                IconButton(
-                                  icon: const Icon(Icons.remove_circle_outline),
-                                  onPressed: () => _removeAuthor(i),
+                                Padding(
+                                  padding: EdgeInsetsGeometry.only(top: 23),
+                                  child: IconButton(
+                                    icon: const Icon(Icons.remove_circle_outline),
+                                    onPressed: () => _removeAuthor(i),
+                                  ),
                                 ),
                             ],
                           ),
-                          // Ottieni la posizione del widget ogni volta che viene costruito
                           Builder(
                             builder: (context) {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 final currentContext = _authorTextFieldKeys[i].currentContext;
-                                // Verifica se currentContext è null prima di chiamare _getWidgetPosition
+
                                 if (currentContext != null) {
-                                  _getWidgetPosition(currentContext); // Passa il context solo se non è null
+                                  _getWidgetPosition(currentContext);
                                 } else {
                                   print("Errore: currentContext è null per l'autore con indice $i");
                                 }
@@ -302,7 +304,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     ),
                     // Button to add a new author
                     Align(
-                      alignment: Alignment.centerRight,
+                      alignment: Alignment.centerLeft,
                       child: TextButton.icon(
                         icon: Icon(Icons.add),
                         label: Text('Aggiungi autore'),
@@ -326,8 +328,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Publication year
                     ComicSansTextInput(
                       title: 'Anno di pubblicazione',
-                      hintText: 'Anno di pubblicazione',
-                      labelText: 'Inserisci la data di pubblicazione dell\'opera',
+                      hintText: 'Inserisci la data di pubblicazione dell\'opera',
                       keyboardType: TextInputType.number,
                       controller: _publicationYearController,
                       onFieldSubmitted: (value) => providerRead.publicationYear = int.tryParse(value)
@@ -346,8 +347,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Italian publisher
                     ComicSansTextInput(
                       title: 'Editore italiano',
-                      hintText: 'Editore italiano',
-                      labelText: 'Inserisci l\'editore italiano del fumetto',
+                      hintText: 'Inserisci l\'editore italiano del fumetto',
                       controller: _italianPublisherController,
                       onFieldSubmitted: (value) => providerRead.italianPublisher = value,
                     ),
@@ -356,8 +356,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Original publisher
                     ComicSansTextInput(
                       title: 'Editore paese di origine',
-                      hintText: 'Editore paese di origine',
-                      labelText: 'Inserisci l\'editore originale del fumetto',
+                      hintText: 'Inserisci l\'editore originale del fumetto',
                       controller: _originalPublisherController,
                       onFieldSubmitted: (value) => providerRead.originalPublisher = value,
                     ),
@@ -366,8 +365,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Series
                     ComicSansTextInput(
                       title: 'Collana',
-                      hintText: 'Collana',
-                      labelText: 'Inserisci la collana di appartenenza del fumetto',
+                      hintText: 'Inserisci la collana di appartenenza del fumetto',
                       controller: _collanaController,
                       onFieldSubmitted: (value) => providerRead.series = value,
                     ),
@@ -376,8 +374,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Country of origin
                     ComicSansTextInput(
                       title: 'Paese di origine',
-                      hintText: 'Paese di origine',
-                      labelText: 'Inserisci il paese di origine del fumetto',
+                      hintText: 'Inserisci il paese di origine del fumetto',
                       controller: _countryController,
                       onFieldSubmitted: (value) => providerRead.country = value,
                     ),
@@ -425,8 +422,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // Edition year
                     ComicSansTextInput(
                       title: 'Anno edizione',
-                      hintText: 'Anno edizione',
-                      labelText: 'Inserisci la data di uscita dell\'edizione',
+                      hintText: 'Inserisci la data di uscita dell\'edizione',
                       keyboardType: TextInputType.number,
                       controller: _editionYearController,
                       onFieldSubmitted: (value) => providerRead.editionYear = int.tryParse(value),
@@ -436,8 +432,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                     // ISBN
                     ComicSansTextInput(
                       title: 'ISBN',
-                      hintText: 'ISBN',
-                      labelText: 'Inserisci l\'ISBN del volume',
+                      hintText: 'Inserisci l\'ISBN del volume',
                       controller: _isbnController,
                       keyboardType: TextInputType.number,
                       onFieldSubmitted: (value) => providerRead.isbn = int.tryParse(value),
@@ -453,7 +448,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                   left: 0,
                   right: 0,
                   child: ComicSansButton (
-                    text: 'Pubblica',
+                    text: widget.comicToModify == null ? 'Pubblica' : 'Modifica',
                     onPressed: () {
                       final ComicsProvider comicsProvider = context.read<ComicsProvider>();
                       final UserProvider userProvider = context.read<UserProvider>();
@@ -465,8 +460,8 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                         userProvider.addComicToLibrary(newComic); // Add comic to the user's library
                         providerRead.resetInformations(); // Reset the provider (clear fields)
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/', // return to the main screen
-                              (route) => false, // remove from the stack all the visited routes
+                          '/user_vendor_screen', // Go to the vendor screen
+                          (route) => false, // remove from the stack all the visited routes
                         );
                       } else {
                         providerRead.updateComic(context, widget.comicToModify!);
@@ -479,10 +474,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                           return count > 4; // When count > 4, stop popping pages
                         });
 
-                        Navigator.of(context).pushReplacementNamed(
-                          '/vendor_screen',
-                          arguments: widget.comicToModify!.seller,
-                        );
+                        Navigator.of(context).pushReplacementNamed('/user_vendor_screen');
                       }
                     },
                   ),

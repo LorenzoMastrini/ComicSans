@@ -21,6 +21,7 @@ class OfferScreen extends StatefulWidget {
 
 class _OfferScreenState extends State<OfferScreen> {
   late TextEditingController _priceController;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -41,47 +42,52 @@ class _OfferScreenState extends State<OfferScreen> {
     return Scaffold(
       appBar: _buildAppBar(),
       resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: ComicSansTextInput(
-                      title: 'Prezzo',
-                      hintText: 'Nuovo prezzo',
-                      labelText: 'Fai un\'offerta appropriata',
-                      keyboardType: TextInputType.number,
-                      controller: _priceController,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 16, top:28),
-                    child: Text(
-                      '€',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.normal,
+      body: Form(
+        key: _formKey,
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: ComicSansTextInput(
+                        title: 'Prezzo',
+                        hintText: 'Fai un\'offerta appropriata',
+                        inputRequired: true,
+                        keyboardType: TextInputType.number,
+                        controller: _priceController,
                       ),
                     ),
-                  ),
-                ]
-              ),
-              ComicSansButton(
-                onPressed: () {
-                  final price = double.tryParse(_priceController.text) ?? 0;
-                  // update the offerPrice of the product
-                  messageProvider.offer(context, widget.chat, price, false);
-                  Navigator.pop(context);
-                },
-                text: "Fai un'offerta",
-                height: 50,
-                width: 200,
-              )
-            ]
+                    const Padding(
+                      padding: EdgeInsets.only(top: 25, left: 10),
+                      child: Text(
+                        '€',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  ]
+                ),
+                ComicSansButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      final price = double.tryParse(_priceController.text) ?? 0;
+                      // update the offerPrice of the product
+                      messageProvider.offer(context, widget.chat, price, false);
+                      Navigator.pop(context);
+                    }
+                  },
+                  text: "Fai un'offerta",
+                  height: 50,
+                  width: 200,
+                )
+              ]
+            ),
           ),
         ),
       ),

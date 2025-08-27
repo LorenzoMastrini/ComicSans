@@ -1,4 +1,3 @@
-import 'package:comicsans/comic.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ProductDetailsModify.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ class UserVendorScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     UserProvider userProviderWatch = context.watch<UserProvider>();
-    UserProvider userProviderRead = context.read<UserProvider>();
 
     return DefaultTabController(
       length: 3,
@@ -31,26 +29,61 @@ class UserVendorScreen extends StatelessWidget{
               padding: const EdgeInsets.fromLTRB(8, 15, 0, 0),
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.account_circle, color: Colors.black, size: 100),
+                  Icon(
+                    Icons.account_circle,
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: 100
+                  ),
                   SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(userProviderWatch.loggedInUser!.username,
+                      Text(
+                        userProviderWatch.loggedInUser!.username,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.secondary,
                           fontSize: 24,
-                          fontWeight: FontWeight.w500)),
+                          fontWeight: FontWeight.w500
+                        )
+                      ),
                       ReviewWidget(user: userProviderWatch.loggedInUser!),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: RichText(
                           text: TextSpan(
                             children: [
-                              TextSpan(text: userProviderWatch.getLibraryLength().toString(), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500)),
-                              TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
-                              TextSpan(text: userProviderWatch.getNumberOfReviews().toString(), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500)),
-                              TextSpan(text: " recensioni", style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
+                              TextSpan(
+                                text: userProviderWatch.getLibraryLength().toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold
+                                )
+                              ),
+                              TextSpan(
+                                text: " articoli in vendita, ",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal
+                                )
+                              ),
+                              TextSpan(
+                                text: userProviderWatch.getNumberOfReviews().toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold
+                                )
+                              ),
+                              TextSpan(
+                                text: " recensioni",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal
+                                )
+                              ),
                             ]
                           )
                         ),
@@ -61,18 +94,15 @@ class UserVendorScreen extends StatelessWidget{
               ),
             ),
 
-
             TabBar(
               tabs: [
                 Tab(text: "Libreria"),
                 Tab(text: "Recensioni"),
                 Tab(text: "Informazioni")
               ],
-              labelColor: Colors.black,
+              labelStyle: Theme.of(context).textTheme.headlineSmall,
               unselectedLabelColor: Colors.grey,
-              indicatorColor: Colors.black,
             ),
-
 
             Expanded(
               child: TabBarView(
@@ -120,7 +150,7 @@ class UserVendorScreen extends StatelessWidget{
                       children: <Widget>[
                         Text("Statistiche",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 22,
                             fontWeight: FontWeight.w500
                           ),
@@ -128,24 +158,24 @@ class UserVendorScreen extends StatelessWidget{
                         RichText(
                           text: TextSpan(
                             children: <TextSpan>[
-                              TextSpan(text: userProviderWatch.getNumberOfSales().toString(), style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
-                              TextSpan(text: " vendite, ", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal)),
-                              TextSpan(text: userProviderWatch.getNumberOfPurchases().toString(), style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500)),
-                              TextSpan(text: " acquisti", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal))
+                              TextSpan(text: userProviderWatch.getNumberOfSales().toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.w500)),
+                              TextSpan(text: " vendite, ", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.normal)),
+                              TextSpan(text: userProviderWatch.getNumberOfPurchases().toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.w500)),
+                              TextSpan(text: " acquisti", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.normal))
                             ]
                           )
                         ),
                         SizedBox(height: 30),
                         Text("Posizione",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 22,
                             fontWeight: FontWeight.w500
                           ),
                         ),
                         Text(userProviderWatch.loggedInUser!.address?.country ?? '',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 18,
                             fontWeight: FontWeight.normal
                           ),

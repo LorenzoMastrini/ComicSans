@@ -108,27 +108,28 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                   children: [
                     const Text('Carica fino a 10 foto (copertina inclusa)'),
                     const SizedBox(height: 20),
-                    const Row(
+                    Row(
                       children: [
                         Text(
-                          'Foto di copertina',
+                          'Foto di copertina ',
                           style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontWeight: FontWeight.bold
                           ),
                         ),
                         Text(
                           '*', //required
                           style: TextStyle(
-                            color: Colors.red,
+                            color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 14,
                           ),
                         ),
                       ]
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(50, 10, 50, 0),
+                      padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
                       child: ImageUploadSlot(
                         initialImagePath: sellInfoProviderRead.coverPath,
                         onImageSelected: (String? selectedImagePath) {
@@ -138,15 +139,16 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                     ),
                     const SizedBox(height: 30),
 
-                    const Text(
+                    Text(
                       'Foto aggiuntive',
                       style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.bold
                       ),
                     ),
 
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 5),
                     photoGrid(context),
                     const SizedBox(height: bottomSpaceForButton), // Prevent the content to be covered by the ElevatedButton
                   ]
@@ -167,7 +169,15 @@ class _ComicSansSell2State extends State<ComicSansSell2> {
                     onPressed: () {
                       if (sellInfoProviderRead.coverPath == null || sellInfoProviderRead.coverPath!.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Devi caricare una foto di copertina per continuare.')),
+                          SnackBar(
+                            backgroundColor: Theme.of(context).colorScheme.secondary,
+                            content: Text(
+                              'Devi caricare una foto di copertina per continuare.',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.tertiary,
+                              )
+                            )
+                          ),
                         );
                         return; // Blocca la navigazione
                       }

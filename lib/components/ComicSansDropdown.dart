@@ -23,49 +23,50 @@ class ComicSansDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).colorScheme.secondary,
+            fontWeight: FontWeight.bold
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(7.0),
+            border: Border.all(color: Theme.of(context).colorScheme.outline, width: 1.0),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String> (
+              value: value, // Selection handled by the passed value
+              isExpanded: isExpanded,
+              icon: const Icon(Icons.arrow_drop_down),
+              elevation: 16,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.titleMedium?.color,
+                fontSize: 16,
+              ),
+              onChanged: (newValue) {
+                if (onChanged != null) {
+                  onChanged!(newValue);
+                  if (controller != null) {
+                    controller!.text = newValue ?? ''; // Synchronize external controller
+                  }
+                }
+              },
+              items: options.map<DropdownMenuItem<String>>((String option) {
+                return DropdownMenuItem<String>(
+                  value: option,
+                  child: Text(option), // Show the text
+                );
+              }).toList(),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(7.0),
-              border: Border.all(color: Theme.of(context).colorScheme.outline, width: 1.0),
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String> (
-                value: value, // Selection handled by the passed value
-                isExpanded: isExpanded,
-                icon: const Icon(Icons.arrow_drop_down),
-                elevation: 16,
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.titleMedium?.color,
-                  fontSize: 16,
-                ),
-                onChanged: (newValue) {
-                  if (onChanged != null) {
-                    onChanged!(newValue);
-                    if (controller != null) {
-                      controller!.text = newValue ?? ''; // Synchronize external controller
-                    }
-                  }
-                },
-                items: options.map<DropdownMenuItem<String>>((String option) {
-                  return DropdownMenuItem<String>(
-                    value: option,
-                    child: Text(option), // Show the text
-                  );
-                }).toList(),
-              ),
-            ),
-          )
-        ]
+        )
+      ]
     );
   }
 }

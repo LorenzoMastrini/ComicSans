@@ -134,7 +134,13 @@ class MySearchDelegate extends SearchDelegate {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: FilterChip(
-            label: Text("Ricerca per ISBN"),
+            label: Text(
+              "Ricerca per ISBN",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 12,
+              )
+            ),
             selected: false,
             onSelected: (bool value) {
               Navigator.push(context, MaterialPageRoute(
