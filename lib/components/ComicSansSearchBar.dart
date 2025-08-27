@@ -27,38 +27,36 @@ class _ComicSansSearchBarState extends State<ComicSansSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    /*return ShowCaseWidget(
-      builder: (context) =>*/ return SizedBox(
-        width: 345,
-        child: Focus(
-          canRequestFocus: false,
-          skipTraversal: true,
-          child: ExcludeFocus(
-            child: SearchBar(
-              //controller: controller;
-              padding: WidgetStatePropertyAll<EdgeInsets>(
-                EdgeInsets.symmetric(horizontal: 10)
-              ),
-              leading: const Icon(Icons.search),
-              hintText: 'Ricerca...',
-              shape: WidgetStatePropertyAll(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7),
-                ),
-              ),
-              onTap:(){
-                showSearch(
-                  context: context,
-                  delegate: MySearchDelegate(filters: filters)
-                );
-                /*WidgetsBinding.instance.addPostFrameCallback((_) {
-                  ShowCaseWidget.of(context).startShowCase([filters]);
-                });*/
-              },
+    return SizedBox(
+      width: 345,
+      child: Focus(
+        canRequestFocus: false,
+        skipTraversal: true,
+        child: ExcludeFocus(
+          child: SearchBar(
+            //controller: controller;
+            padding: WidgetStatePropertyAll<EdgeInsets>(
+              EdgeInsets.symmetric(horizontal: 10)
             ),
+            leading: const Icon(Icons.search),
+            hintText: 'Ricerca...',
+            shape: WidgetStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7),
+              ),
+            ),
+            onTap:(){
+              showSearch(
+                context: context,
+                delegate: MySearchDelegate(filters: filters)
+              );
+              /*WidgetsBinding.instance.addPostFrameCallback((_) {
+                ShowCaseWidget.of(context).startShowCase([filters]);
+              });*/
+            },
           ),
         ),
-      //),
+      ),
     );
   }
 }
@@ -73,12 +71,7 @@ class MySearchDelegate extends SearchDelegate {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      /*Showcase(
-        key: filters,
-        description: "Premi qui per applicare filtri alla ricerca",
-        overlayOpacity: 0,
-        disableMovingAnimation: true,
-        child:*/ IconButton(
+     IconButton(
           icon: Icon(Icons.filter_list),
           tooltip: 'Filtri',
           onPressed: () {
@@ -87,7 +80,6 @@ class MySearchDelegate extends SearchDelegate {
             ));
           },
         ),
-      //),
     ];
   }
 
@@ -118,12 +110,12 @@ class MySearchDelegate extends SearchDelegate {
       close(context, query);
       await Future<void>.delayed(const Duration(milliseconds: 1));
       if(!context.mounted) return;
-      Navigator.push(context, MaterialPageRoute(
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
         builder: (context) => SearchResults(
           comicsResults: purchasableComics.where((comic) => matchQuery.contains(comic)).toList(),
           query: query,
         ),
-      ));
+      ), (Route<dynamic> route) => route.isFirst);
     });
     return const SizedBox.shrink();
   }
@@ -180,9 +172,9 @@ class MySearchDelegate extends SearchDelegate {
                     close(context, query);
                     await Future<void>.delayed(const Duration(milliseconds: 1));
                     if (!context.mounted) return;
-                    Navigator.push(context, MaterialPageRoute(
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                       builder: (context) => SearchResults(comicsResults: [comics], query: query)
-                    ));
+                    ), (Route<dynamic> route) => route.isFirst,);
                   },
                   style: TextButton.styleFrom(
                     shape: RoundedRectangleBorder(

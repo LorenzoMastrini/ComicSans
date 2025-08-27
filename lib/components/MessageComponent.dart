@@ -127,7 +127,7 @@ class _MessageComponentState extends State<MessageComponent> {
                               builder: (context) => OfferScreen(chat: widget.chat)
                             ));
                           },
-                          enabled: widget.chat.currentOfferPrice != null
+                          enabled: widget.chat.currentOfferPrice != null && _areButtonsEnabled
                         ),
                       ),
                       SizedBox(width: 10),
@@ -139,7 +139,7 @@ class _MessageComponentState extends State<MessageComponent> {
                             _disableButtons();
                             messageProviderRead.acceptOffer(context, widget.chat);
                           },
-                          enabled: widget.chat.currentOfferPrice != null
+                          enabled: widget.chat.currentOfferPrice != null && _areButtonsEnabled
                         ),
                       )
                     ],

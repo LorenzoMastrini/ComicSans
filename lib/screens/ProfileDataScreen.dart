@@ -23,6 +23,7 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
   late TextEditingController _lastNameController;
   late TextEditingController _genderController;
   late TextEditingController _birthdayController;
+  late TextEditingController _usernameController;
   late Gender? selectedGender;
 
   List<String> getAllGenderLabels(){
@@ -38,6 +39,7 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
     _lastNameController = TextEditingController();
     _genderController = TextEditingController();
     _birthdayController = TextEditingController();
+    _usernameController = TextEditingController();
     selectedGender = Gender.maschio;
 
     // Safe access to provider without triggering rebuilds
@@ -48,6 +50,7 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
         _lastNameController = TextEditingController(text: userProvider.loggedInUser!.lastName);
         _genderController = TextEditingController(text: userProvider.loggedInUser!.gender?.label ?? '');
         _birthdayController = TextEditingController(text: userProvider.loggedInUser!.birthday);
+        _usernameController = TextEditingController(text: userProvider.loggedInUser!.username);
         selectedGender = userProvider.loggedInUser!.gender;
       });
     });
@@ -59,6 +62,7 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
     _lastNameController.dispose();
     _genderController.dispose();
     _birthdayController.dispose();
+    _usernameController.dispose();
     super.dispose();
   }
 
@@ -72,6 +76,7 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
       userProviderRead.loggedInUser!.lastName = _lastNameController.text;
       userProviderRead.loggedInUser!.gender = selectedGender;
       userProviderRead.loggedInUser!.birthday = _birthdayController.text;
+      userProviderRead.loggedInUser!.username = _usernameController.text;
       Navigator.pop(context, true);
     }
 
@@ -104,6 +109,12 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
               ComicSansTextInput(
                 title: 'Cognome',
                 controller: _lastNameController,
+              ),
+              const SizedBox(height: 10),
+
+              ComicSansTextInput(
+                title: 'Username',
+                controller: _usernameController,
               ),
               const SizedBox(height: 10),
 

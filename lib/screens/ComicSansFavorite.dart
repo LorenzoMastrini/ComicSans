@@ -172,7 +172,7 @@ class _ComicSansFavoriteState extends State<ComicSansFavorite> {
             ),
             results.isEmpty
               ? Text("Nessun fumetto trovato", style: TextStyle(fontSize: 14))
-              : FavouriteGrid(comics: results),
+              : ProductsGrid(comics: results, gridContent: GridContent.favoriteComics),
           ],
         )
       ),

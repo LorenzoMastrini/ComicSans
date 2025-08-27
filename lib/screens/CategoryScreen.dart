@@ -4,6 +4,7 @@ import 'package:comicsans/components/ComicSansAppBar.dart';
 import 'package:comicsans/comic.dart';
 import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/providers/user_provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'ProductDetail.dart';
 
 
@@ -53,7 +54,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       builder: (context) => ProductDetail(comic: filteredComics[index])
                   ));
                 },
-                child: ComicCard(comic: filteredComics[index])
+                child: ShowCaseWidget(builder: (context) => ComicCard(comic: filteredComics[index]))
             );
           },
           itemCount: filteredComics.length,

@@ -6,6 +6,7 @@ import 'package:comicsans/screens/Registration.dart';
 import 'package:comicsans/screens/VendorScreen.dart';
 import 'package:comicsans/user.dart';
 import 'package:flutter/material.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 
 
@@ -22,7 +23,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const Registration());
       case '/chat':
         if (args is Chat) {
-          return MaterialPageRoute(builder: (_) => ChatScreen(chat: args));
+          return MaterialPageRoute(builder: (_) => ShowCaseWidget(builder: (context) => ChatScreen(chat: args)));
         } else {
           return _errorRoute();
         }

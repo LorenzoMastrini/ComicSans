@@ -76,7 +76,7 @@ class _ComicSansHomeState extends State<ComicSansHome> {
             _buildSectionTitle("Esplora"),
             CategoriesGrid(),
             _buildSectionTitle("Consigliati per te"),
-            ProductsGrid(/*gridContent: GridContent.purchasableComics*/),
+            ProductsGrid(gridContent: GridContent.purchasableComics),
           ],
         ),
       ),

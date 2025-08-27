@@ -31,25 +31,15 @@ class ComicSansProfileState extends State<ComicSansProfile> {
           ShowCaseWidget.of(context)?.startShowCase([profile]);
           userProvider.setHasSeenProfileShowcasePerUser(userProvider.loggedInUser!.id, true);
           _showcaseStarted = true;
-          print("Showcase avviato");
         }
+        Future.delayed(const Duration(seconds: 2), () {
+          if(profile.currentContext != null){
+            ShowCaseWidget.of(context)?.completed(profile);
+          }
+        });
       });
     }
   }
-
-  /*void startShowcaseIfNeeded() {
-    print("startShowcase");
-    final userProvider = context.read<UserProvider>();
-    if (!_showcaseStarted && !userProvider.hasSeenProfileShowcasePerUser(userProvider.loggedInUser!.id)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          ShowCaseWidget.of(context)?.startShowCase([profile]);
-          userProvider.setHasSeenProfileShowcasePerUser(userProvider.loggedInUser!.id, true);
-          _showcaseStarted = true;
-        }
-      });
-    }
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +68,8 @@ class ComicSansProfileState extends State<ComicSansProfile> {
               description: "Premi qui per vedere e modificare i tuoi fumetti in vendita",
               overlayOpacity: 0,
               disableMovingAnimation: true,
+              tooltipBackgroundColor: Theme.of(context).colorScheme.secondary,
+              textColor: Theme.of(context).colorScheme.tertiary,
               child: Row(
                 children: <Widget>[
                   Padding(

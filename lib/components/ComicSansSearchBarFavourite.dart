@@ -1,12 +1,4 @@
-import 'package:comicsans/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:comicsans/comic.dart';
-import 'package:comicsans/screens/SearchResults.dart';
-import 'package:provider/provider.dart';
-import '../screens/FiltersScreen.dart';
-import '../screens/IsbnSearchScreen.dart';
-
-
 
 class ComicSansSearchBarFavourite extends StatelessWidget {
   final ValueChanged<String> onQueryChanged;

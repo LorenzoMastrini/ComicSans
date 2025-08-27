@@ -33,6 +33,11 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
         ShowCaseWidget.of(context)?.startShowCase([add]);
         userProvider.setHasSeenAddComicShowcasePerUser(userProvider.loggedInUser!.id, true);
       }
+      Future.delayed(const Duration(seconds: 2), () {
+        if(add.currentContext != null){
+          ShowCaseWidget.of(context)?.completed(add);
+        }
+      });
     });
   }
 
@@ -69,6 +74,8 @@ class _ComicSansBottomBarState extends State<ComicSansBottomBar> {
                       description: "Premi qui per vendere un fumetto",
                       overlayOpacity: 0,
                       disableMovingAnimation: true,
+                      tooltipBackgroundColor: Theme.of(context).colorScheme.secondary,
+                      textColor: Theme.of(context).colorScheme.tertiary,
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),

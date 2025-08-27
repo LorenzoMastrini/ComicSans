@@ -414,7 +414,7 @@ class _FiltersFavouriteScreenState extends State<FiltersFavouriteScreen> {
                         onPressed: () {
                           List<Comic> filtered = providerRead.filterFavouriteComics(context.read<UserProvider>().loggedInUser, widget.query);
 
-                          Navigator.push(context, MaterialPageRoute(
+                          Navigator.pushReplacement(context, MaterialPageRoute(
                               builder: (context) => SearchResults(comicsResults: filtered, query: widget.query)
                           ));
                         },

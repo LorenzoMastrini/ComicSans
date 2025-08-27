@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 
@@ -62,10 +63,22 @@ class _ImageUploadSlotState extends State<ImageUploadSlot> {
                 title: const Text('Scatta una foto'),
                 onTap: () async {
                   Navigator.pop(context);
-                  final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-                  if (image != null) {
-                    setState(() => _uploadedImagePath = image.path);
-                    widget.onImageSelected(_uploadedImagePath);
+                  PermissionStatus status;
+                  if(await Permission.camera.isGranted || await Permission.camera.isLimited){
+                    status = await PermissionStatus.granted;
+                  }
+                  else{
+                    status = await Permission.camera.request();
+                  }
+                  if(status.isGranted){
+                    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+                    if (image != null) {
+                      setState(() => _uploadedImagePath = image.path);
+                      widget.onImageSelected(_uploadedImagePath);
+                    }
+                  }
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Permesso non concesso")));
                   }
                 },
               ),
@@ -74,10 +87,22 @@ class _ImageUploadSlotState extends State<ImageUploadSlot> {
                 title: const Text('Scegli dalla galleria'),
                 onTap: () async {
                   Navigator.pop(context);
-                  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-                  if (image != null) {
-                    setState(() => _uploadedImagePath = image.path);
-                    widget.onImageSelected(_uploadedImagePath);
+                  PermissionStatus status;
+                  if(await Permission.photos.isGranted || await Permission.photos.isLimited){
+                    status = await PermissionStatus.granted;
+                  }
+                  else{
+                    status = await Permission.photos.request();
+                  }
+                  if(status.isGranted){
+                    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                    if (image != null) {
+                      setState(() => _uploadedImagePath = image.path);
+                      widget.onImageSelected(_uploadedImagePath);
+                    }
+                  }
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Permesso non concesso")));
                   }
                 },
               ),
@@ -95,7 +120,6 @@ class _ImageUploadSlotState extends State<ImageUploadSlot> {
       widget.onImageSelected(null);
     });
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -6,8 +6,6 @@ import 'package:comicsans/screens/ComicSansSell3.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
-
 class ComicSansSell2 extends StatefulWidget {
   Comic? comicToModify;
 
@@ -16,8 +14,6 @@ class ComicSansSell2 extends StatefulWidget {
   @override
   State<ComicSansSell2> createState() => _ComicSansSell2State();
 }
-
-
 
 class _ComicSansSell2State extends State<ComicSansSell2> {
   @override

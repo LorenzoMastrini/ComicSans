@@ -42,23 +42,6 @@ class _ProductDetailState extends State<ProductDetail> {
     _scrollController = ScrollController();
     _scrollController.addListener(_handleScroll);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final userProvider = context.read<UserProvider>();
-
-      if(!userProvider.hasSeenFavouriteShowcasePerUser(userProvider.loggedInUser!.id)) {
-        final ctx = favourite.currentContext;
-        if (ctx != null) {
-          await Scrollable.ensureVisible(
-            ctx,
-            duration: const Duration(milliseconds: 500),
-            alignment: 0.2
-          );
-
-          ShowCaseWidget.of(ctx).startShowCase([favourite]);
-          userProvider.setHasSeenFavouriteShowcasePerUser(userProvider.loggedInUser!.id, true);
-        }
-      }
-    });
   }
 
   @override
@@ -145,12 +128,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     ),
                   ]),
                 ),
-                Showcase(
-                  key: favourite,
-                  description: "Premi qui per aggiungere un fumetto tra i preferiti",
-                  overlayOpacity: 0,
-                  disableMovingAnimation: true,
-                  child: IconButton(
+                IconButton(
                     iconSize: 40,
                     icon: isFavorite
                       ? Icon(Icons.bookmark, color: Colors.black)
@@ -184,7 +162,6 @@ class _ProductDetailState extends State<ProductDetail> {
 
                     }
                   ),
-                )
               ]
             ),
             const Divider(height: 30, thickness: 1, indent: 10, endIndent: 10, color: Colors.black),

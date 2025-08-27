@@ -10,33 +10,34 @@ import 'package:showcaseview/showcaseview.dart';
 
 
 // Types of grid varies with the page in which it's displayed
-//enum GridContent { purchasableComics, favoriteComics }
+enum GridContent { purchasableComics, favoriteComics }
 
 class ProductsGrid extends StatefulWidget {
-  //final GridContent gridContent;
-  const ProductsGrid({super.key, /*required this.gridContent*/});
+  final GridContent gridContent;
+  final List<Comic>? comics;
+  const ProductsGrid({super.key, required this.gridContent, this.comics});
 
   @override
   State<ProductsGrid> createState() => _ProductsGridState();
 }
 
 class _ProductsGridState extends State<ProductsGrid> {
+
   @override
   Widget build(BuildContext context) {
     final UserProvider userProviderWatch = context.watch<UserProvider>();
-    final List<Comic> comicsList = userProviderWatch.getPurchasableComics(context); // Grid elements varies based on the page in which it's displayed
-    final GlobalKey favourite = GlobalKey();
+    List<Comic>? comicsList = widget.comics; // Grid elements varies based on the page in which it's displayed
 
-    /*switch (gridContent) {
+    switch (widget.gridContent) {
       case GridContent.purchasableComics:
-        comicsList = userProviderWatch.getPurchasableComics(context);
+        comicsList ??= userProviderWatch.getPurchasableComics(context);
         break;
       case GridContent.favoriteComics:
-        comicsList = userProviderWatch.getFavoriteComics();
+        comicsList ??= userProviderWatch.getFavoriteComics();
         break;
-    }*/
+    }
 
-    //List<Comic> sortedComic = _sort(context, comicsList);
+    List<Comic> sortedComic = _sort(context, comicsList);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
@@ -51,19 +52,34 @@ class _ProductsGridState extends State<ProductsGrid> {
           return GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
-                builder: (context) => ShowCaseWidget(
-                    builder: (context) => ProductDetail(comic: comicsList[index])
-                )
+                builder: (context) => ProductDetail(comic: sortedComic![index])
               ));
             },
-            child: ComicCard(comic: comicsList[index])
+            child: ShowCaseWidget(builder: (context) => ComicCard(comic: sortedComic![index]))
           );
         },
-        itemCount: comicsList.length,
+        itemCount: sortedComic.length,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
       ),
     );
+  }
+
+  List<Comic> _sort(BuildContext context, List<Comic> comicsList) {
+    final comicsProviderWatch = context.watch<ComicsProvider>();
+    List<Comic> sortedComic = List.from(comicsList);
+
+    if (comicsProviderWatch.sortType == SortType.alphabetical) {
+      sortedComic.sort((a, b) => a.title.compareTo(b.title));
+    } else if (comicsProviderWatch.sortType == SortType.price) {
+      sortedComic.sort((a, b) => a.price.compareTo(b.price));
+    }
+
+    if (comicsProviderWatch.sortDirection == SortDirection.descending) {
+      sortedComic = sortedComic.reversed.toList();
+    }
+
+    return sortedComic;
   }
 }

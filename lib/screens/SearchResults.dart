@@ -1,15 +1,11 @@
 import 'package:comicsans/components/ComicSansSearchBar.dart';
-import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/components/ComicCard.dart';
 import 'package:comicsans/comic.dart';
 import 'package:provider/provider.dart';
-
+import 'package:showcaseview/showcaseview.dart';
 import '../Components/ComicSansAppBar.dart';
-import '../components/ComicSansBottomBar.dart';
-import '../components/ComicSansCheckbox.dart';
-import '../components/ComicSansRadioButtons.dart';
 import '../components/ComicSansToggle.dart';
 import '../providers/comics_provider.dart';
 import 'FiltersScreen.dart';
@@ -111,19 +107,6 @@ class SearchResults extends StatelessWidget {
                   providerRead.sortDirection = value!;
                 },
               ),
-              /*ComicSansRadioButtons(
-                  title: '',
-                  options: Conditions.values.map((condition) => conditionsToString(condition)).toList(),
-                  controller: _conditionsController,
-                  onChanged: (newValue) {
-                    provider.conditions = stringToConditions(newValue);
-                    if (_conditionsController.text != (newValue ?? '')) {
-                      _conditionsController.text = newValue ?? '';
-                    }
-                    setState(() {});
-                  },
-                  selectedValue: conditionsToString(context.watch<SellInfoProvider>().conditions) // Selected value from provider
-              ),*/
             ],
           ),
         )
@@ -212,7 +195,7 @@ class SearchResults extends StatelessWidget {
                         }
                       ));
                     },
-                    child: ComicCard(comic: sortedResults[index])
+                    child: ShowCaseWidget(builder: (context) => ComicCard(comic: sortedResults[index]))
                   );
                 },
                 itemCount: comicsResults.length,

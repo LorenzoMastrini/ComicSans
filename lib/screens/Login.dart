@@ -116,7 +116,9 @@ class _LoginState extends State<Login> {
                                 'Password dimenticata?',
                                 style: TextStyle(fontSize: 14, color: Color(0xFF669bbc)),
                               ),
-                              onPressed: () => Navigator.pushNamed(context, '/forgot_password'),
+                              onPressed: () {
+                                // Handle password reset logic here
+                              },
                             ),
                           ),
 
@@ -150,7 +152,10 @@ class _LoginState extends State<Login> {
                                 borderRadius: BorderRadius.circular(7),
                               ),
                             ),
-                            onPressed: () => Navigator.pushNamed(context, '/'),
+                            onPressed: () {
+                              userProvider.loggedInUser = SampleData.user2;
+                              Navigator.pushReplacementNamed(context, '/');
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

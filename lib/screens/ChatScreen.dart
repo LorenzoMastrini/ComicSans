@@ -43,6 +43,11 @@ class _ChatScreenState extends State<ChatScreen> {
         ShowCaseWidget.of(context)?.startShowCase([offer]);
         userProvider.setHasSeenOfferShowcasePerUser(userProvider.loggedInUser!.id, true);
       }
+      Future.delayed(const Duration(seconds: 2), () {
+        if(offer.currentContext != null){
+          ShowCaseWidget.of(context)?.completed(offer);
+        }
+      });
     });
   }
 
@@ -93,6 +98,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   description: "Premi qui per fare un'offerta al venditore",
                   overlayOpacity: 0,
                   disableMovingAnimation: true,
+                  tooltipBackgroundColor: Theme.of(context).colorScheme.secondary,
+                  textColor: Theme.of(context).colorScheme.tertiary,
                   child: ComicSansButton(
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(
