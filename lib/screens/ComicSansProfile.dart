@@ -9,6 +9,7 @@ import 'package:comicsans/screens/FollowedUsersScreen.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:comicsans/ComicSansTheme.dart';
 
 
 class ComicSansProfile extends StatefulWidget {
@@ -70,7 +71,7 @@ class ComicSansProfileState extends State<ComicSansProfile> {
               disableMovingAnimation: true,
               tooltipBackgroundColor: Theme.of(context).colorScheme.secondary,
               textColor: Theme.of(context).colorScheme.tertiary,
-              child: Row( // Questa parentesi ora è correttamente scritta
+              child: Row(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
@@ -91,10 +92,10 @@ class ComicSansProfileState extends State<ComicSansProfile> {
                           child: RichText(
                             text: TextSpan(
                               children: [
-                                TextSpan(text: userProviderWatch.getLibraryLength().toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.w500)),
-                                TextSpan(text: " articoli in vendita, ", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.normal)),
-                                TextSpan(text: userProviderWatch.getNumberOfReviews().toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.w500)),
-                                TextSpan(text: " recensioni", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.normal)),
+                                TextSpan(text: userProviderWatch.getLibraryLength().toString(), style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.w500)),
+                                TextSpan(text: " articoli in vendita, ", style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.normal)),
+                                TextSpan(text: userProviderWatch.getNumberOfReviews().toString(), style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.w500)),
+                                TextSpan(text: " recensioni", style: TextStyle(color: quaternary, fontSize: 14, fontWeight: FontWeight.normal)),
                               ]
                             )
                           ),

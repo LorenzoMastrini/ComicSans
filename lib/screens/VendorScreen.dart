@@ -82,7 +82,7 @@ class _VendorScreenState extends State<VendorScreen> {
                             isFollowed ? 'Non seguire più' : 'Segui',
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
-                              fontSize: 12,
+                              fontSize: isFollowed ? 10 : 12,
                               letterSpacing: 0.1
                             )
                           ),

@@ -72,11 +72,11 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.comic.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-                        Text("Prezzo: ${widget.comic.offerPrice ?? widget.comic.price}€", style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-                        Text("Spedizione: ", style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+                        Text(widget.comic.title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
+                        Text("Prezzo: ${widget.comic.offerPrice ?? widget.comic.price}€", style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
+                        Text("Spedizione: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
                         SizedBox(height: 150),
-                        Text("Totale: ${widget.comic.offerPrice ?? widget.comic.price}€", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                        Text("Totale: ${widget.comic.offerPrice ?? widget.comic.price}€", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                       ],
                     )
                   ],

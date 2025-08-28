@@ -6,6 +6,7 @@ import 'package:comicsans/components/ComicCardDelete.dart';
 import 'package:comicsans/components/ReviewComponent.dart';
 import 'package:comicsans/components/ReviewWidget.dart';
 import 'package:provider/provider.dart';
+import 'package:comicsans/ComicSansTheme.dart';
 
 
 
@@ -55,7 +56,7 @@ class UserVendorScreen extends StatelessWidget{
                               TextSpan(
                                 text: userProviderWatch.getLibraryLength().toString(),
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color: quaternary,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold
                                 )
@@ -63,7 +64,7 @@ class UserVendorScreen extends StatelessWidget{
                               TextSpan(
                                 text: " articoli in vendita, ",
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color: quaternary,
                                   fontSize: 12,
                                   fontWeight: FontWeight.normal
                                 )
@@ -71,7 +72,7 @@ class UserVendorScreen extends StatelessWidget{
                               TextSpan(
                                 text: userProviderWatch.getNumberOfReviews().toString(),
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color: quaternary,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold
                                 )
@@ -79,7 +80,7 @@ class UserVendorScreen extends StatelessWidget{
                               TextSpan(
                                 text: " recensioni",
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color: quaternary,
                                   fontSize: 12,
                                   fontWeight: FontWeight.normal
                                 )

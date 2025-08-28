@@ -79,12 +79,12 @@ class ComicSansAppBar extends StatelessWidget implements PreferredSizeWidget {
           itemBuilder: (context) {
             return [
               PopupMenuItem(
-                child: Text("Segnala"),
+                child: Text("Segnala", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.w500)),
                 onTap: () {
                 },
               ),
               PopupMenuItem(
-                child: Text("Condividi"),
+                child: Text("Condividi", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.w500)),
                 onTap: () {
                 },
               )

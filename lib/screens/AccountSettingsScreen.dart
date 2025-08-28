@@ -26,8 +26,8 @@ class AccountSettingsScreen extends StatelessWidget{
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border(
-                top: BorderSide(color: Colors.black, width: 1),
-                bottom: BorderSide(color: Colors.black, width: 1),
+                top: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
+                bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
               ),
             ),
             child: TextButton(
@@ -42,9 +42,9 @@ class AccountSettingsScreen extends StatelessWidget{
               ),
               child: Row(
                 children: <Widget>[
-                  Text("Dati profilo", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  Text("Dati profilo", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.w500)),
                   Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                  Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
                 ]
               ),
             ),
@@ -52,7 +52,7 @@ class AccountSettingsScreen extends StatelessWidget{
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Colors.black, width: 1),
+                bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
               ),
             ),
             child: TextButton(
@@ -67,9 +67,9 @@ class AccountSettingsScreen extends StatelessWidget{
               ),
               child: Row(
                 children: <Widget>[
-                  Text("Pagamenti", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  Text("Pagamenti", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.w500)),
                   Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                  Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
                 ]
               ),
             ),
@@ -77,7 +77,7 @@ class AccountSettingsScreen extends StatelessWidget{
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Colors.black, width: 1),
+                bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
               ),
             ),
             child: TextButton(
@@ -92,9 +92,9 @@ class AccountSettingsScreen extends StatelessWidget{
               ),
               child: Row(
                 children: <Widget>[
-                  Text("Spedizione", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  Text("Spedizione", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.w500)),
                   Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                  Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
                 ]
               ),
             ),
@@ -104,8 +104,8 @@ class AccountSettingsScreen extends StatelessWidget{
             child: DecoratedBox(
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(color: Colors.black, width: 1),
-                  bottom: BorderSide(color: Colors.black, width: 1),
+                  top: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
+                  bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
                 ),
               ),
               child: TextButton(
@@ -123,9 +123,9 @@ class AccountSettingsScreen extends StatelessWidget{
                 ),
                 child: Row(
                   children: <Widget>[
-                    Text("Disconnetti", style: TextStyle(color: Colors.black, fontSize: 16)),
+                    Text("Disconnetti", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.w500)),
                     Spacer(),
-                    Icon(Icons.arrow_forward_ios, color: Colors.black),
+                    Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
                   ]
                 ),
               ),
@@ -134,7 +134,7 @@ class AccountSettingsScreen extends StatelessWidget{
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Colors.black, width: 1),
+                bottom: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1),
               ),
             ),
             child: TextButton(
@@ -145,9 +145,9 @@ class AccountSettingsScreen extends StatelessWidget{
               ),
               child: Row(
                 children: <Widget>[
-                  Text("Elimina account", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  Text("Elimina account", style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14, fontWeight: FontWeight.w500)),
                   Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.black),
+                  Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
                 ]
               ),
             ),

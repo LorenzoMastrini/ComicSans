@@ -37,6 +37,7 @@ class SearchResults extends StatelessWidget {
 
     if (comicsResults.isEmpty) {
       return Scaffold(
+        appBar: ComicSansAppBar(showBackButton: true, title: "Risultati"),
         body: Column(
           children: <Widget>[
             Padding(

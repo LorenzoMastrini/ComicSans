@@ -18,7 +18,7 @@ class FollowedUserComponent extends StatefulWidget{
 
 
 class _FollowedUserComponentState extends State<FollowedUserComponent> {
-  void toggleFavourite() {
+  void toggleFollow() {
     final UserProvider userProviderRead = context.read<UserProvider>();
 
     setState(() {
@@ -42,7 +42,7 @@ class _FollowedUserComponentState extends State<FollowedUserComponent> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.followedUser.username, style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
+              Text(widget.followedUser.username, style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 18, fontWeight: FontWeight.w500)),
               ReviewWidget(user: widget.followedUser),
             ],
           ),
@@ -53,18 +53,20 @@ class _FollowedUserComponentState extends State<FollowedUserComponent> {
               width: 120,
               height: 25,
               child: ElevatedButton(
-                onPressed: () => toggleFavourite(),
+                onPressed: () => toggleFollow(),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(7),
                   ),
                 ),
                 child: Text(
-                  widget.isFollowed ? 'Non seguire più' : 'Segui',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: widget.isFollowed ? 10 : 16,
-                    fontWeight: FontWeight.normal)),
+                    widget.isFollowed ? 'Non seguire più' : 'Segui',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: widget.isFollowed ? 8 : 12,
+                        letterSpacing: 0.1
+                    )
+                ),
               ),
             ),
           ),

@@ -121,19 +121,18 @@ class _ChangeShippingAddressScreenState extends State<ChangeShippingAddressScree
                     controller: _capController,
                   ),
                   const SizedBox(height: 10),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: ComicSansButton (
-                      text: 'Conferma',
-                      onPressed: updateAddressData,
-                    ),
-                  )
                 ],
               ),
             ),
           );
         },
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+        child: ComicSansButton (
+          text: 'Conferma',
+          onPressed: updateAddressData,
+        ),
       ),
     );
   }
