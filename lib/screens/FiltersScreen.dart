@@ -437,7 +437,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   onPressed: () {
                     List<Comic> filtered = providerRead.filterPurchasableComics(context.read<UserProvider>().loggedInUser, widget.query);
 
-                    Navigator.push(context, MaterialPageRoute(
+                    Navigator.pushReplacement(context, MaterialPageRoute(
                       builder: (context) => SearchResults(comicsResults: filtered, query: widget.query)
                      ));
                   },
