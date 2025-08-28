@@ -375,13 +375,13 @@ class _ProductDetailState extends State<ProductDetail> {
                             child: item.startsWith('assets/')
                                 ? Image.asset(
                               item,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.fitHeight,
                             )
                                 : item.isEmpty || !File(item).existsSync()
-                                ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
+                                ? Image.asset('assets/no_image.png', fit: BoxFit.fitHeight)
                                 : Image.file(
                               File(item),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.fitHeight,
                             ),
                           );
                         }).toList(),
