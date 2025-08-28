@@ -118,9 +118,9 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
               ),
               const SizedBox(height: 10),
 
-              Text("Sesso", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text("Sesso", style: Theme.of(context).textTheme.labelMedium),
               ListTile(
-                title: Text("Maschio", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                title: Text("Maschio", style: Theme.of(context).textTheme.headlineMedium),
                 leading: Radio<Gender>(
                   value: Gender.maschio,
                   groupValue: selectedGender,
@@ -133,7 +133,7 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
                 )
               ),
               ListTile(
-                title: Text("Femmina", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                title: Text("Femmina", style: Theme.of(context).textTheme.headlineMedium),
                 leading: Radio<Gender>(
                   value: Gender.femmina,
                   groupValue: selectedGender,

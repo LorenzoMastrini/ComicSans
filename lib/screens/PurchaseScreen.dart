@@ -9,6 +9,7 @@ import 'package:comicsans/providers/comics_provider.dart';
 import 'package:comicsans/screens/ChangeShippingAddressScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:comicsans/comic.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 
@@ -195,15 +196,15 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                           children: [
                             Text(
                               "${userProviderWatch.loggedInUser!.address?.name ?? ''} ${userProviderWatch.loggedInUser?.address?.lastName ?? ''}",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                              style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary)
                             ),
                             Text(
                               userProviderWatch.loggedInUser!.address?.address ?? '',
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                              style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary)
                             ),
                             Text(
                               userProviderWatch.loggedInUser!.address?.cap.toString() ?? '',
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                              style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary)
                             ),
                           ],
                         ),
@@ -247,9 +248,9 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Armadietto 1", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
-                              Text("Via Banca 3", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
-                              Text("06055", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                              Text("Armadietto 1", style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary)),
+                              Text("Via Banca 3", style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary)),
+                              Text("06055", style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary)),
                             ],
                           ),
                         ),
@@ -292,19 +293,19 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                             ? [
                               Text(
                                 userProviderWatch.loggedInUser!.card!.holder,
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                                style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary)
                               ),
                               Text(
                                 maskCardNumber(userProviderWatch.loggedInUser!.card!.number.toString()),
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                                style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary)
                               ),
                               Text(
                                 userProviderWatch.loggedInUser!.card!.expiration,
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                                style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary)
                               ),
                               Text(
                                 userProviderWatch.loggedInUser!.card!.cvv.toString(),
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                                style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary)
                               ),
                             ]
                             : [

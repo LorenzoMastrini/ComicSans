@@ -366,8 +366,6 @@ class ComicsProvider extends ChangeNotifier {
     }).toList();
   }
 
-
-
   void resetInformations() {
     _fromPrice = null;
     _toPrice = null;

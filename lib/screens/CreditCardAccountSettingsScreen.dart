@@ -24,6 +24,11 @@ class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSetti
   late TextEditingController _expirationController;
   late TextEditingController _cvvController;
   late bool isConnected;
+  final formKey = GlobalKey<FormState>();
+  bool correctCvv = true;
+  bool correctNumber = true;
+  bool correctHolder = true;
+  bool correctExpiration = true;
 
   @override
   void initState() {
@@ -74,11 +79,19 @@ class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSetti
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
     final UserProvider userProviderRead = context.read<UserProvider>();
+    final UserProvider userProviderWatch = context.watch<UserProvider>();
+
 
     void updateCreditCardData() {
-      if(formKey.currentState!.validate()){
+      setState(() {
+        correctNumber = _numberController.text.length == 16;
+        correctCvv = _cvvController.text.length == 3;
+        correctExpiration = _expirationController.text.isNotEmpty;
+        correctHolder = _holderController.text.isNotEmpty;
+      });
+
+      if(correctNumber && correctCvv && correctExpiration && correctHolder){
         final newCard = CreditCard(
           holder: _holderController.text,
           number: int.parse(_numberController.text),
@@ -105,51 +118,60 @@ class _CreditCardAccountSettingsScreenState extends State<CreditCardAccountSetti
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  ComicSansTextInput(
-                    title: 'Titolare della carta',
-                    controller: _holderController,
+                  Column(
+                    children:<Widget>[
+                      ComicSansTextInput(
+                        title: 'Titolare della carta',
+                        controller: _holderController,
+                      ),
+                      if(correctHolder != true)
+                        Text("Inserisci un nome", style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Theme.of(context).colorScheme.primary))
+                    ]
                   ),
                   const SizedBox(height: 10),
 
-                  ComicSansTextInput(
-                    title: 'Numero della carta',
-                    controller: _numberController,
-                    keyboardType: TextInputType.number,
-                    validator: (value){
-                      if(value?.length != 16) {
-                        return 'Numero della carta non valido';
-                      }
-
-                      return null;
-                    }
+                  Column(
+                    children:<Widget>[
+                      ComicSansTextInput(
+                        title: 'Numero della carta',
+                        controller: _numberController,
+                        keyboardType: TextInputType.number,
+                      ),
+                      if(correctNumber != true)
+                        Text("Numero non valido", style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Theme.of(context).colorScheme.primary))
+                    ]
                   ),
                   const SizedBox(height: 10),
-
                   Row(
                     children: [
                       SizedBox(
                         width: 150,
-                        child: ComicSansTextInput(
-                          title: 'Scadenza',
-                          keyboardType: TextInputType.emailAddress,
-                          controller: _expirationController,
+                        child: Column(
+                          children:<Widget>[
+                            ComicSansTextInput(
+                              title: 'Scadenza',
+                              keyboardType: TextInputType.emailAddress,
+                              controller: _expirationController,
+                            ),
+                            if(correctExpiration != true)
+                              Text("Data non valida", style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Theme.of(context).colorScheme.primary))
+                          ]
                         ),
                       ),
                       SizedBox(width: 20),
-                      SizedBox(
-                        width: 150,
-                        child: ComicSansTextInput(
-                          title: 'CVV',
-                          controller: _cvvController,
-                          keyboardType: TextInputType.number,
-                          validator: (value){
-                            if(value?.length != 3) {
-                              return 'CVV non valido';
-                            }
-
-                            return null;
-                          }
-                        ),
+                      Column(
+                        children:<Widget>[
+                          SizedBox(
+                            width: 150,
+                            child: ComicSansTextInput(
+                              title: 'CVV',
+                              controller: _cvvController,
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                          if(correctCvv != true)
+                            Text("CVV non valido", style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Theme.of(context).colorScheme.primary))
+                        ]
                       ),
                     ]
                   ),
