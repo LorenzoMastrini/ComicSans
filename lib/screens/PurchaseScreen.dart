@@ -52,24 +52,26 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text("Riepilogo", style: Theme.of(context).textTheme.titleMedium),
-                Row(
-                  children: [
-                    Card(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-                      child: SizedBox(
-                        width: 150,
-                        height: 250,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(7),
-                          child: widget.comic.coverPath.startsWith('assets/')
-                            ? Image.asset(widget.comic.coverPath, fit: BoxFit.fitHeight)
-                            : widget.comic.coverPath.isEmpty || !File(widget.comic.coverPath).existsSync()
-                              ? Image.asset('assets/no_image.png', fit: BoxFit.fitHeight)
-                              : Image.file(File(widget.comic.coverPath), fit: BoxFit.fitHeight,),
-                        ),
+              Row(
+                children: [
+                  Card(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                    child: SizedBox(
+                      width: 150,
+                      height: 250,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(7),
+                        child: widget.comic.coverPath.startsWith('assets/')
+                          ? Image.asset(widget.comic.coverPath, fit: BoxFit.fitHeight)
+                          : widget.comic.coverPath.isEmpty || !File(widget.comic.coverPath).existsSync()
+                            ? Image.asset('assets/no_image.png', fit: BoxFit.fitHeight)
+                            : Image.file(File(widget.comic.coverPath), fit: BoxFit.fitHeight,),
                       ),
                     ),
-                    Column(
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -78,7 +80,9 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.secondary,
-                          )
+                          ),
+                          softWrap: true,
+                          overflow: TextOverflow.visible
                         ),
                         RichText(
                           text: TextSpan(
@@ -120,7 +124,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                             ]
                           ),
                         ),
-                        SizedBox(height: 178),
+                        SizedBox(height: 150),
                         RichText(
                           text: TextSpan(
                             children: <TextSpan>[
@@ -144,9 +148,10 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                           ),
                         ),
                       ],
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
+              ),
               SizedBox(height: 20),
               Text("Metodo di spedizione", style: Theme.of(context).textTheme.titleMedium),
               ListTile(

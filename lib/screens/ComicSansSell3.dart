@@ -463,7 +463,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                         // Go back until reaching the vendor screen
                         Navigator.of(context).popUntil((route) {
                           count++;
-                          return count > 4; // When count > 4, stop popping pages
+                          return count > 3; // When count > 3, stop popping pages
                         });
 
                         Navigator.of(context).pushNamed('/user_vendor_screen');
@@ -475,7 +475,7 @@ class _ComicSansSell3State extends State<ComicSansSell3> {
                         // Go back until reaching the vendor screen
                         Navigator.of(context).popUntil((route) {
                           count++;
-                          return count > 4; // When count > 4, stop popping pages
+                          return count > 3; // When count > 3, stop popping pages
                         });
 
                         Navigator.of(context).pushReplacementNamed('/user_vendor_screen');

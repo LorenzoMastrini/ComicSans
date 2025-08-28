@@ -74,7 +74,8 @@ class _ProductDetailsModifyScreenState extends State<ProductDetailsModifyScreen>
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                           fontSize: 24,
-                          fontWeight: FontWeight.w500
+                          fontWeight: FontWeight.w500,
+                          overflow: TextOverflow.visible
                         )
                       ),
                     ),

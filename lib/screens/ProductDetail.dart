@@ -77,7 +77,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
                           ),
-                          overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.visible,
                         ),
                       ),
                     ),
