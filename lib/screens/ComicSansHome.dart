@@ -38,7 +38,7 @@ class _ComicSansHomeState extends State<ComicSansHome> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Acquisto effettuato"),
-        content: const Text("Il tuo acquisto è andato a buon fine!"),
+        content: const Text("Il tuo acquisto è andato a buon fine! Ti è stata inviata un'email con un link per tracciare la spedizione."),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

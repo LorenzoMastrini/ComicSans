@@ -1,7 +1,6 @@
 import 'dart:io';
-
+import 'package:comicsans/ComicSansTheme.dart';
 import 'package:comicsans/Components/ComicSansButton.dart';
-import 'package:comicsans/SampleData.dart';
 import 'package:comicsans/global_constants.dart';
 import 'package:comicsans/providers/user_provider.dart';
 import 'package:comicsans/screens/ChangeCreditCardScreen.dart';
@@ -51,7 +50,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text("Riepilogo", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text("Riepilogo", style: Theme.of(context).textTheme.titleMedium),
                 Row(
                   children: [
                     Card(
@@ -62,29 +61,95 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(7),
                           child: widget.comic.coverPath.startsWith('assets/')
-                            ? Image.asset(widget.comic.coverPath, fit: BoxFit.fill)
+                            ? Image.asset(widget.comic.coverPath, fit: BoxFit.fitHeight)
                             : widget.comic.coverPath.isEmpty || !File(widget.comic.coverPath).existsSync()
-                              ? Image.asset('assets/no_image.png', fit: BoxFit.fill)
-                              : Image.file(File(widget.comic.coverPath), fit: BoxFit.fill,),
+                              ? Image.asset('assets/no_image.png', fit: BoxFit.fitHeight)
+                              : Image.file(File(widget.comic.coverPath), fit: BoxFit.fitHeight,),
                         ),
                       ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.comic.title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
-                        Text("Prezzo: ${widget.comic.offerPrice ?? widget.comic.price}€", style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
-                        Text("Spedizione: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
-                        SizedBox(height: 150),
-                        Text("Totale: ${widget.comic.offerPrice ?? widget.comic.price}€", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                        Text(
+                          widget.comic.title,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.secondary,
+                          )
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Prezzo: ',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '${widget.comic.offerPrice ?? widget.comic.price}€',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ]
+                          ),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Spedizione: ',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '2€',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ]
+                          ),
+                        ),
+                        SizedBox(height: 178),
+                        RichText(
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Totale: ',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '${(widget.comic.offerPrice ?? widget.comic.price) + 2}€',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ]
+                          ),
+                        ),
                       ],
                     )
                   ],
                 ),
               SizedBox(height: 20),
-              Text("Metodo di spedizione", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text("Metodo di spedizione", style: Theme.of(context).textTheme.titleMedium),
               ListTile(
-                title: Text("Spedisci a casa", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                title: Text("Spedisci a casa", style: Theme.of(context).textTheme.headlineMedium),
                 leading: Radio<Shipping>(
                   value: Shipping.home,
                   groupValue: shipping,
@@ -96,7 +161,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                 )
               ),
               ListTile(
-                title: Text("Punto di ritiro", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                title: Text("Punto di ritiro", style: Theme.of(context).textTheme.headlineMedium),
                 leading: Radio<Shipping>(
                   value: Shipping.retirePoint,
                   groupValue: shipping,
@@ -108,7 +173,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              Text("Indirizzo di spedizione", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text("Indirizzo di spedizione", style: Theme.of(context).textTheme.titleMedium),
               if(shipping == Shipping.home)
                 Container(
                   padding: EdgeInsets.all(16),
@@ -130,13 +195,16 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                           children: [
                             Text(
                               "${userProviderWatch.loggedInUser!.address?.name ?? ''} ${userProviderWatch.loggedInUser?.address?.lastName ?? ''}",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400
-                              )
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
                             ),
-                            Text(userProviderWatch.loggedInUser!.address?.address ?? '', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                            Text(userProviderWatch.loggedInUser!.address?.cap.toString() ?? '', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                            Text(
+                              userProviderWatch.loggedInUser!.address?.address ?? '',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                            ),
+                            Text(
+                              userProviderWatch.loggedInUser!.address?.cap.toString() ?? '',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                            ),
                           ],
                         ),
                       ),
@@ -146,20 +214,29 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                               builder: (context) => ChangeShippingAddressScreen()
                           ));
                         },
-                        child: Text("Cambia", style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, decoration: TextDecoration.underline))
+                        child: Text(
+                          "Cambia",
+                          style: TextStyle(
+                            color: quaternary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                            decorationColor: quaternary,
+                          ),
+                        )
                       ),
                     ]
                   )
                 ),
                 if(shipping == Shipping.retirePoint)
                   Container(
-                    padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
+                          color: Colors.grey.withAlpha(128),
                         )
                       ]
                     ),
@@ -170,9 +247,9 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Armadietto 1", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                              Text("Via Banca 3", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                              Text("06055", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                              Text("Armadietto 1", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                              Text("Via Banca 3", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                              Text("06055", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
                             ],
                           ),
                         ),
@@ -180,9 +257,9 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     )
                   ),
                 SizedBox(height: 20),
-                Text("Pagamento", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Text("Pagamento", style: Theme.of(context).textTheme.titleMedium),
                 ListTile(
-                  title: Text("Carta di credito", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                  title: Text("Carta di credito", style: Theme.of(context).textTheme.headlineMedium),
                   leading: Radio<PaymentMethod>(
                     value: PaymentMethod.creditCard,
                     groupValue: payment,
@@ -201,7 +278,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
+                          color: Colors.grey.withAlpha(128),
                         )
                       ]
                     ),
@@ -213,10 +290,22 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: userProviderWatch.loggedInUser!.card != null
                             ? [
-                              Text(userProviderWatch.loggedInUser!.card!.holder, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                              Text(maskCardNumber(userProviderWatch.loggedInUser!.card!.number.toString()), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                              Text(userProviderWatch.loggedInUser!.card!.expiration, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                              Text(userProviderWatch.loggedInUser!.card!.cvv.toString(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                              Text(
+                                userProviderWatch.loggedInUser!.card!.holder,
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                              ),
+                              Text(
+                                maskCardNumber(userProviderWatch.loggedInUser!.card!.number.toString()),
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                              ),
+                              Text(
+                                userProviderWatch.loggedInUser!.card!.expiration,
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                              ),
+                              Text(
+                                userProviderWatch.loggedInUser!.card!.cvv.toString(),
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)
+                              ),
                             ]
                             : [
                               Text("Nessuna carta di credito inserita", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400))
@@ -229,16 +318,22 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                               builder: (context) => ChangeCreditCardScreen()
                             ));
                           },
-                          child: Text("Cambia", style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.normal,
-                            decoration: TextDecoration.underline))
+                          child: Text(
+                            "Cambia",
+                            style: TextStyle(
+                              color: quaternary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              decoration: TextDecoration.underline,
+                              decorationColor: quaternary,
+                            ),
+                          )
                         ),
                       ]
                     )
                   ),
                 ListTile(
-                  title: Text("PayPal", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                  title: Text("PayPal", style: Theme.of(context).textTheme.headlineMedium),
                   leading: Radio<PaymentMethod>(
                     value: PaymentMethod.payPal,
                     groupValue: payment,
@@ -250,70 +345,66 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                   )
                 ),
                 SizedBox(height: 20),
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: ComicSansButton(
-                    onPressed: () {
-                      bool canPurchase = true;
-                      if(shipping == Shipping.home && userProviderWatch.loggedInUser!.address == null) {
-                        canPurchase = false;
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: Text("Inserisci un indirizzo di spedizione!"),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text("OK")
-                              )
-                            ]
+                ComicSansButton(
+                  onPressed: () {
+                    bool canPurchase = true;
+                    if(shipping == Shipping.home && userProviderWatch.loggedInUser!.address == null) {
+                      canPurchase = false;
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          content: Text("Inserisci un indirizzo di spedizione!"),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text("OK")
                             )
-                        );
-                      }
-                      if(payment == PaymentMethod.creditCard && userProviderWatch.loggedInUser!.card == null) {
-                        canPurchase = false;
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: Text("Inserisci una carta di credito!"),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text("OK")
-                              )
-                            ]
+                          ]
+                        )
+                      );
+                    }
+                    if(payment == PaymentMethod.creditCard && userProviderWatch.loggedInUser!.card == null) {
+                      canPurchase = false;
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          content: Text("Inserisci una carta di credito!"),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text("OK")
                             )
-                        );
-                      }
-                      if(payment == PaymentMethod.payPal && userProviderWatch.loggedInUser!.connectedAccount == false) {
-                        canPurchase = false;
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: Text("Account non connesso!"),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text("OK")
-                              )
-                            ]
-                          )
-                        );
-                      }
-                      if(canPurchase) {
-                        final comicsProvider = context.read<ComicsProvider>();
+                          ]
+                        )
+                      );
+                    }
+                    if(payment == PaymentMethod.payPal && userProviderWatch.loggedInUser!.connectedAccount == false) {
+                      canPurchase = false;
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          content: Text("Account non connesso!"),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text("OK")
+                            )
+                          ]
+                        )
+                      );
+                    }
+                    if(canPurchase) {
+                      final comicsProvider = context.read<ComicsProvider>();
 
-                        userProviderRead.updatePurchases(widget.comic);
-                        widget.comic.seller.sellings.add(widget.comic);
-                        widget.comic.seller.comicsSale.remove(widget.comic);
-                        comicsProvider.removeComic(widget.comic);
-                        userProviderRead.setJustPurchased(true);
-                        Navigator.pushReplacementNamed(context, '/');
-                      }
-                    },
-                    text: "Paga"
-                  ),
+                      userProviderRead.updatePurchases(widget.comic);
+                      widget.comic.seller.sellings.add(widget.comic);
+                      widget.comic.seller.comicsSale.remove(widget.comic);
+                      comicsProvider.removeComic(widget.comic);
+                      userProviderRead.setJustPurchased(true);
+                      Navigator.pushReplacementNamed(context, '/');
+                    }
+                  },
+                  text: "Paga"
                 ),
             ],
           ),

@@ -259,14 +259,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Condizioni",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    )
-                  ),
+                  child: Text("Condizioni", style: Theme.of(context).textTheme.titleMedium),
                 ),
               ),
               Padding(
@@ -283,10 +276,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Descrizione",
-                    style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
+                  child: Text("Descrizione", style: Theme.of(context).textTheme.titleMedium),
                 ),
               ),
               Padding(

@@ -61,7 +61,10 @@ class ComicSansRadioButtons extends StatelessWidget {
             ),
             ...options.map((option) {
               return RadioListTile<String> (
-                title: Text(option),
+                title: Text(
+                  option,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
                 value: option,
                 groupValue: state.value,
                 onChanged: (newValue) {

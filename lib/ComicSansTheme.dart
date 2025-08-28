@@ -25,11 +25,12 @@ class ComicSansTheme {
       letterSpacing: 0.15,
       color: Color(0xFF0C3148)
     ),
+    // Section titles (in ProductDetail and PurchaseScreen)
     titleMedium: GoogleFonts.poppins(
       fontSize: 18,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.15,
-      color: Color(0xFF0C3148)
+      fontWeight: FontWeight.w600,
+      letterSpacing: 0.1,
+      color: Color(0xFFc11720)
     ),
     labelLarge: GoogleFonts.poppins(
       fontSize: 15,
