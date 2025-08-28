@@ -119,6 +119,7 @@ class _ChangeShippingAddressScreenState extends State<ChangeShippingAddressScree
                   ComicSansTextInput(
                     title: 'CAP',
                     controller: _capController,
+                    keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 10),
                 ],
